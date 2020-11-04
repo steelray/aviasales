@@ -1,0 +1,13 @@
+.inputs-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 15px;
+}
+
+button {
+  padding: 0 55px;
+}
+
+h1 {
+  margin-bottom: 50px;
+}

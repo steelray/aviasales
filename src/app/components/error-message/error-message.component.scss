@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 99;
+
+  >div {
+    background: rgba(255, 0, 0, 0.8);
+    color: #fff;
+    font-size: 15px;
+    padding: 12px 44px 16px 16px;
+    display: flex;
+    border-radius: 10px;
+    margin: 30px auto;
+    max-width: 90%;
+    top: 0;
+    position: relative;
+
+    button {
+      margin-left: 15px;
+      position: absolute;
+      background: none;
+      outline: none;
+      border: none;
+      font-size: 18px;
+      color: #fff;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+    }
+  }
+}

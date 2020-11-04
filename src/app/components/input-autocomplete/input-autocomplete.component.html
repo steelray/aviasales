@@ -1,0 +1,22 @@
+<mat-form-field [class.has-label]="label" [class.placeholder-instead-label]="!label && placeholder">
+    <mat-label *ngIf="label">
+      {{label}}
+      <span *ngIf="isRequired" class="required-mark">*</span>
+    </mat-label>
+    <input
+        type="text" 
+        [formControl]="control"
+        [placeholder]="placeholder"
+        matInput
+        [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let option of filteredOptions  |async" [value]="option">
+            {{option}}
+        </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngFor="let error of errors">
+      {{error.message}}
+    </mat-error>
+    <ng-content></ng-content>
+  </mat-form-field>
+  

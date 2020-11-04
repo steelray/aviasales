@@ -1,0 +1,15 @@
+<mat-form-field [class.has-label]="label" [class.placeholder-instead-label]="!label && placeholder">
+    <mat-label *ngIf="label">
+        {{label}}
+        <span *ngIf="isRequired" class="required-mark">*</span>
+    </mat-label>
+    <textarea 
+        matInput
+        [formControl]="control" 
+        [rows]="rows"
+        [placeholder]="placeholder"></textarea>
+    <mat-error *ngFor="let error of errors">
+        {{error.message}}
+    </mat-error>
+    <ng-content></ng-content>
+</mat-form-field>

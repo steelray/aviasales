@@ -1,0 +1,6 @@
+<div *ngIf="errorService.error$ | async as error" @slideInOut>
+    {{error}}
+    <button (click)="onClose()">
+      <mat-icon aria-hidden="false" aria-label="Close" class="material-icons">close</mat-icon>
+    </button>
+</div>

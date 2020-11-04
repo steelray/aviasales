@@ -1,0 +1,138 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--font-color-1);
+  line-height: 1;
+  margin-bottom: 30px;
+
+  h1 {
+    margin-bottom: 10px;
+    font-size: 24px;
+
+    mat-icon {
+      font-size: 28px;
+      color: var(--main-color);
+      vertical-align: top;
+      margin: 2px 5px 0;
+    }
+  }
+
+  .back-again {
+    font-size: 14px;
+    color: var(--font-color-3);
+  }
+}
+
+.race-item {
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    line-height: 1;
+  }
+
+  &__col {
+    &:last-child {
+      text-align: right;
+    }
+  }
+
+  mat-list {
+    margin: 0 -24px;
+    padding: 0;
+  }
+
+  mat-list-item {
+    padding: 15px 24px;
+    border-bottom: 1px solid var(--border-color);
+    height: auto;
+    font-size: 16px;
+
+    span {
+      font-size: 14px;
+      color: var(--font-color-3);
+      display: block;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  mat-card-content {
+    margin-bottom: 0;
+  }
+
+  mat-card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .buy-btn {
+      font-size: 18px;
+      font-weight: normal;
+      padding: 0 24px;
+    }
+
+    .more-btn {
+      color: var(--main-color);
+      text-decoration: none;
+      font-weight: 500;
+      line-height: 24px;
+
+      mat-icon {
+        color: var(--font-color-2);
+        vertical-align: top;
+      }
+    }
+  }
+
+}
+
+.race-price {
+  color: var(--main-color);
+  font-size: 28px;
+  font-weight: 500;
+
+  span {
+    color: var(--font-color-3);
+    font-size: 12px;
+  }
+}
+
+
+.race-logos {
+  img {
+    margin-left: 3px;
+    float: left;
+  }
+}
+
+.filter-btn {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--white);
+  transition: background-color 0.3s;
+
+  mat-icon {
+    color: var(--font-color-2);
+    transition: color 0.3s;
+  }
+
+  &:hover {
+    background: var(--main-color);
+
+    mat-icon {
+      color: var(--white);
+    }
+  }
+}

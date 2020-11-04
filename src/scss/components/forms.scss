@@ -1,0 +1,285 @@
+mat-form-field,
+.mat-form-field-appearance-legacy {
+  width: 100%;
+  font-family: var(--default-font-family);
+
+  &.file-input-field {
+    .mat-form-field-infix {
+      border: none;
+      background: none;
+      padding: 0;
+    }
+
+    .mat-form-field-underline {
+      display: none;
+    }
+  }
+
+  .mat-input-element {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  &.mat-focused {
+    .mat-form-field-infix {
+      border-color: var(--main-color);
+      background-color: #fafbfc;
+    }
+  }
+
+  .mat-form-field-infix {
+    border: 1px solid transparent;
+    background-color: var(--input-bg-color);
+    padding: 1.179em 0;
+    border-radius: 4px;
+    transition: border-color 0.3s, background-color 0.3s;
+  }
+
+  &.has-label {
+    margin-top: 1.6em;
+  }
+
+  &.placeholder-instead-label {
+    .mat-form-field-label-wrapper {
+      display: flex;
+      align-items: center;
+
+      .mat-form-field-label {
+        position: static;
+        padding-left: 15px;
+        transition: opacity 0.3s;
+      }
+    }
+
+    &.mat-form-field-should-float {
+      .mat-form-field-label-wrapper {
+        .mat-form-field-label {
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  .mat-form-field-label-wrapper {
+    padding-top: 1.6em;
+    top: -1.6em;
+  }
+
+  .mat-form-field-label {
+    transform: none !important;
+    top: 0;
+    color: var(--font-color-2) !important;
+  }
+}
+
+app-datepicker {
+  .mat-form-field-suffix {
+    position: absolute;
+    right: 15px;
+    top: 14px;
+  }
+}
+
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+  display: none;
+}
+
+
+.mat-raised-button {
+  &.btn {
+    line-height: 40px;
+    border-radius: 50px;
+    box-shadow: none;
+    border: none;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--white);
+    font-family: 'Ubuntu', sans-serif;
+  }
+}
+
+
+.from-to-fields {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  app-input-autocomplete {
+    width: calc(50% - 7.5px);
+  }
+
+  >span {
+    position: absolute;
+    top: 8px;
+    left: calc(50% - 17px);
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    z-index: 1;
+  }
+
+  .from-field {
+    mat-icon {
+      color: var(--accent);
+    }
+  }
+
+  .to-field {
+    mat-icon {
+      color: var(--main-color);
+    }
+  }
+
+  mat-form-field,
+  .mat-form-field {
+    mat-icon {
+      position: absolute;
+      left: 15px;
+      top: calc(50% - 10px);
+      font-size: 20px;
+    }
+
+    &.placeholder-instead-label {
+      .mat-input-element {
+        padding-left: 40px;
+      }
+
+      .mat-form-field-label-wrapper {
+        .mat-form-field-label {
+          padding-left: 40px;
+        }
+      }
+    }
+
+  }
+
+}
+
+
+.fields-group {
+  margin-bottom: calc(24px - 1.5em);
+}
+
+body {
+
+  .mat-form-field-appearance-legacy .mat-form-field-prefix .mat-datepicker-toggle-default-icon,
+  .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
+    fill: var(--font-color-2);
+    width: 20px;
+  }
+
+  .mat-select-arrow {
+    color: var(--font-color-2);
+    margin: 0 15px 0 10px;
+  }
+
+  .mat-select-value {
+    color: var(--font-color-2);
+    padding-left: 15px;
+  }
+
+  .mat-flat-button.mat-primary,
+  .mat-raised-button.mat-primary,
+  .mat-fab.mat-primary,
+  .mat-mini-fab.mat-primary {
+    background-color: var(--main-color);
+  }
+
+  .mat-raised-button {
+    line-height: 48px;
+    font-size: 18px;
+
+    &:not([class*=mat-elevation-z]) {
+      box-shadow: none;
+    }
+  }
+
+  .mat-autocomplete-panel {
+    background: var(--white);
+    border: 1px solid var(--main-color);
+  }
+
+  .mat-option {
+    color: var(--font-color-1);
+    background: var(--white);
+
+    &.mat-active {
+      background: var(--light-grey) !important;
+      color: var(--font-color-1) !important;
+    }
+
+    &:hover {
+      background: var(--light-grey) !important;
+      color: var(--font-color-1) !important;
+    }
+  }
+
+  .mat-option.mat-selected:not(.mat-option-multiple):not(.mat-option-disabled) {
+    background: var(--main-color) !important;
+    color: var(--white) !important;
+  }
+
+  .mat-autocomplete-panel .mat-option.mat-selected:not(.mat-active):not(:hover) {
+    background: var(--font-color-2);
+  }
+
+  .mat-datepicker-content {
+    background-color: var(--light-grey);
+    color: var(--font-color-1);
+  }
+
+  .mat-calendar-body-cell-content,
+  .mat-date-range-input-separator {
+    color: var(--font-color-1);
+
+    &:hover {
+      background: var(--light-grey-2) !important;
+    }
+  }
+
+  .mat-calendar-arrow {
+    border-top-color: var(--font-color-1);
+  }
+
+  .mat-datepicker-toggle,
+  .mat-datepicker-content .mat-calendar-next-button,
+  .mat-datepicker-content .mat-calendar-previous-button,
+  .mat-calendar-table-header,
+  .mat-calendar-body-label {
+    color: var(--font-color-1);
+    opacity: 0.7;
+  }
+
+  .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    border-color: var(--font-color-2);
+  }
+
+  .mat-calendar-body-selected {
+    background-color: var(--main-color);
+    color: var(--white);
+  }
+
+  .mat-button,
+  .mat-raised-button,
+  .mat-icon-button,
+  .mat-stroked-button,
+  .mat-flat-button,
+  .mat-fab,
+  .mat-mini-fab {
+    font-family: var(--default-font-family);
+  }
+}

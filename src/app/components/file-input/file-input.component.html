@@ -1,0 +1,20 @@
+<mat-form-field [class.has-label]="label" class="file-input-field">
+    <mat-label *ngIf="label">
+        {{label}}
+        <span *ngIf="isRequired" class="required-mark">*</span>
+    </mat-label>
+    <div class="file-uploader">
+        <button mat-raised-button class="upload-button" (click)="fileInput.click()">{{placeholder ? placeholder : 'Загрузить'}}</button>
+        <div class="upload-files">
+            <span *ngFor="let file of files">{{file.name}}</span>
+        </div>
+    </div>
+    <div class="inputs">
+        <input #fileInput class="file-input" type="file" (change)="onFileChange($event)">
+        <input type="text" [formControl]="control" matInput [placeholder]="placeholder">
+    </div>
+    <mat-error *ngFor="let error of errors">
+        {{error.message}}
+    </mat-error>
+    <ng-content></ng-content>
+</mat-form-field>

@@ -1,0 +1,18 @@
+<mat-form-field [class.has-label]="label" [class.placeholder-instead-label]="!label && placeholder">
+    <mat-label *ngIf="label">
+        {{label}}
+        <span *ngIf="isRequired" class="required-mark">*</span>
+    </mat-label>
+    <mat-select [placeholder]="placeholder" [formControl]="control">
+        <mat-option *ngIf="prompt">{{prompt}}</mat-option>
+        <mat-option 
+            *ngFor="let option of options;trackBy: trackByFn" 
+            [value]="option.value">
+            {{option.title}}
+        </mat-option>
+    </mat-select>
+    <mat-error *ngFor="let error of errors">
+        {{error.message}}
+    </mat-error>
+    <ng-content></ng-content>
+</mat-form-field>
