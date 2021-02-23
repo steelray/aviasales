@@ -8,7 +8,8 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss",
-          "changeDetection": "OnPush"
+          "changeDetection": "OnPush",
+          "skipTests": true
         }
       },
       "root": "",
@@ -38,7 +39,9 @@
                 "src/scss"
               ]
             },
-            "scripts": []
+            "scripts": [
+              "src/assets/js/money.min.js"
+            ]
           },
           "configurations": {
             "production": {

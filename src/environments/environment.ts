@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'api'
+  apiEndpoint: 'https://uzcard.paycom.uz/api',
+  airlineLogoEndpoint: ' http://pics.avs.io'
 };
 
 /*

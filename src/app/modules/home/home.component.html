@@ -3,8 +3,8 @@
     <div class="from-to-fields fields-group">
         <app-input-autocomplete
             placeholder="Откуда"
-            [options]="fromOptions$ | async"
             class="from-field"
+            [options]="fromOptions$ | async"
             [control]="controls.departure">
             <mat-icon>location_on</mat-icon>
         </app-input-autocomplete>
@@ -13,7 +13,7 @@
         </span>
         <app-input-autocomplete
             placeholder="Куда"
-            [options]="fromOptions$ | async"
+            [options]="toOptions$ | async"
             class="to-field"
             [control]="controls.arrival">
             <mat-icon>location_on</mat-icon>
@@ -35,12 +35,12 @@
 
         <app-select
             placeholder="Количество пассажиров"
-            [options]="passangersQuantityOptions"
-            [control]="controls.passangers"></app-select>
+            [options]="passengersQuantityOptions"
+            [control]="controls.passengers"></app-select>
     </div>
 
     <div class="text-center">
-        <button mat-raised-button color="primary">Искать билеты</button>
+        <button mat-raised-button color="primary" [disabled]="form.invalid">Искать билеты</button>
     </div>
 
 </form>

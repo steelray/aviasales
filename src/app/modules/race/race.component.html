@@ -1,4 +1,4 @@
-<button *ngIf="prevUrl$ | async as prevUrl" [routerLink]="[prevUrl.route]" [queryParams]="prevUrl.queryParams" queryParams="departure=usa&arrival=usa&departure_date=2020-11-12&arrival_date=2020-11-10&passangers=2" class="back-btn">
+<button mat-button  *ngIf="prevUrl$ | async as prevUrl" [routerLink]="[prevUrl.route]" [queryParams]="prevUrl.queryParams" queryParams="departure=usa&arrival=usa&departure_date=2020-11-12&arrival_date=2020-11-10&passangers=2" class="back-btn">
     <mat-icon>keyboard_arrow_left</mat-icon>
     Назад
 </button>

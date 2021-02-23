@@ -1,29 +1,32 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { CustomFormFieldComponent } from '@components/custom-form-field/custom-form-field.component';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { ISelectOption } from '@core/interfaces/select-option.interface';
+import { NgOnDestroy } from '@core/services/destroy.service';
 
 @Component({
   selector: 'app-input-autocomplete',
   templateUrl: './input-autocomplete.component.html',
   styleUrls: ['./input-autocomplete.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [NgOnDestroy]
 })
-export class InputAutocompleteComponent extends CustomFormFieldComponent implements OnInit {
-  @Input() options: string[];
-  filteredOptions: Observable<string[]>;
+export class InputAutocompleteComponent extends CustomFormFieldComponent {
+  @Input() options: ISelectOption[];
+  optionIsSelected = false;
 
-  ngOnInit(): void {
-    this.filteredOptions = this.control.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value))
-    );
+  displayWithFn(option: ISelectOption): string {
+    return option.title;
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.options.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
+  optionSelected(): void {
+    this.optionIsSelected = true;
   }
 
+
+  onBlur(value: string): void {
+    // controller value must be selected from options
+    if (value && !this.optionIsSelected) {
+      this.control.setValue('');
+    }
+  }
 }

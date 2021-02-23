@@ -3,6 +3,8 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HttpObserve } from '../enums/http-observe.enum';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { map, tap } from 'rxjs/operators';
+import { HttpErrorService } from './http-error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,9 @@ export class ApiService {
   // tslint:disable-next-line:variable-name
   private readonly _apiEndpoint = environment.apiEndpoint;
 
-  constructor(public http: HttpClient) { }
+  constructor(
+    public http: HttpClient,
+    public httpErrorService: HttpErrorService) { }
 
   public get<Response>(
     url: string,
@@ -28,7 +32,20 @@ export class ApiService {
     url: string,
     body?: Body
   ): Observable<Response> {
-    return this.makeRequest('post', url, { body });
+    const requestBody = {
+      method: url,
+      params: body
+    };
+    return this.makeRequest('post', url, { body: requestBody }).pipe(
+      map(res => {
+        if (res.result) {
+          return res.result;
+        } else {
+          this.httpErrorService.error$.next(res.error.message);
+          throw new Error(res.error.message);
+        }
+      })
+    );
   }
 
   public put<Body, Response>(
@@ -67,7 +84,7 @@ export class ApiService {
   }
 
   private prepareUrl(action: string): string {
-    return this._apiEndpoint + action;
+    return this._apiEndpoint + '/' + action;
   }
 }
 

@@ -7,7 +7,7 @@ export const routes: Routes = [
     loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule),
   },
   {
-    path: 'races/:id',
+    path: 'races/:search_id/:url',
     loadChildren: () => import('./modules/race/race.module').then(m => m.RaceModule),
   },
   {
