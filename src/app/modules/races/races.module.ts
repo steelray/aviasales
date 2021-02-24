@@ -22,6 +22,20 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MinutesToHoursMins } from '@core/pipes/minutes-to-hours.pipe';
 import { TransferCount } from '@core/pipes/transfer-count.pipe';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { RaceViewComponent } from './race-view/race-view.component';
+import { GetCityPipe } from '@core/pipes/get-city.pipe';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { GetAirlineNamePipe } from '@core/pipes/get-airline-name.pipe';
+import { RaceFilterPriceComponent } from './races-filter/race-filter-price/race-filter-price.component';
+import { RaceFilterBaggageComponent } from './races-filter/race-filter-baggage/race-filter-baggage.component';
+import { RaceFilterAirportComponent } from './races-filter/race-filter-airport/race-filter-airport.component';
+import { RaceFilterAirlineComponent } from './races-filter/race-filter-airline/race-filter-airline.component';
+import { RaceFilterDurationComponent } from './races-filter/race-filter-duration/race-filter-duration.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -31,7 +45,15 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     CustomNumber,
     MinutesToHoursMins,
     GetAirlineLogo,
-    TransferCount
+    TransferCount,
+    RaceViewComponent,
+    GetCityPipe,
+    GetAirlineNamePipe,
+    RaceFilterPriceComponent,
+    RaceFilterBaggageComponent,
+    RaceFilterAirportComponent,
+    RaceFilterAirlineComponent,
+    RaceFilterDurationComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +71,13 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     MatSliderModule,
     MatProgressSpinnerModule,
     ScrollingModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    NgxSliderModule,
+    MatTooltipModule,
+    MatCheckboxModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class RacesModule { }

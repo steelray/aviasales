@@ -116,6 +116,7 @@ header {
   img {
     margin-left: 3px;
     float: left;
+    border-radius: 50%;
   }
 }
 
@@ -126,6 +127,10 @@ header {
   border-radius: 10px;
   background: var(--white);
   transition: background-color 0.3s;
+  &.mat-button-disabled {
+    background: var(--gray);
+    pointer-events: none;
+  }
 
   mat-icon {
     color: var(--font-color-2);
@@ -160,4 +165,17 @@ header {
 
 .search-results {
   height: 100%;
+}
+
+.is-loading {
+  display: flex;
+  align-items: center;
+  color: var(--font-color-3);
+  .spinner {
+    margin-left: 10px;
+  }
+}
+
+.spinner {
+  font-size: 22px;
 }

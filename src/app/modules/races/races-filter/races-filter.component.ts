@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, ChangeDetectorRef, Input } from '@angular/core';
+import { IAirline, IAirport, ISearchResultFilter, ISearchResultSegments } from '@core/interfaces/search.interfaces';
 import { ISelectOption } from '@core/interfaces/select-option.interface';
 
 enum FILTER_TYPES {
@@ -6,7 +7,8 @@ enum FILTER_TYPES {
   TRAVEL_TIME = 'travel_time',
   TICKET_PRICE = 'ticket_price',
   AIRPORT = 'airport',
-  DEPARTURE_TIME = 'departure_time'
+  TRAVEL_DURATION = 'travel_duration',
+  AIRLINE = 'airline'
 }
 
 @Component({
@@ -16,6 +18,10 @@ enum FILTER_TYPES {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RacesFilterComponent implements OnInit {
+  @Input() filtersData: ISearchResultFilter;
+  @Input() searchSegments: ISearchResultSegments;
+  @Input() airports: IAirport[];
+  @Input() airlines: IAirline[];
   @Output() closed = new EventEmitter();
 
   activeFilterType: ISelectOption;
@@ -26,7 +32,7 @@ export class RacesFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.activeFilterType = {
-      value: FILTER_TYPES.TRAVEL_TIME,
+      value: FILTER_TYPES.TICKET_PRICE,
       title: 'Время в пути'
     };
   }
@@ -34,11 +40,15 @@ export class RacesFilterComponent implements OnInit {
   get filterItems(): ISelectOption[] {
     return [
       {
+        value: FILTER_TYPES.TRAVEL_TIME,
+        title: 'Время вылета и прибытия'
+      },
+      {
         value: FILTER_TYPES.BAGGAGE,
         title: 'Багаж'
       },
       {
-        value: FILTER_TYPES.TRAVEL_TIME,
+        value: FILTER_TYPES.TRAVEL_DURATION,
         title: 'Время в пути'
       },
       {
@@ -50,8 +60,8 @@ export class RacesFilterComponent implements OnInit {
         title: 'Аэропорт'
       },
       {
-        value: FILTER_TYPES.DEPARTURE_TIME,
-        title: 'Время вылета и прибытия'
+        value: FILTER_TYPES.AIRLINE,
+        title: 'Авиакомпания'
       },
     ];
   }

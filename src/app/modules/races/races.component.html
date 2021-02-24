@@ -1,35 +1,52 @@
-<ng-container *ngIf="searchResult$ | async as searchResult;else spinner">
+<!-- <ng-container> -->
+<ng-container *ngIf="allResults$ | async as searchIdResult;else spinner">
+    
     <header>
         <div>
             <h1>
-                Ташкент
+                {{searchResult.segments.to.original_origin | getCity:searchResult.airports}}
                 <mat-icon>swap_horiz</mat-icon>
-                Бангкок
+                {{searchResult.segments.to.original_destination | getCity:searchIdResult.airports}}
             </h1>
             <div class="back-again">Туда и обратно</div>
         </div>
-        <button class="filter-btn" mat-icon-button (click)="onFilterToggle()">
-            <mat-icon>filter_alt</mat-icon>
-        </button>
+        <div class="is-loading" *ngIf="isLoading;else filterBtn">
+            Ищем все варианты
+            <div class="spinner">
+                <ng-container [ngTemplateOutlet]="spinner" [ngTemplateOutletContext]="{diameter: 30}"></ng-container>
+            </div>
+        </div>
+        <ng-template #filterBtn>
+            <button  class="filter-btn" mat-icon-button (click)="onFilterToggle()">
+                <mat-icon>filter_alt</mat-icon>
+            </button>
+            <app-races-filter 
+                [filtersData]="searchResult.filters"
+                [searchSegments]="searchIdResult.segments"
+                [airports]="searchIdResult.airports"
+                [class.active]="filterIsActive"
+                (closed)="onFilterToggle()"></app-races-filter>
+            <div class="filter-backdrop" (click)="onFilterToggle()" [class.active]="filterIsActive"></div>
+        </ng-template>
     </header>
 
-
-    <ng-container *ngIf="flights;else noRacesFound">
+    <ng-container *ngIf="visibleFlights.length;else noRacesFound">
         <div
+            *ngIf="!viewItem;else viewItemTemp"
             class="search-results"
             infiniteScroll
             [infiniteScrollDistance]="2"
             [infiniteScrollThrottle]="50"
             (scrolled)="onScrollDown()">
             
-            <mat-card class="race-item" *ngFor="let flight of flights;trackBy: trackByFn">
+            <mat-card class="race-item" *ngFor="let flight of visibleFlights;trackBy: trackByFn">
                 <div class="race-item__header">
                     <div class="race-price">
                         {{flight.price | number | customNumber}}
                         <span>сум</span>
                     </div>
                     <div class="race-logos">
-                        <img *ngFor="let carrier of flight.carriers" [src]="carrier | getAirlineLogo" alt="logo-1">
+                        <img *ngFor="let carrier of flight.carriers" [src]="carrier | getAirlineLogo" [matTooltip]="carrier | getAirlineName:searchResult.airlines" alt="logo-1">
                     </div>
                 </div>
                 <mat-card-content>
@@ -52,28 +69,25 @@
                 </mat-card-content>
                 <mat-card-actions>
                     <button class="buy-btn" mat-raised-button color="primary">Купить</button>
-                    <a [routerLink]="['/races', 1]" class="more-btn">
+                    <a href="#" (click)="onView($event, flight)" class="more-btn">
                         Подробнее
                         <mat-icon>keyboard_arrow_right</mat-icon>
                     </a>
                 </mat-card-actions>
             </mat-card>
         </div>
-       
+      
     </ng-container>
     <ng-template #noRacesFound>
         По вашему запросу ничего не найдено. Попробуйте вернуться <a routerLink="/">на страницу поиска</a> и изменить параметры запроса.
     </ng-template>
 
-    <app-races-filter 
-        [class.active]="filterIsActive"
-        (closed)="onFilterToggle()"></app-races-filter>
-<div class="filter-backdrop" (click)="onFilterToggle()" [class.active]="filterIsActive"></div>
-
+    
+    
 </ng-container>
 
-<ng-template #spinner>
-    <mat-spinner></mat-spinner>
+<ng-template #spinner let-diameter="diameter">
+    <mat-spinner class="spinner" [diameter]="diameter || 100"></mat-spinner>
 </ng-template>
 
 <ng-template let-segment="segment" #segment>
@@ -91,4 +105,8 @@
             <div>{{segment.transfers_total_duration / 60 | minutesToHoursMins}}</div>
         </ng-container>
     </div>
+</ng-template>
+
+<ng-template #viewItemTemp>
+    <app-race-view [flight]="this.viewItem" (backToList)="onBackToList()"></app-race-view>
 </ng-template>

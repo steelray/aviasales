@@ -1,9 +1,40 @@
-<mat-slider
-    class="example-margin"
-    [disabled]="false"
-    [invert]="false"
-    [max]="100"
-    [min]="0"
-    [step]="1"
-    [thumbLabel]="'wow'">
-  </mat-slider>
+<h3>
+  {{searchSegments.to.original_origin | getCity:airports}} 
+  - 
+  {{searchSegments.to.original_destination | getCity:airports}} 
+</h3>
+<label>Вылет из {{searchSegments.to.original_origin | getCity:airports:'po'}}:</label>
+<ngx-slider 
+  [formControl]="controls.to.controls.departure" 
+  [value]="departureMinutes.to.min" 
+  [highValue]="departureMinutes.to.max" 
+  [options]="departureToOptions">
+</ngx-slider>
+<label>Прибытие {{searchSegments.to.original_destination | getCity:airports:'vi'}}:</label>
+<ngx-slider 
+  [formControl]="controls.to.controls.arrival"
+  [value]="arrivalDatetime.to.min"
+  [highValue]="arrivalDatetime.to.max"
+  [options]="arrivalToOptions">
+</ngx-slider>
+
+
+<h3>
+  {{searchSegments.back.original_origin | getCity:airports}} 
+  - 
+  {{searchSegments.back.original_destination | getCity:airports}} 
+</h3>
+<label>Вылет из {{searchSegments.back.original_origin | getCity:airports:'po'}}:</label>
+<ngx-slider 
+  [formControl]="controls.back.controls.departure" 
+  [value]="departureMinutes.back.min" 
+  [highValue]="departureMinutes.back.max" 
+  [options]="departureBackOptions">
+</ngx-slider>
+<label>Прибытие {{searchSegments.back.original_destination | getCity:airports:'vi'}}:</label>
+<ngx-slider 
+  [formControl]="controls.back.controls.arrival"
+  [value]="arrivalDatetime.back.min"
+  [highValue]="arrivalDatetime.back.max"
+  [options]="arrivalBackOptions">
+</ngx-slider>

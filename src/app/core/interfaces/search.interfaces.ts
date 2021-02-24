@@ -57,6 +57,8 @@ export interface ISearchResult {
   filters: ISearchResultFilter;
   flights: IFlight[];
   gatesInfos: IGatesInfo[]; // agents info
+  segments: ISearchResultSegments;
+
 }
 
 export interface IGatesInfo {
@@ -84,8 +86,25 @@ export interface ISearchResultFilter {
       * departire_time_0 = туда, departire_time_1 = обратно
     */
   departure_time: ISearchResultFilterTime;
+  departure_minutes?: ISearchResultFilterArrivalDateTime;
   flights_duration: IMinMaxValues;
   price: IMinMaxValues;
+}
+
+export interface ISearchResultSegments {
+  to: ISearchResultSegment;
+  back?: ISearchResultSegment;
+}
+
+export interface ISearchResultSegment {
+  date: string;
+  depart_date: string;
+  destination: string;
+  destination_country: string;
+  origin: string;
+  origin_country: string;
+  original_destination: string;
+  original_origin: string;
 }
 
 export interface ISearchResultFilterArrivalDateTime {
@@ -125,6 +144,14 @@ export interface IAirport {
   country_code: string;
   name: string;
   time_zone: string;
+  cases: IAirportCase;
+  iata: string; // iata code
+}
+
+export interface IAirportCase {
+  po: string;
+  pr: string;
+  vi: string;
 }
 
 // proposals

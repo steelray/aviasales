@@ -80,16 +80,13 @@ app-datepicker {
   }
 }
 
-
 .form-field {
   margin-bottom: 15px;
 }
 
-
 .mat-form-field-appearance-legacy .mat-form-field-underline {
   display: none;
 }
-
 
 .mat-raised-button {
   &.btn {
@@ -102,10 +99,9 @@ app-datepicker {
     font-size: 12px;
     font-weight: bold;
     color: var(--white);
-    font-family: 'Ubuntu', sans-serif;
+    font-family: "Ubuntu", sans-serif;
   }
 }
-
 
 .from-to-fields {
   position: relative;
@@ -117,7 +113,7 @@ app-datepicker {
     width: calc(50% - 7.5px);
   }
 
-  >span {
+  > span {
     position: absolute;
     top: 8px;
     left: calc(50% - 17px);
@@ -164,18 +160,14 @@ app-datepicker {
         }
       }
     }
-
   }
-
 }
-
 
 .fields-group {
   margin-bottom: calc(24px - 1.5em);
 }
 
 body {
-
   .mat-form-field-appearance-legacy .mat-form-field-prefix .mat-datepicker-toggle-default-icon,
   .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
     fill: var(--font-color-2);
@@ -203,7 +195,7 @@ body {
     line-height: 48px;
     font-size: 18px;
 
-    &:not([class*=mat-elevation-z]) {
+    &:not([class*="mat-elevation-z"]) {
       box-shadow: none;
     }
   }
@@ -282,4 +274,42 @@ body {
   .mat-mini-fab {
     font-family: var(--default-font-family);
   }
+}
+
+body {
+  ngx-slider.ngx-slider {
+    height: 2px;
+    .ngx-slider {
+      &-bar-wrapper {
+        height: 24px;
+        margin-top: -12px;
+        padding-top: 12px;
+      }
+      &-bar {
+        height: 2px;
+      }
+      &-selection {
+        background: var(--main-color);
+        height: 2px;
+      }
+      &-pointer {
+        width: 24px;
+        height: 24px;
+        background: var(--white);
+        border: 2px solid var(--border-color);
+        &::after,
+        &::before {
+          display: none;
+        }
+      }
+      &-bubble {
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: var(--main-color) !important;
 }

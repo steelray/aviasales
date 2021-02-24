@@ -1,30 +1,45 @@
+import { BaseOverlayDispatcher } from '@angular/cdk/overlay/dispatchers/base-overlay-dispatcher';
 import { Injectable } from '@angular/core';
-import { IPlacesParams } from '@core/interfaces/search.interfaces';
+import { IPlacesParams, ISearchResult } from '@core/interfaces/search.interfaces';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchSearvice extends ApiService {
-  flightSearch$ = new BehaviorSubject<any>(null);
-  flightSearch(params: any): Observable<any> {
+  flightSearch$: Observable<any>;
+  searchResult$ = new BehaviorSubject<ISearchResult>(null);
 
-    return this.http.get('/assets/flight-search.json').pipe(
-      map((res: any) => res.result),
-      tap(res => this.flightSearch$.next(res))
-    );
+  mock = true;
+  flightSearch(params: any): Observable<any> {
+    if (this.mock) {
+      return this.http.get('/assets/flight-search.json').pipe(
+        map((res: any) => res.result),
+        // publishReplay(1),
+        // refCount()
+      );
+    }
     return this.post(`travelpayouts.flight_search`, params).pipe(
-      tap(res => this.flightSearch$.next(res))
+      // publishReplay(1),
+      // refCount()
     );
   }
 
   flightSearchResults(searchId: string): Observable<any> {
-    return this.http.get('/assets/flight-search-result.json').pipe(
-      map((res: any) => res.result)
+    if (this.mock) {
+      return this.http.get('/assets/flight-search-result.json').pipe(
+        map((res: any) => res.result),
+        // publishReplay(1),
+        // refCount()
+      );
+    }
+
+    return this.post(`travelpayouts.flight_search_results`, { search_id: searchId }).pipe(
+      // publishReplay(1),
+      // refCount()
     );
-    return this.post(`travelpayouts.flight_search_results`, { search_id: searchId });
   }
 
   places(params: IPlacesParams): Observable<any> {

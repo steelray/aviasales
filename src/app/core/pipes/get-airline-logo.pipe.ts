@@ -11,7 +11,7 @@ export class GetAirlineLogo implements PipeTransform {
   ) { }
 
   transform(carrier: string): SafeUrl {
-    return this.sanitization.bypassSecurityTrustUrl(`${this.cdn}/150/40/${carrier}.png`);
+    return this.sanitization.bypassSecurityTrustUrl(`${this.cdn}/al_square/40/40/${carrier}.png`);
   }
 
 }

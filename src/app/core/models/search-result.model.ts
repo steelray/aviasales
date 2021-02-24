@@ -13,7 +13,8 @@ import {
   ISearchResult,
   ISearchResultFilter,
   ISearchResultFilterArrivalDateTime,
-  ISearchResultFilterTime
+  ISearchResultFilterTime,
+  ISearchResultSegments
 } from '@core/interfaces/search.interfaces';
 declare var fx: any;
 export class SearchResult implements ISearchResult {
@@ -23,12 +24,14 @@ export class SearchResult implements ISearchResult {
   filters: ISearchResultFilter = null;
   flights: IFlight[] = [];
   gatesInfos: IGatesInfo[] = [];
-
+  segments: ISearchResultSegments = null;
   fxFn: any;
 
   constructor(
     result: any,
-    flightSearchRequestResult: IFlightSearch) {
+    flightSearchRequestResult: IFlightSearch,
+    currentResult?: ISearchResult) {
+    this.setDefaultData(currentResult);
     this.initFxFn(flightSearchRequestResult.currency_rates);
     this.prepareResults(result);
   }
@@ -39,6 +42,20 @@ export class SearchResult implements ISearchResult {
     this.fxFn = fx;
   }
 
+  private setDefaultData(currentResult: ISearchResult): void {
+    if (currentResult) {
+      // console.log(currentResult);
+      this.airlines = currentResult.airlines;
+      this.airports = currentResult.airports;
+      this.currency = currentResult.currency;
+      this.filters = currentResult.filters;
+      this.flights = currentResult.flights;
+      this.gatesInfos = currentResult.gatesInfos;
+    } else {
+      // console.log('no current results');
+    }
+  }
+
 
   private prepareResults(result: any): void {
     if (!result || !Array.isArray(result)) {
@@ -46,22 +63,40 @@ export class SearchResult implements ISearchResult {
     }
     let proposals = [];
     result.forEach(res => {
-      this.airlines = this.pushOnlyUniquesObjArray(this.airlines, Object.values(res.airlines), 'iata');
+      if (res?.proposals?.length) {
+        this.airlines = this.pushOnlyUniquesObjArray(this.airlines, Object.values(res.airlines), 'iata');
 
-      this.airports = this.pushOnlyUniquesObjArray(this.airports, Object.values(res.airports), 'name');
+        const airports: IAirport[] = Object.keys(res.airports).map(iata => {
+          const r = res.airports[iata];
+          r.iata = iata;
+          return r;
+        });
 
-      this.currency = res.currency;
+        this.airports = this.pushOnlyUniquesObjArray(this.airports, airports, 'name');
+
+        this.currency = res.currency;
 
 
 
-      this.filters = this.prepareFilters(res);
-      this.gatesInfos.push(this.getGatesInfo(res));
+        this.filters = this.prepareFilters(res);
+        this.gatesInfos.push(this.getGatesInfo(res));
 
 
-      proposals = proposals.concat(this.prepareFlights(res.proposals));
+        proposals = proposals.concat(this.prepareFlights(res.proposals));
+      }
 
     });
+
     this.flights = proposals;
+
+    const segments = result[0].segments;
+    this.segments = {
+      to: segments[0],
+      back: null
+    };
+    if (segments[1]) {
+      this.segments.back = segments[1];
+    }
   }
 
 
@@ -79,12 +114,14 @@ export class SearchResult implements ISearchResult {
       max: this.convertPriceToUzs(newFilters.price.max, gateCurrency)
     };
 
+
     const res: ISearchResultFilter = this.filters ? this.filters : this.setFiltersDefaultValues();
     res.airports.arrival = this.pusOnlyUniques(res.airports.arrival, newFilters.airports.arrival);
     res.airports.departure = this.pusOnlyUniques(res.airports.departure, newFilters.airports.departure);
     res.arrival_datetime = this.prepareFilterArrivalDateTime(newFilters, res.arrival_datetime);
     res.arrival_time = this.prepareFilterArrivalTime(newFilters, res.arrival_time);
     res.departure_time = this.prepareFilterDepartureTime(newFilters, res.departure_time);
+    res.departure_minutes = this.prepareFilterDepartureMinutes(newFilters, res.departure_minutes);
     res.flights_duration = this.prepareFlightsDuration(newFilters.flights_duration, res.flights_duration);
     res.price = this.prepareFilterPrice(newFiltersPrice, res.price);
     return res;
@@ -126,6 +163,16 @@ export class SearchResult implements ISearchResult {
           min: ''
         },
       },
+      departure_minutes: {
+        to: {
+          max: 0,
+          min: 0,
+        },
+        back: {
+          max: 0,
+          min: 0
+        },
+      },
       flights_duration: {
         max: 0,
         min: 0,
@@ -141,21 +188,21 @@ export class SearchResult implements ISearchResult {
     filters: any, currentDateTime: ISearchResultFilterArrivalDateTime
   ): ISearchResultFilterArrivalDateTime {
 
-    if (filters.arrival_datetime_0.max > currentDateTime.back.max) {
-      currentDateTime.back.max = filters.arrival_datetime_0.max;
+    if (filters.arrival_datetime_0.max > currentDateTime.to.max) {
+      currentDateTime.to.max = filters.arrival_datetime_0.max;
     }
 
-    if (!currentDateTime.back.min || filters.arrival_datetime_0.min < currentDateTime.back.min) {
-      currentDateTime.back.min = filters.arrival_datetime_0.min;
+    if (!currentDateTime.to.min || filters.arrival_datetime_0.min < currentDateTime.to.min) {
+      currentDateTime.to.min = filters.arrival_datetime_0.min;
     }
 
     if (filters.arrival_datetime_1) {
-      if (filters.arrival_datetime_1.max > currentDateTime.to.max) {
-        currentDateTime.to.max = filters.arrival_datetime_1.max;
+      if (filters.arrival_datetime_1.max > currentDateTime.back.max) {
+        currentDateTime.back.max = filters.arrival_datetime_1.max;
       }
 
-      if (!currentDateTime.to.min || filters.arrival_datetime_1.min < currentDateTime.to.min) {
-        currentDateTime.to.min = filters.arrival_datetime_1.min;
+      if (!currentDateTime.back.min || filters.arrival_datetime_1.min < currentDateTime.back.min) {
+        currentDateTime.back.min = filters.arrival_datetime_1.min;
       }
     }
 
@@ -206,6 +253,31 @@ export class SearchResult implements ISearchResult {
 
       if (!currentTime.to.min || filters.departure_time_1.min < currentTime.to.min) {
         currentTime.to.min = filters.departure_time_1.min;
+      }
+    }
+
+    return currentTime;
+  }
+
+  private prepareFilterDepartureMinutes(
+    filters: any, currentTime: ISearchResultFilterArrivalDateTime
+  ): ISearchResultFilterArrivalDateTime {
+
+    if (filters.departure_minutes_0.max > currentTime.back.max) {
+      currentTime.back.max = filters.departure_minutes_0.max;
+    }
+
+    if (!currentTime.back.min || filters.departure_minutes_0.min < currentTime.back.min) {
+      currentTime.back.min = filters.departure_minutes_0.min;
+    }
+
+    if (filters.departure_minutes_1) {
+      if (filters.departure_minutes_1.max > currentTime.to.max) {
+        currentTime.to.max = filters.departure_minutes_1.max;
+      }
+
+      if (!currentTime.to.min || filters.departure_minutes_1.min < currentTime.to.min) {
+        currentTime.to.min = filters.departure_minutes_1.min;
       }
     }
 

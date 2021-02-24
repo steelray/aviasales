@@ -10,9 +10,29 @@
     </div>
   </div>
   <ng-template #filterTypes>
-    <ng-container [ngSwitch]="activeFilterType.value">
-      <app-races-filter-travel-time *ngSwitchCase="filterTypesEnum.TRAVEL_TIME"></app-races-filter-travel-time>
-    </ng-container>
+    <div class="filter-inner__content">
+      <ng-container [ngSwitch]="activeFilterType.value">
+        <app-races-filter-travel-time
+          *ngSwitchCase="filterTypesEnum.TRAVEL_TIME"
+          [departureMinutes]="filtersData.departure_minutes"
+          [arrivalDatetime]="filtersData.arrival_datetime"
+          [searchSegments]="searchSegments"
+          [airports]="airports"></app-races-filter-travel-time>
+        <app-race-filter-baggage
+          *ngSwitchCase="filterTypesEnum.BAGGAGE"></app-race-filter-baggage>
+        <app-race-filter-airline
+          *ngSwitchCase="filterTypesEnum.AIRLINE"></app-race-filter-airline>
+        <app-race-filter-airport
+          *ngSwitchCase="filterTypesEnum.AIRPORT"
+          [airports]="airports"></app-race-filter-airport>
+        <app-race-filter-duration
+          *ngSwitchCase="filterTypesEnum.TRAVEL_DURATION"
+          [flightsDuration]="filtersData.flights_duration"></app-race-filter-duration>
+        <app-race-filter-price
+          *ngSwitchCase="filterTypesEnum.TICKET_PRICE"
+          [price]="filtersData.price"></app-race-filter-price>
+      </ng-container>
+    </div>
   </ng-template>
 
   <button mat-button class="filter-reset-btn">Сбросить фильтр</button>

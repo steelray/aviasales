@@ -1,13 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy, Self, HostListener } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, OnInit, ChangeDetectionStrategy, Self, HostListener, ChangeDetectorRef, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
-import { IFlight, IFlightSearchParams } from '@core/interfaces/search.interfaces';
+import { IFlight, IFlightSearch, IFlightSearchParams, ISearchResult } from '@core/interfaces/search.interfaces';
 import { SearchResult } from '@core/models/search-result.model';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
 import { environment } from '@environments/environment';
-import { Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-races',
@@ -18,32 +19,68 @@ import { map, switchMap, tap } from 'rxjs/operators';
 })
 export class RacesComponent implements OnInit {
   filterIsActive = false;
-  searchResult$: Observable<SearchResult>;
-  searchRequestResult$: Observable<any>;
+  allResults$: Observable<SearchResult>;
+  searchResult: ISearchResult; // prepared search result
+  flightSearch: any;
   airlineLogoEndpoint = environment.airlineLogoEndpoint;
-  allFlights: IFlight[];
-  flights: IFlight[] = [];
+  allFlights: IFlight[] = [];
+  visibleFlights: IFlight[] = [];
   visibleItems = 3;
+  viewItem: IFlight;
+  currentScrollPosition = 0;
+  updateList$ = new BehaviorSubject(null);
+  departureIATA: string;
+  arrivalIATA: string;
 
-
-  @HostListener('keyup')
-  onKeyup(event: Event): void {
-    console.log(event);
-  }
+  isLoading = true;
 
   constructor(
     @Self() private onDestroy$: NgOnDestroy,
     private activatedRoute: ActivatedRoute,
-    private searchService: SearchSearvice
+    private searchService: SearchSearvice,
+    private cdRef: ChangeDetectorRef,
+    @Inject(DOCUMENT) private document: Document
   ) { }
 
   ngOnInit(): void {
-    this.searchResult$ = this.searchService.flightSearch(this.prepareParams()).pipe(
-      switchMap(res => this.searchService.flightSearchResults(res.search_id)),
-      map(res => new SearchResult(res, this.searchService.flightSearch$.getValue())),
+    this.allResults$ = this.updateList$.pipe(
+      switchMap(() => {
+        if (!this.flightSearch) {
+          // new search
+          return this.searchService.flightSearch(this.prepareParams()).pipe(
+            tap(res => this.flightSearch = res)
+          );
+        }
+        // search by stored search id
+        return of(this.flightSearch);
+      }),
+      switchMap(() => this.searchService.flightSearchResults(this.flightSearch.search_id)),
+      // filter(res => {
+      //   const filterRes = res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals);
+      //   if (res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals)) {
+      //     this.updateList$.next(null);
+      //     this.isLoading = true;
+      //   } else {
+      //     this.isLoading = false;
+      //     this.cdRef.detectChanges();
+      //   }
+      //   return filterRes;
+      // }),
+      /*
+        * searchResult передаем, чтоб новые данные фильтров(каждый запрос
+        * flightSearchResults возвращает новые фильтры с результатами) добавлялись в старые
+      */
+      map(res => new SearchResult(res, this.flightSearch, this.searchResult)),
       tap(res => {
-        this.allFlights = res.flights;
-        this.flights = this.addItems();
+        this.isLoading = false;
+        this.searchResult = res;
+
+        this.allFlights = [...this.allFlights, ...res.flights];
+        // add items once
+        if (!this.visibleFlights.length) {
+          this.visibleFlights = this.addItems();
+        }
+        console.log(this.searchResult);
       })
     );
   }
@@ -54,20 +91,32 @@ export class RacesComponent implements OnInit {
 
 
   onScrollDown(): void {
-    this.flights = this.addItems();
+    this.visibleFlights = this.addItems();
   }
 
   trackByFn(index: number): number {
     return index;
   }
 
+  onView(e: Event, flight: IFlight): void {
+    e.preventDefault();
+    this.currentScrollPosition = this.document.documentElement.scrollTop;
+    this.viewItem = flight;
+  }
+
+  onBackToList(): void {
+    this.viewItem = null;
+    setTimeout(() => window.scroll(0, this.currentScrollPosition), 100);
+  }
+
   private addItems(): IFlight[] {
-    return [...this.flights, ...this.allFlights.slice(this.flights.length, this.visibleItems + this.flights.length)];
+    return [...this.visibleFlights, ...this.allFlights.slice(this.visibleFlights.length, this.visibleItems + this.visibleFlights.length)];
   }
 
   private prepareParams(): IFlightSearchParams {
     const { departure, arrival, departure_date, arrival_date, passengers, trip_class } = this.activatedRoute.snapshot.queryParams;
-
+    this.departureIATA = departure;
+    this.arrivalIATA = arrival;
     const params: IFlightSearchParams = {
       currency: 'uzs',
       locale: 'ru',
