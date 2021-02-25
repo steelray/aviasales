@@ -24,7 +24,9 @@
                 [filtersData]="searchResult.filters"
                 [searchSegments]="searchIdResult.segments"
                 [airports]="searchIdResult.airports"
+                [airlines]="searchIdResult.airlines"
                 [class.active]="filterIsActive"
+                (filterChanged)="onFilterChange($event)"
                 (closed)="onFilterToggle()"></app-races-filter>
             <div class="filter-backdrop" (click)="onFilterToggle()" [class.active]="filterIsActive"></div>
         </ng-template>
@@ -93,7 +95,7 @@
 <ng-template let-segment="segment" #segment>
     <div class="race-item__col">
         <span>{{segment.departure}} - {{segment.arrival}}</span>
-        <div>{{segment.departure_timestamp * 1000 | date:'HH:mm'}} - {{segment.arrival_timestamp * 1000 | date:'HH:mm'}}</div>
+        <div>{{segment.departure_timestamp * 1000 | customDate:'HH:mm':(segment.departure | getCityTimeZone:searchResult.airports)}} - {{segment.arrival_timestamp * 1000 | customDate:'HH:mm':(segment.arrival | getCityTimeZone:searchResult.airports)}}</div>
     </div>
     <div class="race-item__col text-center">
         <span>В пути</span>

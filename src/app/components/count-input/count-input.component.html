@@ -1,0 +1,7 @@
+<button mat-icon-button (click)="reduce($event)" [class.disabled]="minValue === control.value">
+  <mat-icon>remove</mat-icon>
+</button>
+<span>{{control.value}}</span>
+<button mat-icon-button (click)="increase($event)" [class.disabled]="maxDisable">
+  <mat-icon>add</mat-icon>
+</button>

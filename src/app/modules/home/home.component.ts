@@ -10,6 +10,7 @@ import { combineLatest, from, Observable, of } from 'rxjs';
 import { debounceTime, filter, finalize, map, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { placesParams } from '@core/const/places-params';
 import { IFlightSearchParams, IPlace } from '@core/interfaces/search.interfaces';
+import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +34,25 @@ export class HomeComponent implements OnInit {
   ];
 
   form: FormGroup;
+  tripClassOptions: ISelectOption[] = [
+    {
+      value: TRIP_CLASS.ECONOMY,
+      title: 'Эконом'
+    },
+    {
+      value: TRIP_CLASS.COMFORT,
+      title: 'Комфорт'
+    },
+    {
+      value: TRIP_CLASS.BUSINESS,
+      title: 'Бизнес'
+    },
+    {
+      value: TRIP_CLASS.FIRST,
+      title: 'Первый класс'
+    }
+  ];
+  maxPassengersCount = 9;
 
   constructor(
     private fb: FormBuilder,
@@ -68,10 +88,19 @@ export class HomeComponent implements OnInit {
       }),
       map(res => this.prepareSelectOptions(res))
     );
+
+    console.log(this.controls);
   }
 
   get controls(): { [key: string]: AbstractControl } {
     return this.form.controls;
+  }
+
+  get passengersCount(): number {
+    const controls: any = this.controls;
+    // tslint:disable-next-line:max-line-length
+    const res = controls.passengers.controls.adults.value + controls.passengers.controls.children.value + controls.passengers.controls.infants.value;
+    return res;
   }
 
   onSubmit(): void {
@@ -79,12 +108,22 @@ export class HomeComponent implements OnInit {
       return;
     }
     const formValue = this.form.value;
-    formValue.departure_date = this.transformDate(formValue.departure_date);
-    formValue.arrival_date = this.transformDate(formValue.arrival_date);
-    formValue.departure = formValue.departure.value;
-    formValue.arrival = formValue.arrival.value;
+    const { adults, children, infants } = this.form.value.passengers;
 
-    this.router.navigate(['/races'], { queryParams: formValue });
+    const queryParams: any = {
+      adults,
+      children,
+      infants,
+      trip_class: formValue.trip_class
+    };
+
+    queryParams.departure_date = this.transformDate(formValue.departure_date);
+    queryParams.arrival_date = this.transformDate(formValue.arrival_date);
+    queryParams.departure = formValue.departure.value;
+    queryParams.arrival = formValue.arrival.value;
+
+
+    this.router.navigate(['/races'], { queryParams });
 
     // this.searchService.flightSearch(this.prepareParams(formValue)).pipe(
     //   map(res => res.search_id),
@@ -98,7 +137,12 @@ export class HomeComponent implements OnInit {
       arrival: ['', RxwebValidators.required()],
       departure_date: ['', RxwebValidators.required()],
       arrival_date: ['', RxwebValidators.required()],
-      passengers: ['', RxwebValidators.required()]
+      passengers: this.fb.group({
+        adults: [1],
+        children: [0],
+        infants: [0],
+      }),
+      trip_class: [TRIP_CLASS.ECONOMY]
     });
   }
 
@@ -107,15 +151,17 @@ export class HomeComponent implements OnInit {
   }
 
   private prepareParams(formValue: any): IFlightSearchParams {
-    const { departure, arrival, departure_date, arrival_date, passengers } = formValue;
+    const { departure, arrival, departure_date, arrival_date, passengers, trip_class } = formValue;
 
     const params: IFlightSearchParams = {
       currency: 'uzs',
       locale: 'ru',
       know_english: true,
-      trip_class: 'C',
+      trip_class,
       passengers: {
-        adults: +passengers
+        adults: +passengers.adults,
+        children: +passengers.children,
+        infants: +passengers.infants,
       },
       segments: [
         {

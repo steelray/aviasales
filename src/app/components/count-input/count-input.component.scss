@@ -1,0 +1,29 @@
+:host {
+  display: flex;
+  button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--main-color);
+    &.disabled {
+      pointer-events: none;
+      background: var(--border-color);
+    }
+    mat-icon {
+      font-size: 20px;
+      width: 30px;
+      height: 30px;
+      color: var(--white);
+      line-height: 30px;
+    }
+  }
+  span {
+    padding: 0 5px;
+    text-align: center;
+    line-height: 30px;
+    min-width: 35px;
+  }
+}

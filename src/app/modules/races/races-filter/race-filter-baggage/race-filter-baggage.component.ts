@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-race-filter-baggage',
@@ -7,8 +8,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RaceFilterBaggageComponent {
-
-  changeAll(): void {
-
+  @Input() control = new FormControl();
+  changeAll(event): void {
+    console.log(event)
   }
 }

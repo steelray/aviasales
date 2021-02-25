@@ -3,12 +3,10 @@ import {
   IAirport,
   IFlight,
   IFlightSearch,
-  IFlightSegment,
   IFlightSegmentToBack,
   IFlightTerms,
   IGatesInfo,
   IMinMaxValues,
-  IRace,
   IRaceTransfer,
   ISearchResult,
   ISearchResultFilter,
@@ -134,6 +132,16 @@ export class SearchResult implements ISearchResult {
         departure: []
       },
       arrival_datetime: {
+        back: {
+          max: 0,
+          min: 0
+        },
+        to: {
+          max: 0,
+          min: 0
+        }
+      },
+      departure_datetime: {
         back: {
           max: 0,
           min: 0
@@ -355,8 +363,8 @@ export class SearchResult implements ISearchResult {
     const res: IFlightSegmentToBack = {
       departure: flights[0].departure,
       arrival: flights[flights.length - 1].arrival,
-      departure_timestamp: flights[0].local_departure_timestamp,
-      arrival_timestamp: flights[flights.length - 1].local_arrival_timestamp,
+      departure_timestamp: flights[0].departure_timestamp,
+      arrival_timestamp: flights[flights.length - 1].arrival_timestamp,
       total_duration: flights.reduce((accumulator, currentValue) => accumulator + currentValue.duration, 0),
       races: []
     };

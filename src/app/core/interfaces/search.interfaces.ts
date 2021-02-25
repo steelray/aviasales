@@ -70,14 +70,12 @@ export interface IGatesInfo {
 }
 
 export interface ISearchResultFilter {
-  airports: { // IATA CODES
-    arrival: string[];
-    departure: string[];
-  };
+  airports: ISearchResultFilterAirports;
   /*
     * arrival_datetime_0 = туда, arrival_datetime_1 = обратно
   */
   arrival_datetime: ISearchResultFilterArrivalDateTime;
+  departure_datetime?: ISearchResultFilterArrivalDateTime;
   /*
     * arrival_time_0 = туда, arrival_time_1 = обратно
   */
@@ -89,6 +87,11 @@ export interface ISearchResultFilter {
   departure_minutes?: ISearchResultFilterArrivalDateTime;
   flights_duration: IMinMaxValues;
   price: IMinMaxValues;
+}
+
+export interface ISearchResultFilterAirports { // IATA CODES
+  arrival: string[];
+  departure: string[];
 }
 
 export interface ISearchResultSegments {
@@ -207,12 +210,12 @@ export interface IRace {
   departure_time: string;
   departure_timestamp: number;
   duration: number;
-  local_arrival_timestamp: number;
-  local_departure_timestamp: number;
   rating: number;
   trip_class: TRIP_CLASS;
   transfers?: IRaceTransfer[]; // segment transfers
   aircraft?: string;
+  local_arrival_timestamp?: number;
+  local_departure_timestamp?: number;
 }
 
 

@@ -1,1 +1,8 @@
-<p>race-filter-airline works!</p>
+<div class="filter-field" *ngFor="let airline of airlines">
+  <mat-checkbox [value]="airline.iata" [checked]="airline.iata | inArray:control.value" (change)="onChange($event, this.control)">
+    <div class="checkbox-inner">
+      {{airline.name}}
+      <img [src]="airline.iata | getAirlineLogo">
+    </div>
+  </mat-checkbox>
+</div>

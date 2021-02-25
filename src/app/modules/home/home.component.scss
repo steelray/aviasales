@@ -11,3 +11,27 @@ button {
 h1 {
   margin-bottom: 50px;
 }
+
+hr {
+  border-color: var(--border-color);
+  border-top: 0;
+  margin: 20px 0;
+}
+
+.trip-class-btn {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.passengers-class-menu {
+  padding: 10px 15px;
+}
+
+.passengers-class-btn {
+  height: 50px;
+  padding: 0 20px;
+  background: var(--input-bg-color);
+  border-radius: 4px;
+  border: none;
+  text-align: left;
+}

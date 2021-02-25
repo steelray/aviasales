@@ -1,6 +1,7 @@
 import { LabelType, Options } from '@angular-slider/ngx-slider';
 import { DecimalPipe } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { IMinMaxValues } from '@core/interfaces/search.interfaces';
 
 @Component({
@@ -11,6 +12,7 @@ import { IMinMaxValues } from '@core/interfaces/search.interfaces';
 })
 export class RaceFilterPriceComponent implements OnInit {
   @Input() price: IMinMaxValues;
+  @Input() control = new FormControl();
   constructor(
     private decimalPipe: DecimalPipe
   ) { }

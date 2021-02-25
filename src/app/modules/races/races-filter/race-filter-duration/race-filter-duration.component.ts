@@ -1,5 +1,6 @@
 import { LabelType, Options } from '@angular-slider/ngx-slider';
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { IMinMaxValues } from '@core/interfaces/search.interfaces';
 import { minutesToTime } from '@core/utils/minutes-to-time.util';
 
@@ -11,6 +12,7 @@ import { minutesToTime } from '@core/utils/minutes-to-time.util';
 })
 export class RaceFilterDurationComponent implements OnInit {
   @Input() flightsDuration: IMinMaxValues;
+  @Input() control = new FormControl();
   constructor() { }
   options: Options;
   ngOnInit(): void {

@@ -33,10 +33,9 @@
             [control]="controls.arrival_date">
         </app-datepicker>
 
-        <app-select
-            placeholder="Количество пассажиров"
-            [options]="passengersQuantityOptions"
-            [control]="controls.passengers"></app-select>
+        <button type="button" class="passengers-class-btn"  [matMenuTriggerFor]="menu">
+            {{passengersCount}}
+        </button>
     </div>
 
     <div class="text-center">
@@ -44,3 +43,41 @@
     </div>
 
 </form>
+
+<mat-menu #menu="matMenu">
+    <div class="passengers-class-menu">
+        <div class="passengers-number">
+            <div>
+                Взрослые
+                <span>Старше 12 лет</span>
+            </div>
+            <app-count-input 
+                [control]="controls.passengers['controls'].adults"
+                [minValue]="1"
+                [maxDisable]="passengersCount === maxPassengersCount"></app-count-input>
+        </div>
+        <div class="passengers-number">
+            <div>
+                Дети
+                <span>От 2 до 12 лет</span>
+            </div>
+            <app-count-input 
+                [control]="controls.passengers['controls'].children"
+                [maxDisable]="passengersCount === maxPassengersCount"></app-count-input>
+        </div>
+        <div class="passengers-number">
+            <div>
+                Младенцы
+                <span>До 2 лет, без места</span>
+            </div>
+            <app-count-input 
+                [control]="controls.passengers['controls'].infants"
+                [maxDisable]="passengersCount === maxPassengersCount"></app-count-input>
+        </div>
+    
+        <hr>
+        <mat-radio-group [formControl]="controls.trip_class" (click)="$event.stopPropagation()">
+            <mat-radio-button class="trip-class-btn" *ngFor="let option of tripClassOptions" [value]="option.value">{{option.title}}</mat-radio-button>
+        </mat-radio-group>
+    </div>
+</mat-menu>

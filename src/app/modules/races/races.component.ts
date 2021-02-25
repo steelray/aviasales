@@ -1,14 +1,15 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, OnInit, ChangeDetectionStrategy, Self, HostListener, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Self, ChangeDetectorRef, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
-import { IFlight, IFlightSearch, IFlightSearchParams, ISearchResult } from '@core/interfaces/search.interfaces';
+import { IFlight, IFlightSearchParams, ISearchResult } from '@core/interfaces/search.interfaces';
 import { SearchResult } from '@core/models/search-result.model';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
 import { environment } from '@environments/environment';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-races',
@@ -25,7 +26,7 @@ export class RacesComponent implements OnInit {
   airlineLogoEndpoint = environment.airlineLogoEndpoint;
   allFlights: IFlight[] = [];
   visibleFlights: IFlight[] = [];
-  visibleItems = 3;
+  visibleItemsCount = 3;
   viewItem: IFlight;
   currentScrollPosition = 0;
   updateList$ = new BehaviorSubject(null);
@@ -35,7 +36,6 @@ export class RacesComponent implements OnInit {
   isLoading = true;
 
   constructor(
-    @Self() private onDestroy$: NgOnDestroy,
     private activatedRoute: ActivatedRoute,
     private searchService: SearchSearvice,
     private cdRef: ChangeDetectorRef,
@@ -72,12 +72,11 @@ export class RacesComponent implements OnInit {
       */
       map(res => new SearchResult(res, this.flightSearch, this.searchResult)),
       tap(res => {
-        this.isLoading = false;
         this.searchResult = res;
-
+        this.isLoading = false;
         this.allFlights = [...this.allFlights, ...res.flights];
-        // add items once
-        if (!this.visibleFlights.length) {
+        // add items if less then 'visibleItemsCount'
+        if (!this.visibleFlights.length || this.visibleFlights.length < this.visibleItemsCount) {
           this.visibleFlights = this.addItems();
         }
         console.log(this.searchResult);
@@ -110,11 +109,21 @@ export class RacesComponent implements OnInit {
   }
 
   private addItems(): IFlight[] {
-    return [...this.visibleFlights, ...this.allFlights.slice(this.visibleFlights.length, this.visibleItems + this.visibleFlights.length)];
+    // tslint:disable-next-line:max-line-length
+    return [...this.visibleFlights, ...this.allFlights.slice(this.visibleFlights.length, this.visibleItemsCount + this.visibleFlights.length)];
   }
 
   private prepareParams(): IFlightSearchParams {
-    const { departure, arrival, departure_date, arrival_date, passengers, trip_class } = this.activatedRoute.snapshot.queryParams;
+    const {
+      departure,
+      arrival,
+      departure_date,
+      arrival_date,
+      children,
+      adults,
+      infants,
+      trip_class
+    } = this.activatedRoute.snapshot.queryParams;
     this.departureIATA = departure;
     this.arrivalIATA = arrival;
     const params: IFlightSearchParams = {
@@ -123,7 +132,9 @@ export class RacesComponent implements OnInit {
       know_english: true,
       trip_class: trip_class ? trip_class : TRIP_CLASS.ECONOMY,
       passengers: {
-        adults: +passengers
+        adults: +adults,
+        children: +children,
+        infants: +infants,
       },
       segments: [
         {
@@ -139,6 +150,30 @@ export class RacesComponent implements OnInit {
       ]
     };
     return params;
+  }
+
+  onFilterChange(filterData: any): void {
+
+  }
+
+
+  private getUnixFromMins(date: string, mins: number): number {
+    const toDepHoursMin = this.getHoursFromMins(mins);
+    const toDepMinutesMin = this.getMinutesFromMins(mins);
+    const m = moment();
+    m.set({
+      hour: toDepHoursMin,
+      minutes: toDepMinutesMin
+    });
+    return m.unix();
+  }
+
+  private getHoursFromMins(mins: number): number {
+    return Math.floor(mins / 60);
+  }
+
+  private getMinutesFromMins(mins: number): number {
+    return mins % 60;
   }
 
 

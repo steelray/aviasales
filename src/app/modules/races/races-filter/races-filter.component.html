@@ -12,25 +12,35 @@
   <ng-template #filterTypes>
     <div class="filter-inner__content">
       <ng-container [ngSwitch]="activeFilterType.value">
+        <app-race-filter-airline
+          *ngSwitchCase="filterTypesEnum.AIRLINE"
+          [airlines]="airlines"
+          [searchSegments]="searchSegments"
+          [control]="form.get('airline')"></app-race-filter-airline>
+        <app-race-filter-airport
+          *ngSwitchCase="filterTypesEnum.AIRPORT"
+          [allAirports]="airports"
+          [filterAirports]="filtersData.airports"
+          [searchSegments]="searchSegments"
+          [form]="form.get('airport')"></app-race-filter-airport>
+        <app-race-filter-baggage
+          *ngSwitchCase="filterTypesEnum.BAGGAGE"
+          [control]="form.get('baggage')"></app-race-filter-baggage>
+        <app-race-filter-duration
+          *ngSwitchCase="filterTypesEnum.TRAVEL_DURATION"
+          [flightsDuration]="filtersData.flights_duration"
+          [control]="form.get('flights_duration')"></app-race-filter-duration>
+        <app-race-filter-price
+          *ngSwitchCase="filterTypesEnum.TICKET_PRICE"
+          [price]="filtersData.price"
+          [control]="form.get('price')"></app-race-filter-price>
         <app-races-filter-travel-time
           *ngSwitchCase="filterTypesEnum.TRAVEL_TIME"
           [departureMinutes]="filtersData.departure_minutes"
           [arrivalDatetime]="filtersData.arrival_datetime"
           [searchSegments]="searchSegments"
-          [airports]="airports"></app-races-filter-travel-time>
-        <app-race-filter-baggage
-          *ngSwitchCase="filterTypesEnum.BAGGAGE"></app-race-filter-baggage>
-        <app-race-filter-airline
-          *ngSwitchCase="filterTypesEnum.AIRLINE"></app-race-filter-airline>
-        <app-race-filter-airport
-          *ngSwitchCase="filterTypesEnum.AIRPORT"
-          [airports]="airports"></app-race-filter-airport>
-        <app-race-filter-duration
-          *ngSwitchCase="filterTypesEnum.TRAVEL_DURATION"
-          [flightsDuration]="filtersData.flights_duration"></app-race-filter-duration>
-        <app-race-filter-price
-          *ngSwitchCase="filterTypesEnum.TICKET_PRICE"
-          [price]="filtersData.price"></app-race-filter-price>
+          [airports]="airports"
+          [form]="form.get('travel_time')"></app-races-filter-travel-time>
       </ng-container>
     </div>
   </ng-template>

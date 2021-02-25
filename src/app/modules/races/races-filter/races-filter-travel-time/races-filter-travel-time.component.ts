@@ -11,7 +11,7 @@ import * as moment from 'moment';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RacesFilterTravelTimeComponent implements OnInit {
-  form: FormGroup;
+  @Input() form: FormGroup;
   @Input() searchSegments: ISearchResultSegments;
   @Input() arrivalDatetime: ISearchResultFilterArrivalDateTime;
   @Input() departureMinutes: ISearchResultFilterArrivalDateTime;
@@ -44,7 +44,6 @@ export class RacesFilterTravelTimeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log(this.airports);
 
     this.departureToOptions = {
       floor: this.departureMinutes.to.min,
@@ -92,24 +91,6 @@ export class RacesFilterTravelTimeComponent implements OnInit {
       }
     };
 
-    // console.log(this.timestampToDatetime(this.arrivalDatetime.to.min));
-    // console.log(minutesToTime(this.departureMinutes.to.min));
-    // console.log(minutesToTime(this.departureMinutes.back.min));
-    // console.log(minutesToTime(this.departureMinutes.back.max));
-
-    this.form = this.fb.group({
-      to: this.fb.group({
-        departure: [''],
-        arrival: ['']
-      }),
-      back: this.fb.group({
-        departure: [''],
-        arrival: ['']
-      })
-    });
-    this.form.valueChanges.subscribe(res => {
-      // console.log(res);
-    });
   }
 
   get controls(): any {

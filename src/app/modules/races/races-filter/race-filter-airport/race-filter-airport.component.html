@@ -1,13 +1,37 @@
-<mat-form-field class="example-full-width">
-  <mat-label>Выберите аэрапорт</mat-label>
-  <input type="text"
-         aria-label="Аэрапорт"
-         matInput
-         [formControl]="control"
-         [matAutocomplete]="auto">
-  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayWithFn">
-    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-      {{option.title}}
-    </mat-option>
-  </mat-autocomplete>
-</mat-form-field>
+<h4>Вылет из {{searchSegments.to.original_origin | getCity:allAirports:'po'}}</h4>
+<div class="filter-field" *ngFor="let airport of filterAirports.departure">
+  <mat-checkbox 
+    (change)="onChange($event, form.controls.to['controls'].departure)"
+    [value]="airport"
+    [checked]="airport | inArray:form.controls.to['controls'].departure.value">{{airport | getAirportName:allAirports}}</mat-checkbox>
+</div>
+
+<hr>
+
+<h4>Прибытие в {{searchSegments.to.original_destination | getCity:allAirports:'vi'}}</h4>
+<div class="filter-field" *ngFor="let airport of filterAirports.arrival">
+  <mat-checkbox 
+    (change)="onChange($event, form.controls.to['controls'].arrival)"
+    [value]="airport"
+    [checked]="airport | inArray:form.controls.to['controls'].arrival.value">{{airport | getAirportName:allAirports}}</mat-checkbox>
+</div>
+<hr>
+<ng-container *ngIf="searchSegments?.back">
+  <h4>Вылет из {{searchSegments.back.original_origin | getCity:allAirports:'po'}}</h4>
+  <div class="filter-field" *ngFor="let airport of filterAirports.arrival">
+    <mat-checkbox 
+      (change)="onChange($event, form.controls.back['controls'].departure)"
+      [value]="airport"
+      [checked]="airport | inArray:form.controls.back['controls'].departure.value">{{airport | getAirportName:allAirports}}</mat-checkbox>
+  </div>
+  <hr>
+
+  <h4>Прибытие в {{searchSegments.back.original_destination | getCity:allAirports:'vi'}}</h4>
+  <div class="filter-field" *ngFor="let airport of filterAirports.departure">
+    <mat-checkbox 
+      (change)="onChange($event, form.controls.back['controls'].arrival)"
+      [value]="airport"
+      [checked]="airport | inArray:form.controls.back['controls'].arrival.value">{{airport | getAirportName:allAirports}}</mat-checkbox>
+  </div>
+</ng-container>
+

@@ -26,6 +26,7 @@ import { FileInputComponent } from './file-input/file-input.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MaterialIconCustomizeModule } from '@core/material-icon-customize.module';
 import { InputAutocompleteComponent } from './input-autocomplete/input-autocomplete.component';
+import { CountInputComponent } from './count-input/count-input.component';
 
 
 const COMPONENTS = [
@@ -36,7 +37,8 @@ const COMPONENTS = [
   DatepickerComponent,
   FileInputComponent,
   PageNotFoundComponent,
-  InputAutocompleteComponent
+  InputAutocompleteComponent,
+  CountInputComponent
 ];
 
 @NgModule({

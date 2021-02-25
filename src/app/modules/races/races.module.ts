@@ -36,6 +36,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { GetAirportNamePipe } from '@core/pipes/get-airport-name.pipe';
+import { GetCityTimeZonePipe } from '@core/pipes/get-city-timezone.pipe';
+import { CustomDatePipe } from '@core/pipes/custom-date.pipe';
+import { RaceFilterChecboxesGroupComponent } from './races-filter/race-filter-checkboxes-group.component';
+import { InArrayPipe } from '@core/pipes/in-array.pipe';
 
 @NgModule({
   declarations: [
@@ -53,7 +58,12 @@ import { MatInputModule } from '@angular/material/input';
     RaceFilterBaggageComponent,
     RaceFilterAirportComponent,
     RaceFilterAirlineComponent,
-    RaceFilterDurationComponent
+    RaceFilterDurationComponent,
+    GetAirportNamePipe,
+    GetCityTimeZonePipe,
+    CustomDatePipe,
+    RaceFilterChecboxesGroupComponent,
+    InArrayPipe
   ],
   imports: [
     CommonModule,
