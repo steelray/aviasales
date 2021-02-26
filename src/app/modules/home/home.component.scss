@@ -34,4 +34,7 @@ hr {
   border-radius: 4px;
   border: none;
   text-align: left;
+  span {
+    color: var(--na-font-color);
+  }
 }

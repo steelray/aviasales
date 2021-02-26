@@ -34,7 +34,12 @@
         </app-datepicker>
 
         <button type="button" class="passengers-class-btn"  [matMenuTriggerFor]="menu">
-            {{passengersCount}}
+            <div>
+                {{passengersCount}} пассажир
+            </div>
+            <span>
+                {{activeTripClass}}
+            </span>
         </button>
     </div>
 

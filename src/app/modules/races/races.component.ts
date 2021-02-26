@@ -2,14 +2,13 @@ import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, Self, ChangeDetectorRef, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
-import { IFlight, IFlightSearchParams, ISearchResult } from '@core/interfaces/search.interfaces';
+import { IFlight, IFlightSearchParams, ISearchResult, ISearchResultFilter } from '@core/interfaces/search.interfaces';
 import { SearchResult } from '@core/models/search-result.model';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
 import { environment } from '@environments/environment';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-races',
@@ -19,15 +18,16 @@ import * as moment from 'moment';
   providers: [NgOnDestroy]
 })
 export class RacesComponent implements OnInit {
+  private readonly visibleItemsCount = 3;
   filterIsActive = false;
   allResults$: Observable<SearchResult>;
   searchResult: ISearchResult; // prepared search result
   flightSearch: any;
   airlineLogoEndpoint = environment.airlineLogoEndpoint;
   allFlights: IFlight[] = [];
-  visibleFlights: IFlight[] = [];
-  visibleItemsCount = 3;
-  viewItem: IFlight;
+  filteredFlights: IFlight[] = []; // by default all flights
+  visibleFlights$ = new BehaviorSubject<IFlight[]>([]);
+  viewItem: IFlight; // items detail view
   currentScrollPosition = 0;
   updateList$ = new BehaviorSubject(null);
   departureIATA: string;
@@ -75,9 +75,11 @@ export class RacesComponent implements OnInit {
         this.searchResult = res;
         this.isLoading = false;
         this.allFlights = [...this.allFlights, ...res.flights];
+        this.filteredFlights = this.allFlights;
         // add items if less then 'visibleItemsCount'
-        if (!this.visibleFlights.length || this.visibleFlights.length < this.visibleItemsCount) {
-          this.visibleFlights = this.addItems();
+        const currentVisibleFlights = this.visibleFlights$.getValue();
+        if (!currentVisibleFlights.length || currentVisibleFlights.length < this.visibleItemsCount) {
+          this.visibleFlights$.next(this.addItems());
         }
         console.log(this.searchResult);
       })
@@ -90,7 +92,7 @@ export class RacesComponent implements OnInit {
 
 
   onScrollDown(): void {
-    this.visibleFlights = this.addItems();
+    this.visibleFlights$.next(this.addItems());
   }
 
   trackByFn(index: number): number {
@@ -108,10 +110,71 @@ export class RacesComponent implements OnInit {
     setTimeout(() => window.scroll(0, this.currentScrollPosition), 100);
   }
 
-  private addItems(): IFlight[] {
-    // tslint:disable-next-line:max-line-length
-    return [...this.visibleFlights, ...this.allFlights.slice(this.visibleFlights.length, this.visibleItemsCount + this.visibleFlights.length)];
+
+  onFilterChange(filters: any): void {
+    this.visibleFlights$.next([]); // reset current visible flights
+    this.filteredFlights = this.filterFlights(filters); // fliter all flights
+    this.visibleFlights$.next(this.addItems()); // add filtered items to visible flights
+
+    console.log(this.filteredFlights.length);
+    console.log(filters);
+    console.log(this.filteredFlights);
   }
+
+  private filterFlights(filters: any): IFlight[] {
+    const allFlgihts = this.allFlights;
+    return allFlgihts.filter(flight => {
+      let res = true;
+
+      switch (true) {
+        case !flight.carriers.filter(iata => filters.airline.find(airline => airline === iata)).length:
+          res = false;
+          break;
+        case !filters.airport.to.arrival.includes(flight.segment.to.arrival):
+          res = false;
+          break;
+        case !filters.airport.to.departure.includes(flight.segment.to.departure):
+          res = false;
+          break;
+        case !filters.airport.back?.arrival?.includes(flight.segment?.back?.arrival):
+          res = false;
+          break;
+        case !filters.airport?.back?.departure.includes(flight.segment?.back?.departure):
+          res = false;
+          break;
+        case !(flight.price >= filters.price[0] && flight.price <= filters.price[1]):
+          res = false;
+          break;
+        case !(
+          flight.segment.to.total_duration >= filters.flights_duration.to[0]
+          &&
+          flight.segment.to.total_duration <= filters.flights_duration.to[1]
+        ):
+          res = false;
+          break;
+        case !(
+          flight.segment.back.total_duration >= filters.flights_duration.back[0]
+          &&
+          flight.segment.back.total_duration <= filters.flights_duration.back[1]
+        ):
+          res = false;
+          break;
+      }
+
+
+
+      return res;
+    });
+  }
+
+
+  private addItems(): IFlight[] {
+    const currentVisibleFlights = this.visibleFlights$.getValue();
+
+    // tslint:disable-next-line:max-line-length
+    return [...currentVisibleFlights, ...this.filteredFlights.slice(currentVisibleFlights.length, this.visibleItemsCount + currentVisibleFlights.length)];
+  }
+
 
   private prepareParams(): IFlightSearchParams {
     const {
@@ -150,30 +213,6 @@ export class RacesComponent implements OnInit {
       ]
     };
     return params;
-  }
-
-  onFilterChange(filterData: any): void {
-
-  }
-
-
-  private getUnixFromMins(date: string, mins: number): number {
-    const toDepHoursMin = this.getHoursFromMins(mins);
-    const toDepMinutesMin = this.getMinutesFromMins(mins);
-    const m = moment();
-    m.set({
-      hour: toDepHoursMin,
-      minutes: toDepMinutesMin
-    });
-    return m.unix();
-  }
-
-  private getHoursFromMins(mins: number): number {
-    return Math.floor(mins / 60);
-  }
-
-  private getMinutesFromMins(mins: number): number {
-    return mins % 60;
   }
 
 

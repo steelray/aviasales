@@ -60,6 +60,16 @@ export class SearchResult implements ISearchResult {
       return;
     }
     let proposals = [];
+
+    const segments = result[0].segments;
+    this.segments = {
+      to: segments[0],
+      back: null
+    };
+    if (segments[1]) {
+      this.segments.back = segments[1];
+    }
+
     result.forEach(res => {
       if (res?.proposals?.length) {
         this.airlines = this.pushOnlyUniquesObjArray(this.airlines, Object.values(res.airlines), 'iata');
@@ -87,14 +97,10 @@ export class SearchResult implements ISearchResult {
 
     this.flights = proposals;
 
-    const segments = result[0].segments;
-    this.segments = {
-      to: segments[0],
-      back: null
-    };
-    if (segments[1]) {
-      this.segments.back = segments[1];
-    }
+    this.filters.flights_duration = this.prepareFlightsDuration(this.flights); // set min max flight duration values for to&&back races;
+
+
+
   }
 
 
@@ -120,7 +126,6 @@ export class SearchResult implements ISearchResult {
     res.arrival_time = this.prepareFilterArrivalTime(newFilters, res.arrival_time);
     res.departure_time = this.prepareFilterDepartureTime(newFilters, res.departure_time);
     res.departure_minutes = this.prepareFilterDepartureMinutes(newFilters, res.departure_minutes);
-    res.flights_duration = this.prepareFlightsDuration(newFilters.flights_duration, res.flights_duration);
     res.price = this.prepareFilterPrice(newFiltersPrice, res.price);
     return res;
   }
@@ -182,8 +187,14 @@ export class SearchResult implements ISearchResult {
         },
       },
       flights_duration: {
-        max: 0,
-        min: 0,
+        to: {
+          max: 0,
+          min: 0,
+        },
+        back: {
+          max: 0,
+          min: 0,
+        }
       },
       price: {
         max: 0,
@@ -302,14 +313,27 @@ export class SearchResult implements ISearchResult {
     return currentPrice;
   }
 
-  private prepareFlightsDuration(durations: IMinMaxValues, currentDurations: IMinMaxValues): IMinMaxValues {
-    if (currentDurations.max < durations.max) {
-      currentDurations.max = durations.max;
+  private prepareFlightsDuration(
+    flights: IFlight[]
+  ): ISearchResultFilterArrivalDateTime {
+    const res: ISearchResultFilterArrivalDateTime = {
+      to: {
+        min: 0,
+        max: 0,
+      },
+      back: {
+        min: 0,
+        max: 0
+      }
+    };
+    res.to.max = Math.max.apply(Math, flights.map(flgiht => flgiht.segment.to.total_duration));
+    res.to.min = Math.min.apply(Math, flights.map(flgiht => flgiht.segment.to.total_duration));
+    if (this.segments?.back) {
+      res.back.max = Math.max.apply(Math, flights.map(flgiht => flgiht.segment.back.total_duration));
+      res.back.min = Math.min.apply(Math, flights.map(flgiht => flgiht.segment.back.total_duration));
     }
-    if (!currentDurations.min || durations.min < currentDurations.min) {
-      currentDurations.min = durations.min;
-    }
-    return currentDurations;
+
+    return res;
   }
 
   private prepareFlights(proposals: any): IFlight[] {

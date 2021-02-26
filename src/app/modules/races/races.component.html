@@ -32,52 +32,54 @@
         </ng-template>
     </header>
 
-    <ng-container *ngIf="visibleFlights.length;else noRacesFound">
-        <div
-            *ngIf="!viewItem;else viewItemTemp"
-            class="search-results"
-            infiniteScroll
-            [infiniteScrollDistance]="2"
-            [infiniteScrollThrottle]="50"
-            (scrolled)="onScrollDown()">
-            
-            <mat-card class="race-item" *ngFor="let flight of visibleFlights;trackBy: trackByFn">
-                <div class="race-item__header">
-                    <div class="race-price">
-                        {{flight.price | number | customNumber}}
-                        <span>сум</span>
+    <ng-container *ngIf="visibleFlights$ | async as visibleFlights;else noRacesFound">
+        <ng-container *ngIf="visibleFlights.length;else noRacesFound">
+            <div
+                *ngIf="!viewItem;else viewItemTemp"
+                class="search-results"
+                infiniteScroll
+                [infiniteScrollDistance]="2"
+                [infiniteScrollThrottle]="50"
+                (scrolled)="onScrollDown()">
+                
+                <mat-card class="race-item" *ngFor="let flight of visibleFlights;trackBy: trackByFn">
+                    <div class="race-item__header">
+                        <div class="race-price">
+                            {{flight.price | number | customNumber}}
+                            <span>сум</span>
+                        </div>
+                        <div class="race-logos">
+                            <img *ngFor="let carrier of flight.carriers" [src]="carrier | getAirlineLogo" [matTooltip]="carrier | getAirlineName:searchResult.airlines" alt="logo-1">
+                        </div>
                     </div>
-                    <div class="race-logos">
-                        <img *ngFor="let carrier of flight.carriers" [src]="carrier | getAirlineLogo" [matTooltip]="carrier | getAirlineName:searchResult.airlines" alt="logo-1">
-                    </div>
-                </div>
-                <mat-card-content>
-                    <mat-list>
-                        <mat-list-item>
-                            <ng-container
-                                [ngTemplateOutlet]="segment"
-                                [ngTemplateOutletContext]="{segment: flight.segment.to}"></ng-container>
-                        </mat-list-item>
-                        <mat-list-item *ngIf="flight.segment.back">
-                            <ng-container
-                                [ngTemplateOutlet]="segment"
-                                [ngTemplateOutletContext]="{segment: flight.segment.back}"></ng-container>
-                        </mat-list-item>
-    
-                        <ng-template #race let-race>
-    
-                        </ng-template>
-                    </mat-list>
-                </mat-card-content>
-                <mat-card-actions>
-                    <button class="buy-btn" mat-raised-button color="primary">Купить</button>
-                    <a href="#" (click)="onView($event, flight)" class="more-btn">
-                        Подробнее
-                        <mat-icon>keyboard_arrow_right</mat-icon>
-                    </a>
-                </mat-card-actions>
-            </mat-card>
-        </div>
+                    <mat-card-content>
+                        <mat-list>
+                            <mat-list-item>
+                                <ng-container
+                                    [ngTemplateOutlet]="segment"
+                                    [ngTemplateOutletContext]="{segment: flight.segment.to}"></ng-container>
+                            </mat-list-item>
+                            <mat-list-item *ngIf="flight.segment.back">
+                                <ng-container
+                                    [ngTemplateOutlet]="segment"
+                                    [ngTemplateOutletContext]="{segment: flight.segment.back}"></ng-container>
+                            </mat-list-item>
+        
+                            <ng-template #race let-race>
+        
+                            </ng-template>
+                        </mat-list>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button class="buy-btn" mat-raised-button color="primary">Купить</button>
+                        <a href="#" (click)="onView($event, flight)" class="more-btn">
+                            Подробнее
+                            <mat-icon>keyboard_arrow_right</mat-icon>
+                        </a>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </ng-container>
       
     </ng-container>
     <ng-template #noRacesFound>

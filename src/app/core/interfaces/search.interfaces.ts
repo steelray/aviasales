@@ -85,7 +85,7 @@ export interface ISearchResultFilter {
     */
   departure_time: ISearchResultFilterTime;
   departure_minutes?: ISearchResultFilterArrivalDateTime;
-  flights_duration: IMinMaxValues;
+  flights_duration: ISearchResultFilterArrivalDateTime;
   price: IMinMaxValues;
 }
 

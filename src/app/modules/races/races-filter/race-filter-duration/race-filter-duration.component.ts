@@ -1,7 +1,7 @@
 import { LabelType, Options } from '@angular-slider/ngx-slider';
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { IMinMaxValues } from '@core/interfaces/search.interfaces';
+import { FormControl, FormGroup } from '@angular/forms';
+import { IAirport, IMinMaxValues, ISearchResultFilterArrivalDateTime, ISearchResultSegments } from '@core/interfaces/search.interfaces';
 import { minutesToTime } from '@core/utils/minutes-to-time.util';
 
 @Component({
@@ -11,26 +11,42 @@ import { minutesToTime } from '@core/utils/minutes-to-time.util';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RaceFilterDurationComponent implements OnInit {
-  @Input() flightsDuration: IMinMaxValues;
-  @Input() control = new FormControl();
+  @Input() flightsDuration: ISearchResultFilterArrivalDateTime;
+  @Input() form: FormGroup;
+  @Input() airports: IAirport[];
+  @Input() searchSegments: ISearchResultSegments;
+
+
   constructor() { }
-  options: Options;
-  ngOnInit(): void {
-    this.options = {
-      floor: this.flightsDuration.min,
-      ceil: this.flightsDuration.max,
-      step: 10, // in minutes
-      translate: (value: number, label: LabelType): string => {
-        switch (label) {
-          case LabelType.Low:
-            return `от ${this.minutesToHourseMinutes(value)}`;
-          case LabelType.High:
-            return `до ${this.minutesToHourseMinutes(value)}`;
-          default:
-            return '' + this.minutesToHourseMinutes(value);
-        }
+  optionsTo: Options;
+  optionsBack: Options;
+  defaultOptions: Options = {
+    step: 10, // in minutes
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          return `от ${this.minutesToHourseMinutes(value)}`;
+        case LabelType.High:
+          return `до ${this.minutesToHourseMinutes(value)}`;
+        default:
+          return '' + this.minutesToHourseMinutes(value);
       }
+    }
+  };
+
+  ngOnInit(): void {
+    this.optionsTo = {
+      floor: this.flightsDuration.to.min,
+      ceil: this.flightsDuration.to.max,
+      ...this.defaultOptions
     };
+    if (this.searchSegments.back) {
+      this.optionsBack = {
+        floor: this.flightsDuration.back.min,
+        ceil: this.flightsDuration.back.max,
+        ...this.defaultOptions
+      };
+    }
   }
 
   private minutesToHourseMinutes(mins: number): string {

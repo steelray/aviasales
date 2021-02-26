@@ -7,8 +7,8 @@
   <label>Вылет из {{searchSegments.to.original_origin | getCity:airports:'po'}}:</label>
   <ngx-slider 
     [formControl]="controls.to.controls.departure" 
-    [value]="departureMinutes.to.min" 
-    [highValue]="departureMinutes.to.max" 
+    [value]="departureDatetime.to.min" 
+    [highValue]="departureDatetime.to.max" 
     [options]="departureToOptions">
   </ngx-slider>
   <label>Прибытие {{searchSegments.to.original_destination | getCity:airports:'vi'}}:</label>
@@ -29,8 +29,8 @@
   <label>Вылет из {{searchSegments.back.original_origin | getCity:airports:'po'}}:</label>
   <ngx-slider 
     [formControl]="controls.back.controls.departure" 
-    [value]="departureMinutes.back.min" 
-    [highValue]="departureMinutes.back.max" 
+    [value]="departureDatetime.back.min" 
+    [highValue]="departureDatetime.back.max" 
     [options]="departureBackOptions">
   </ngx-slider>
   <label>Прибытие {{searchSegments.back.original_destination | getCity:airports:'vi'}}:</label>

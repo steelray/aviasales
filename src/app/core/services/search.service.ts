@@ -12,7 +12,7 @@ export class SearchSearvice extends ApiService {
   flightSearch$: Observable<any>;
   searchResult$ = new BehaviorSubject<ISearchResult>(null);
 
-  mock = true;
+  mock = false;
   flightSearch(params: any): Observable<any> {
     if (this.mock) {
       return this.http.get('/assets/flight-search.json').pipe(

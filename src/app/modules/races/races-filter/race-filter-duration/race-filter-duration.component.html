@@ -1,6 +1,27 @@
-<ngx-slider
-  [formControl]="control"
-  [value]="flightsDuration.min"
-  [highValue]="flightsDuration.max"
-  [options]="options">
-</ngx-slider>
+<div class="filter-field">
+  <h3>
+    {{searchSegments.to.original_origin | getCity:airports}} 
+    - 
+    {{searchSegments.to.original_destination | getCity:airports}} 
+  </h3>
+  <ngx-slider
+    [formControl]="form.get('to')"
+    [value]="flightsDuration.to.min"
+    [highValue]="flightsDuration.to.max"
+    [options]="optionsTo">
+  </ngx-slider>
+</div>
+
+<ng-container *ngIf="searchSegments.back">
+  <h3>
+    {{searchSegments.back.original_origin | getCity:airports}} 
+    - 
+    {{searchSegments.back.original_destination | getCity:airports}} 
+  </h3>
+  <ngx-slider
+    [formControl]="form.get('back')"
+    [value]="flightsDuration.back.min"
+    [highValue]="flightsDuration.back.max"
+    [options]="optionsBack">
+  </ngx-slider>
+</ng-container>

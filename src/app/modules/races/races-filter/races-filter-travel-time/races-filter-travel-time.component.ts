@@ -14,10 +14,10 @@ export class RacesFilterTravelTimeComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() searchSegments: ISearchResultSegments;
   @Input() arrivalDatetime: ISearchResultFilterArrivalDateTime;
-  @Input() departureMinutes: ISearchResultFilterArrivalDateTime;
+  @Input() departureDatetime: ISearchResultFilterArrivalDateTime;
   @Input() airports: IAirport[];
 
-  arrivalDefaultOptions: Options = {
+  DefaultOptions: Options = {
     step: 600, // in seconds(10 minutes)
     translate: (value: number, label: LabelType): string => {
       switch (label) {
@@ -43,51 +43,31 @@ export class RacesFilterTravelTimeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-
-    this.departureToOptions = {
-      floor: this.departureMinutes.to.min,
-      ceil: this.departureMinutes.to.max,
-      step: 10, // in minutes
-      translate: (value: number, label: LabelType): string => {
-        switch (label) {
-          case LabelType.Low:
-            return `от ${minutesToTime(value)}, ${moment(this.searchSegments.to.date).format('DD MMM')}`;
-          case LabelType.High:
-            return `до ${minutesToTime(value)}, ${moment(this.searchSegments.to.date).format('DD MMM')}`;
-          default:
-            return '' + minutesToTime(value);
-        }
-      }
-    };
-
-    this.departureBackOptions = {
-      floor: this.departureMinutes.back.min,
-      ceil: this.departureMinutes.back.max,
-      step: 10, // in minutes
-      translate: (value: number, label: LabelType): string => {
-        switch (label) {
-          case LabelType.Low:
-            return `от ${minutesToTime(value)}, ${moment(this.searchSegments.back.date).format('DD MMM')}`;
-          case LabelType.High:
-            return `до ${minutesToTime(value)}, ${moment(this.searchSegments.back.date).format('DD MMM')}`;
-          default:
-            return '' + minutesToTime(value);
-        }
-      }
-    };
-
     this.arrivalToOptions = {
-      ...this.arrivalDefaultOptions, ...{
+      ...this.DefaultOptions, ...{
         floor: this.arrivalDatetime.to.min,
         ceil: this.arrivalDatetime.to.max,
       }
     };
 
     this.arrivalBackOptions = {
-      ...this.arrivalDefaultOptions, ...{
+      ...this.DefaultOptions, ...{
         floor: this.arrivalDatetime.back.min,
         ceil: this.arrivalDatetime.back.max,
+      }
+    };
+
+    this.departureToOptions = {
+      ...this.DefaultOptions, ...{
+        floor: this.departureDatetime.to.min,
+        ceil: this.departureDatetime.to.max,
+      }
+    };
+
+    this.departureBackOptions = {
+      ...this.DefaultOptions, ...{
+        floor: this.departureDatetime.back.min,
+        ceil: this.departureDatetime.back.max,
       }
     };
 

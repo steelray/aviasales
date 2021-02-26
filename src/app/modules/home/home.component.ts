@@ -103,6 +103,10 @@ export class HomeComponent implements OnInit {
     return res;
   }
 
+  get activeTripClass(): string {
+    return this.tripClassOptions.find(tripClass => tripClass.value === this.controls.trip_class.value)?.title;
+  }
+
   onSubmit(): void {
     if (this.form.invalid) {
       return;
@@ -124,11 +128,6 @@ export class HomeComponent implements OnInit {
 
 
     this.router.navigate(['/races'], { queryParams });
-
-    // this.searchService.flightSearch(this.prepareParams(formValue)).pipe(
-    //   map(res => res.search_id),
-    //   takeUntil(this.onDestroy$)
-    // ).subscribe(searchId => this.router.navigate(['/races', searchId]));
   }
 
   private buildForm(): void {
@@ -148,35 +147,6 @@ export class HomeComponent implements OnInit {
 
   private transformDate(date: any): string {
     return this.datePipe.transform(date, 'yyyy-MM-dd');
-  }
-
-  private prepareParams(formValue: any): IFlightSearchParams {
-    const { departure, arrival, departure_date, arrival_date, passengers, trip_class } = formValue;
-
-    const params: IFlightSearchParams = {
-      currency: 'uzs',
-      locale: 'ru',
-      know_english: true,
-      trip_class,
-      passengers: {
-        adults: +passengers.adults,
-        children: +passengers.children,
-        infants: +passengers.infants,
-      },
-      segments: [
-        {
-          origin: departure,
-          destination: arrival,
-          date: departure_date
-        },
-        {
-          origin: arrival,
-          destination: departure,
-          date: arrival_date
-        },
-      ]
-    };
-    return params;
   }
 
   private prepareSelectOptions(places: IPlace[]): ISelectOption[] {

@@ -29,14 +29,16 @@
         <app-race-filter-duration
           *ngSwitchCase="filterTypesEnum.TRAVEL_DURATION"
           [flightsDuration]="filtersData.flights_duration"
-          [control]="form.get('flights_duration')"></app-race-filter-duration>
+          [form]="form.get('flights_duration')"
+          [searchSegments]="searchSegments"
+          [airports]="airports"></app-race-filter-duration>
         <app-race-filter-price
           *ngSwitchCase="filterTypesEnum.TICKET_PRICE"
           [price]="filtersData.price"
           [control]="form.get('price')"></app-race-filter-price>
         <app-races-filter-travel-time
           *ngSwitchCase="filterTypesEnum.TRAVEL_TIME"
-          [departureMinutes]="filtersData.departure_minutes"
+          [departureDatetime]="filtersData.departure_datetime"
           [arrivalDatetime]="filtersData.arrival_datetime"
           [searchSegments]="searchSegments"
           [airports]="airports"

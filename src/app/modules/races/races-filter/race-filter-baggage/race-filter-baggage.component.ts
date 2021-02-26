@@ -10,6 +10,5 @@ import { FormControl } from '@angular/forms';
 export class RaceFilterBaggageComponent {
   @Input() control = new FormControl();
   changeAll(event): void {
-    console.log(event)
   }
 }
