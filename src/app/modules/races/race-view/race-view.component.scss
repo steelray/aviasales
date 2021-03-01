@@ -1,0 +1,217 @@
+.back-btn {
+  margin-left: -15px;
+  margin-bottom: 20px;
+  font-size: 24px;
+  box-shadow: none !important;
+}
+
+.race {
+  margin-bottom: 50px;
+  &-header {
+    line-height: 1;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 35px;
+    span {
+      color: var(--na-font-color);
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+  &-price {
+    color: var(--main-color);
+    font-weight: 500;
+    font-size: 28px;
+    div {
+      display: flex;
+      align-items: center;
+      span {
+        margin-left: 5px;
+      }
+    }
+  }
+  &-body {
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      font-size: 16px;
+      div {
+        &:last-child {
+          text-align: right;
+        }
+      }
+    }
+  }
+  &-transfers {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    overflow: hidden;
+
+    &__item {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      &:first-child {
+        text-align: left;
+
+        .race-transfers {
+          &__icon {
+            margin-left: 0;
+            position: relative;
+            &::before {
+              height: 1px;
+              width: 100vw;
+              position: absolute;
+              top: calc(50% - 0.5px);
+              left: 100%;
+              content: "";
+              background: var(--border-color);
+            }
+            mat-icon {
+              color: var(--main-color);
+            }
+          }
+        }
+      }
+      &:last-child {
+        text-align: right;
+        .race-transfers {
+          &__icon {
+            margin-right: 0;
+            mat-icon {
+              color: var(--main-color);
+            }
+          }
+        }
+      }
+    }
+    &__icon {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      margin: 0 auto 5px;
+      background: var(--white);
+      mat-icon {
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+        color: var(--na-font-color);
+      }
+    }
+  }
+  &-item {
+    margin-bottom: 22px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    &__title {
+      margin-bottom: 22px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      mat-icon {
+        color: var(--na-font-color);
+        margin-right: 10px;
+      }
+    }
+    &__header {
+      padding: 7px 15px;
+      background: #f3f6f8;
+      display: flex;
+      justify-content: space-between;
+    }
+    &__body {
+      padding: 12px 15px;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      img {
+        width: 24px;
+        height: 24px;
+        flex: 0 0 24px;
+        margin-right: 15px;
+        border-radius: 50%;
+      }
+      > div {
+        flex: 1;
+        min-width: 0;
+      }
+      &-row {
+        display: flex;
+        justify-content: space-between;
+
+        > div {
+          &:last-child {
+            text-align: right;
+          }
+        }
+      }
+      &-iata {
+        display: flex;
+        > * {
+          margin-left: 10px;
+          &:first-child {
+            margin-left: 0;
+            margin-right: 15px;
+          }
+        }
+      }
+    }
+    &__footer {
+      padding: 12px 15px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      a {
+        font-weight: 500;
+        text-decoration: none;
+        color: var(--main-color);
+        display: flex;
+        align-items: center;
+      }
+    }
+    &__handbags-count,
+    &__baggages-count {
+      line-height: 24px;
+      text-align: center;
+      color: var(--main-color);
+      font-weight: 500;
+      font-size: 12px;
+      display: inline-block;
+      vertical-align: middle;
+      &.not-included {
+        color: var(--red);
+      }
+    }
+    &__handbags-count {
+      width: 19px;
+      height: 20px;
+      background: url(/assets/images/icons/si-1.png) no-repeat;
+      margin-right: 14px;
+      &.not-included {
+        background: url(/assets/images/icons/si-1-err.png) no-repeat;
+      }
+    }
+    &__baggages-count {
+      width: 18px;
+      height: 24px;
+      background: url(/assets/images/icons/si-2.png) no-repeat;
+      &.not-included {
+        background: url(/assets/images/icons/si-2-err.png) no-repeat;
+      }
+    }
+  }
+}
+
+.na-color {
+  color: var(--na-font-color);
+  font-size: 14px;
+}

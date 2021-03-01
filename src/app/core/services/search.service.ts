@@ -42,6 +42,10 @@ export class SearchSearvice extends ApiService {
     );
   }
 
+  flightSearchClick(searchId: string, url: string | number): Observable<any> {
+    return this.post('travelpayouts.flight_search_click', { search_id: searchId, url });
+  }
+
   places(params: IPlacesParams): Observable<any> {
     return this.post(`travelpayouts.places`, params);
   }

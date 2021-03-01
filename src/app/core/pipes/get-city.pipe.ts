@@ -6,7 +6,10 @@ import { IAirport } from '@core/interfaces/search.interfaces';
 export class GetCityPipe implements PipeTransform {
 
   transform(iata: string, airports: IAirport[], nameCase: string): string {
-    const city = airports.find(item => item.city_code === iata);
+    let city = airports.find(item => item.city_code === iata);
+    if (!city) {
+      city = airports.find(item => item.iata === iata);
+    }
     if (city) {
       if (nameCase && city.cases[nameCase]) {
         return city.cases[nameCase];

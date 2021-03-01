@@ -8,7 +8,7 @@ import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
 import { environment } from '@environments/environment';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-races',
@@ -39,7 +39,8 @@ export class RacesComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private searchService: SearchSearvice,
     private cdRef: ChangeDetectorRef,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    @Self() private onDestroy$: NgOnDestroy
   ) { }
 
   ngOnInit(): void {
@@ -55,17 +56,17 @@ export class RacesComponent implements OnInit {
         return of(this.flightSearch);
       }),
       switchMap(() => this.searchService.flightSearchResults(this.flightSearch.search_id)),
-      // filter(res => {
-      //   const filterRes = res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals);
-      //   if (res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals)) {
-      //     this.updateList$.next(null);
-      //     this.isLoading = true;
-      //   } else {
-      //     this.isLoading = false;
-      //     this.cdRef.detectChanges();
-      //   }
-      //   return filterRes;
-      // }),
+      filter(res => {
+        const filterRes = res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals);
+        if (res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals)) {
+          this.updateList$.next(null);
+          this.isLoading = true;
+        } else {
+          this.isLoading = false;
+          this.cdRef.detectChanges();
+        }
+        return filterRes;
+      }),
       /*
         * searchResult передаем, чтоб новые данные фильтров(каждый запрос
         * flightSearchResults возвращает новые фильтры с результатами) добавлялись в старые
@@ -73,7 +74,7 @@ export class RacesComponent implements OnInit {
       map(res => new SearchResult(res, this.flightSearch, this.searchResult)),
       tap(res => {
         this.searchResult = res;
-        this.isLoading = false;
+        // this.isLoading = false;
         this.allFlights = [...this.allFlights, ...res.flights];
         this.filteredFlights = this.allFlights;
         // add items if less then 'visibleItemsCount'
@@ -81,7 +82,7 @@ export class RacesComponent implements OnInit {
         if (!currentVisibleFlights.length || currentVisibleFlights.length < this.visibleItemsCount) {
           this.visibleFlights$.next(this.addItems());
         }
-        console.log(this.searchResult);
+        // this.viewItem = this.allFlights[0];
       })
     );
   }
@@ -107,7 +108,7 @@ export class RacesComponent implements OnInit {
 
   onBackToList(): void {
     this.viewItem = null;
-    setTimeout(() => window.scroll(0, this.currentScrollPosition), 100);
+    setTimeout(() => window.scroll(0, this.currentScrollPosition), 30);
   }
 
 
@@ -115,10 +116,14 @@ export class RacesComponent implements OnInit {
     this.visibleFlights$.next([]); // reset current visible flights
     this.filteredFlights = this.filterFlights(filters); // fliter all flights
     this.visibleFlights$.next(this.addItems()); // add filtered items to visible flights
+  }
 
-    console.log(this.filteredFlights.length);
-    console.log(filters);
-    console.log(this.filteredFlights);
+  onBuy(url: number): void {
+    this.searchService.flightSearchClick(this.flightSearch.search_id, url).pipe(
+      takeUntil(this.onDestroy$)
+    ).subscribe(res => {
+      window.open(res.url, '_blank');
+    });
   }
 
   private filterFlights(filters: any): IFlight[] {

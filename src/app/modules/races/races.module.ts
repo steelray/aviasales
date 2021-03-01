@@ -41,6 +41,7 @@ import { GetCityTimeZonePipe } from '@core/pipes/get-city-timezone.pipe';
 import { CustomDatePipe } from '@core/pipes/custom-date.pipe';
 import { RaceFilterChecboxesGroupComponent } from './races-filter/race-filter-checkboxes-group.component';
 import { InArrayPipe } from '@core/pipes/in-array.pipe';
+import { GetBaggageHandbagInfoPipe } from '@core/pipes/get-baggage-kg.pipe';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { InArrayPipe } from '@core/pipes/in-array.pipe';
     GetCityTimeZonePipe,
     CustomDatePipe,
     RaceFilterChecboxesGroupComponent,
-    InArrayPipe
+    InArrayPipe,
+    GetBaggageHandbagInfoPipe
   ],
   imports: [
     CommonModule,

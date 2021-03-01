@@ -199,6 +199,7 @@ export interface IFlightTerms {
 }
 
 export interface IRace {
+  operating_carrier: string; // airline iata code
   name: string; // operating_carrier + number
   arrival: string; //  IATA code
   arrival_date: string;

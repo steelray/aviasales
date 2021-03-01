@@ -397,6 +397,7 @@ export class SearchResult implements ISearchResult {
     }
     for (const flight of flights) {
       res.races.push({
+        operating_carrier: flight.operating_carrier,
         name: `${flight.operating_carrier} ${flight.number}`, // operating_carrier + number
         aircraft: flight.aircraft,
         arrival: flight.arrival, //  IATA code

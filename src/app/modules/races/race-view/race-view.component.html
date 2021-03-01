@@ -1,1 +1,129 @@
-<button mat-raised-button (click)="onBackToList()">Нзада</button>
+<button class="back-btn" mat-raised-button (click)="onBackToList()">Назад</button>
+<div class="race-header">
+  <div class="race-price">
+    <div>{{flight.price | number | customNumber}} <span>сум</span></div>
+    <span>Туда и обратно</span>
+  </div>
+  <button class="buy-btn" mat-raised-button color="primary" (click)="onBuy()">Купить</button>
+</div>
+<ng-container [ngTemplateOutlet]="raceItem" [ngTemplateOutletContext]="{segment: flight.segment.to, isBack: false}"></ng-container>
+<ng-container *ngIf="flight.segment.back" [ngTemplateOutlet]="raceItem" [ngTemplateOutletContext]="{segment: flight.segment.back, isBack: true}"></ng-container>
+
+<ng-template
+  let-segment="segment"
+  let-isBack="isBack"
+  #raceItem>
+
+  <div class="race">
+    
+    <div class="race-body">
+      <div class="race-body__header">
+        <div>
+          {{segment.departure | getCity:searchResult.airports}}
+          <br>
+          {{segment.departure_timestamp * 1000 | customDate:'HH:mm':(segment.departure | getCityTimeZone:searchResult.airports)}}
+        </div>
+        <div>
+          {{segment.arrival | getCity:searchResult.airports}}
+          <br>
+          {{segment.arrival_timestamp * 1000 | customDate:'HH:mm':(segment.arrival | getCityTimeZone:searchResult.airports)}}
+        </div>
+      </div>
+      <div class="race-transfers">
+        <div class="race-transfers__item" *ngIf="segment.races[0] as flightDeparture">
+          <span class="race-transfers__icon">
+            <mat-icon>flight_takeoff</mat-icon>
+          </span>
+          <div class="na-color">
+            {{flightDeparture.departure_timestamp * 1000 | customDate:'DD MMMM':(segment.departure | getCityTimeZone:searchResult.airports) }}
+          </div>
+          <div>{{flightDeparture.departure}}</div>
+        </div>
+        <ng-container *ngFor="let race of segment.races;let i = index">
+          <div
+            *ngIf="i !== 0 && i !== segment.races.length-1" 
+            class="race-transfers__item">
+            <span class="race-transfers__icon">
+              <mat-icon>access_time</mat-icon>
+            </span>
+            <div class="na-color">
+              {{ race.departure }}
+            </div>
+            <div>Пересадка</div>
+          </div>
+        </ng-container>
+        <div class="race-transfers__item" *ngIf="segment.races[segment.races.length - 1] as flightArrival">
+          <span class="race-transfers__icon">
+            <mat-icon>flight_land</mat-icon>
+          </span>
+          <div class="na-color">
+            {{flightArrival.arrival_timestamp * 1000 | customDate:'DD MMMM':(segment.arrival | getCityTimeZone:searchResult.airports) }}
+          </div>
+          <div>{{flightArrival.arrival}}</div>
+        </div>
+      </div>
+
+      <ng-container *ngFor="let race of segment.races;let i = index">
+        <div *ngIf="i !== 0" class="race-item__title">
+          <mat-icon>access_time</mat-icon>
+          Пересадка в
+          {{race.departure | getCity:searchResult.airports:'pr'}}
+        </div>
+        <div
+          class="race-item">
+          <div class="race-item__header">
+            <div class="na-color">
+              {{race.name}}
+            </div>
+            <div>{{race.duration | minutesToHoursMins}}</div>
+          </div>
+          <div class="race-item__body">
+            <img [src]="race.operating_carrier | getAirlineLogo" [matTooltip]="race.operating_carrier | getAirlineName:searchResult.airlines" alt="logo-1">
+            <div>
+              <div class="race-item__body-row">
+                <div class="race-item__body-iata">
+                  <div>
+                    {{race.departure_timestamp * 1000 | customDate:'DD MMMM':(segment.departure | getCityTimeZone:searchResult.airports) }}
+                  </div>
+                  <div>{{race.departure}}</div>
+                  <div>{{race.departure | getCity:searchResult.airports}}</div>
+                </div>
+                <div>
+                  {{race.departure_timestamp * 1000 | customDate:'DD MMMM, ddd':(segment.arrival | getCityTimeZone:searchResult.airports) }}
+                </div>
+              </div>
+              <div class="race-item__body-row">
+                <div class="race-item__body-iata">
+                  <div>
+                    {{race.arrival_timestamp * 1000 | customDate:'DD MMMM':(segment.arrival | getCityTimeZone:searchResult.airports) }}
+                  </div>
+                  <div>{{race.arrival}}</div>
+                  <div>{{race.arrival | getCity:searchResult.airports}}</div>
+                </div>
+                <div>
+                  {{race.arrival_timestamp * 1000 | customDate:'DD MMMM, ddd':(segment.arrival | getCityTimeZone:searchResult.airports) }}
+                </div>
+              </div>
+             
+            </div>
+          </div>
+          <div class="race-item__footer">
+            <a href="#" (click)="viewDetails($event)">
+              Информация о рейсе
+              <mat-icon>arrow_drop_down</mat-icon>
+            </a>
+            <div>
+              <span 
+                *ngIf="flight.terms.flights_handbags[isBack ? 1 : 0][i]" 
+                class="race-item__handbags-count"
+                [class.not-included]="(flight.terms.flights_handbags[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true) === 'x'">{{flight.terms.flights_handbags[isBack ? 1 : 0][i] | getBaggageHandbagInfo}}</span>
+              <span class="race-item__baggages-count" 
+                *ngIf="flight.terms.flights_baggage[isBack ? 1 : 0][i] !== undefined"
+                [class.not-included]="(flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true) === 'x'">{{flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true}}</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>

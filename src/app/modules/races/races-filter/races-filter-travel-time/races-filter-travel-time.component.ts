@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { minutesToTime } from '@core/utils/minutes-to-time.util';
 import { IAirport, IMinMaxValues, ISearchResultFilterArrivalDateTime, ISearchResultFilterTime, ISearchResultSegments } from '@core/interfaces/search.interfaces';
 import * as moment from 'moment';
+import 'moment/min/locales';
+
 @Component({
   selector: 'app-races-filter-travel-time',
   templateUrl: './races-filter-travel-time.component.html',
@@ -78,7 +80,7 @@ export class RacesFilterTravelTimeComponent implements OnInit {
   }
 
   private timestampToDatetime(timestamp: number): string {
-    return moment(timestamp * 1000).format('HH:mm, DD MMM');
+    return moment(timestamp * 1000).locale('ru').format('HH:mm, DD MMM');
   }
 
   private timeToMinutes(time: string, splitter = ':'): number {

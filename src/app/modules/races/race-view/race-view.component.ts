@@ -1,5 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { IFlight } from '@core/interfaces/search.interfaces';
+import { DOCUMENT } from '@angular/common';
+import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, Inject } from '@angular/core';
+import { IFlight, ISearchResult } from '@core/interfaces/search.interfaces';
 
 @Component({
   selector: 'app-race-view',
@@ -9,16 +10,28 @@ import { IFlight } from '@core/interfaces/search.interfaces';
 })
 export class RaceViewComponent implements OnInit {
   @Input() flight: IFlight;
+  @Input() searchResult: ISearchResult;
   @Output() backToList = new EventEmitter();
+  @Output() buyClicked = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    @Inject(DOCUMENT) private document: Document
+  ) { }
 
   ngOnInit(): void {
-    console.log(this.flight);
+    window.scroll(0, 0);
   }
 
   onBackToList(): void {
     this.backToList.emit();
+  }
+
+  viewDetails(event: Event): void {
+    event.preventDefault();
+  }
+
+  onBuy(): void {
+    this.buyClicked.emit(this.flight.terms.url);
   }
 
 }
