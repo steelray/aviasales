@@ -1,5 +1,6 @@
 <h1 class="title-1">Авиабилеты</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="mob-title">Направление</div>
     <div class="from-to-fields fields-group">
         <app-input-autocomplete
             placeholder="Откуда"
@@ -21,6 +22,7 @@
     </div>
 
     <div class="inputs-group fields-group">
+        <div class="mob-title">Даты</div>
         <app-datepicker
             placeholder="Туда"
             class="from-field"

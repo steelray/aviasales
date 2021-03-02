@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, Inject } from '@angular/core';
-import { IFlight, ISearchResult } from '@core/interfaces/search.interfaces';
+import { TRIP_CLASS } from '@core/enums/trip-class.enum';
+import { IFlight, IRaceDetail, ISearchResult } from '@core/interfaces/search.interfaces';
 
 @Component({
   selector: 'app-race-view',
@@ -11,6 +12,7 @@ import { IFlight, ISearchResult } from '@core/interfaces/search.interfaces';
 export class RaceViewComponent implements OnInit {
   @Input() flight: IFlight;
   @Input() searchResult: ISearchResult;
+  @Input() tripClass: TRIP_CLASS;
   @Output() backToList = new EventEmitter();
   @Output() buyClicked = new EventEmitter();
 
@@ -19,6 +21,8 @@ export class RaceViewComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.searchResult);
+    console.log(this.flight);
     window.scroll(0, 0);
   }
 

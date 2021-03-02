@@ -1,3 +1,4 @@
+@import "components/mixins";
 .inputs-group {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -36,5 +37,16 @@ hr {
   text-align: left;
   span {
     color: var(--na-font-color);
+  }
+}
+
+.mob-title {
+  display: none;
+  @include for-mobile {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 500;
+    font-size: 16px;
+    color: var(--black);
   }
 }

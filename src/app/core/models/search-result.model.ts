@@ -7,7 +7,6 @@ import {
   IFlightTerms,
   IGatesInfo,
   IMinMaxValues,
-  IRaceTransfer,
   ISearchResult,
   ISearchResultFilter,
   ISearchResultFilterArrivalDateTime,
@@ -16,6 +15,7 @@ import {
 } from '@core/interfaces/search.interfaces';
 declare var fx: any;
 export class SearchResult implements ISearchResult {
+  private readonly baseCurrency = 'rub';
   airlines: IAirline[] = [];
   airports: IAirport[] = [];
   currency: string = null;
@@ -24,6 +24,7 @@ export class SearchResult implements ISearchResult {
   gatesInfos: IGatesInfo[] = [];
   segments: ISearchResultSegments = null;
   fxFn: any;
+  flightInfo: any = null;
 
   constructor(
     result: any,
@@ -34,8 +35,8 @@ export class SearchResult implements ISearchResult {
     this.prepareResults(result);
   }
 
-  initFxFn(rates): void {
-    fx.base = 'rub';
+  private initFxFn(rates): void {
+    fx.base = this.baseCurrency;
     fx.rates = rates;
     this.fxFn = fx;
   }
@@ -49,11 +50,9 @@ export class SearchResult implements ISearchResult {
       this.filters = currentResult.filters;
       this.flights = currentResult.flights;
       this.gatesInfos = currentResult.gatesInfos;
-    } else {
-      // console.log('no current results');
+      this.flightInfo = currentResult.flightInfo;
     }
   }
-
 
   private prepareResults(result: any): void {
     if (!result || !Array.isArray(result)) {
@@ -88,9 +87,10 @@ export class SearchResult implements ISearchResult {
 
         this.filters = this.prepareFilters(res);
         this.gatesInfos.push(this.getGatesInfo(res));
+        this.flightInfo = { ...this.flightInfo, ...this.getUniqueInfo(res.flight_info) };
 
 
-        proposals = proposals.concat(this.prepareFlights(res.proposals));
+        proposals = [...proposals, ...this.prepareFlights(res.proposals)];
       }
 
     });
@@ -98,11 +98,20 @@ export class SearchResult implements ISearchResult {
     this.flights = proposals;
 
     this.filters.flights_duration = this.prepareFlightsDuration(this.flights); // set min max flight duration values for to&&back races;
-
-
-
   }
 
+  private getUniqueInfo(flightInfo: any): any {
+    if (!this.flightInfo) {
+      return flightInfo;
+    }
+    const res = {};
+    Object.keys(flightInfo).forEach(key => {
+      if (!this.flightInfo[key]) {
+        res[key] = flightInfo[key];
+      }
+    });
+    return res;
+  }
 
   private getGatesInfo(res: any): IGatesInfo {
     return Object.values(res.gates_info)[0] as IGatesInfo;
@@ -118,10 +127,9 @@ export class SearchResult implements ISearchResult {
       max: this.convertPriceToUzs(newFilters.price.max, gateCurrency)
     };
 
-
     const res: ISearchResultFilter = this.filters ? this.filters : this.setFiltersDefaultValues();
-    res.airports.arrival = this.pusOnlyUniques(res.airports.arrival, newFilters.airports.arrival);
-    res.airports.departure = this.pusOnlyUniques(res.airports.departure, newFilters.airports.departure);
+    res.airports.arrival = this.pushOnlyUniques(res.airports.arrival, newFilters.airports.arrival);
+    res.airports.departure = this.pushOnlyUniques(res.airports.departure, newFilters.airports.departure);
     res.arrival_datetime = this.prepareFilterArrivalDateTime(newFilters, res.arrival_datetime);
     res.arrival_time = this.prepareFilterArrivalTime(newFilters, res.arrival_time);
     res.departure_time = this.prepareFilterDepartureTime(newFilters, res.departure_time);
@@ -369,7 +377,7 @@ export class SearchResult implements ISearchResult {
         segment: {
           to: this.prepareFlightRaces(segment[0])
         },
-        price: this.convertPriceToUzs(terms.price, terms.currency)
+        price: this.convertPriceToUzs(terms.unified_price, this.baseCurrency)
       };
       // если есть обратный рейс
       if (segment[1]) {
@@ -398,6 +406,7 @@ export class SearchResult implements ISearchResult {
     for (const flight of flights) {
       res.races.push({
         operating_carrier: flight.operating_carrier,
+        number: flight.number,
         name: `${flight.operating_carrier} ${flight.number}`, // operating_carrier + number
         aircraft: flight.aircraft,
         arrival: flight.arrival, //  IATA code
@@ -414,25 +423,17 @@ export class SearchResult implements ISearchResult {
         local_departure_timestamp: flight.local_departure_timestamp,
         rating: flight.rating,
         trip_class: flight.trip_class,
-        transfers: this.prepareRaceTransfers(transfers), // race transfers
       });
     }
     return res;
-  }
-
-  private prepareRaceTransfers(transfers: any): IRaceTransfer[] {
-    if (!transfers) {
-      return [];
-    }
-    return null;
   }
 
   private prepareFlightTerms(terms: any): IFlightTerms {
     return Object.values(terms)[0] as IFlightTerms;
   }
 
-  private pushOnlyUniquesObjArray(array: any, mergeArray: any, compareKey: string): [] {
-    mergeArray.forEach(value => {
+  private pushOnlyUniquesObjArray(array: any, pushingArr: any, compareKey: string): [] {
+    pushingArr.forEach(value => {
       if (!array.find(item => item[compareKey] === value[compareKey])) {
         array.push(value);
       }
@@ -440,15 +441,14 @@ export class SearchResult implements ISearchResult {
     return array;
   }
 
-  private pusOnlyUniques(array: any[], mergeArray: any[]): any[] {
-    mergeArray.forEach(value => {
+  private pushOnlyUniques(array: any[], pushingArr: any[]): any[] {
+    pushingArr.forEach(value => {
       if (!array.find(item => value === item)) {
         array.push(value);
       }
     });
     return array;
   }
-
 
   private convertPriceToUzs(price: number, currency: string): number {
     return Math.round(fx(price).from('uzs').to(currency));

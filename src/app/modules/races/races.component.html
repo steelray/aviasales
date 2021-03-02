@@ -88,7 +88,10 @@
     </div>
 
     <app-race-view 
-        *ngIf="viewItem" [flight]="viewItem" [searchResult]="searchResult" (backToList)="onBackToList()"
+        *ngIf="viewItem" [flight]="viewItem" 
+        [searchResult]="searchResult" 
+        [tripClass]="flightSearch.trip_class"
+        (backToList)="onBackToList()"
         (buyClicked)="onBuy($event)"></app-race-view>
     
     

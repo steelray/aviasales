@@ -1,3 +1,4 @@
+import { BEVERAGE_TYPES } from '@core/enums/beverage-type.enum';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 
 export interface IPlacesParams {
@@ -58,8 +59,38 @@ export interface ISearchResult {
   flights: IFlight[];
   gatesInfos: IGatesInfo[]; // agents info
   segments: ISearchResultSegments;
-
+  flightInfo: any;
 }
+
+export interface IRaceDetail {
+  amenities: IRaceDetailAmenites;
+  seat: IRaceDetailSeat;
+}
+
+export interface IRaceDetailAmenites {
+  food: IRaceDetailProps;
+  power: IRaceDetailProps;
+  beverage: IRaceDetailBeverage;
+  wifi: IRaceDetailProps;
+}
+
+export interface IRaceDetailSeat {
+  pitch: number;
+  type: string;
+  width: number;
+  width_description: string;
+}
+export interface IRaceDetailBeverage {
+  exists: boolean;
+  type: BEVERAGE_TYPES;
+  alcoholic_paid: boolean;
+  nonalcoholic_paid: boolean;
+}
+export interface IRaceDetailProps {
+  exists: boolean;
+  paid: boolean;
+}
+
 
 export interface IGatesInfo {
   currency_code: string;
@@ -200,12 +231,13 @@ export interface IFlightTerms {
 
 export interface IRace {
   operating_carrier: string; // airline iata code
+  number: string; // airline iata code
   name: string; // operating_carrier + number
   arrival: string; //  IATA code
   arrival_date: string;
   arrival_time: string;
   arrival_timestamp: number;
-  delay: number;
+  delay?: number;
   departure: string; // IATA code
   departure_date: string;
   departure_time: string;

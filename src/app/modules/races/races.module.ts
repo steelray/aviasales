@@ -42,6 +42,7 @@ import { CustomDatePipe } from '@core/pipes/custom-date.pipe';
 import { RaceFilterChecboxesGroupComponent } from './races-filter/race-filter-checkboxes-group.component';
 import { InArrayPipe } from '@core/pipes/in-array.pipe';
 import { GetBaggageHandbagInfoPipe } from '@core/pipes/get-baggage-kg.pipe';
+import { RaceViewDetailsComponent } from './race-view/race-view-details/race-view-details.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { GetBaggageHandbagInfoPipe } from '@core/pipes/get-baggage-kg.pipe';
     CustomDatePipe,
     RaceFilterChecboxesGroupComponent,
     InArrayPipe,
-    GetBaggageHandbagInfoPipe
+    GetBaggageHandbagInfoPipe,
+    RaceViewDetailsComponent
   ],
   imports: [
     CommonModule,

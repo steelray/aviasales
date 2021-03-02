@@ -1,7 +1,17 @@
+@import "mixins";
 mat-form-field,
 .mat-form-field-appearance-legacy {
   width: 100%;
   font-family: var(--default-font-family);
+
+  @include for-mobile {
+    .mat-form-field-wrapper {
+      padding-bottom: 0 !important;
+    }
+    .mat-error {
+      display: none !important;
+    }
+  }
 
   &.file-input-field {
     .mat-form-field-infix {
@@ -33,6 +43,16 @@ mat-form-field,
     padding: 1.179em 0;
     border-radius: 4px;
     transition: border-color 0.3s, background-color 0.3s;
+
+    @include for-mobile {
+      background-color: var(--white);
+      border: 1px solid var(--border-color);
+    }
+  }
+  &.ng-invalid.ng-touched {
+    .mat-form-field-infix {
+      border-color: var(--red);
+    }
   }
 
   &.has-label {
@@ -109,8 +129,44 @@ app-datepicker {
   justify-content: space-between;
   flex-wrap: wrap;
 
+  @include for-mobile {
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+  }
+
   app-input-autocomplete {
     width: calc(50% - 7.5px);
+    @include for-mobile {
+      width: 100%;
+      mat-form-field,
+      .mat-form-field-appearance-legacy {
+        &:not(.mat-focused) {
+          .mat-form-field-infix {
+            border-color: transparent;
+          }
+        }
+      }
+      &:first-child {
+        mat-form-field,
+        .mat-form-field-appearance-legacy {
+          .mat-form-field-infix {
+            border-radius: 6px 6px 0 0;
+          }
+          &:not(.mat-focused) {
+            .mat-form-field-infix {
+              border-bottom: 1px solid var(--border-color);
+            }
+          }
+        }
+      }
+      &:last-child {
+        mat-form-field .mat-form-field-infix,
+        .mat-form-field-appearance-legacy .mat-form-field-infix {
+          border-radius: 0 0 6px 6px;
+        }
+      }
+    }
   }
 
   > span {
@@ -126,6 +182,30 @@ app-datepicker {
     justify-content: center;
     background: var(--white);
     z-index: 1;
+    @include for-mobile {
+      top: calc(50% - 17px);
+      right: 10px;
+      left: auto;
+      transform: rotate(90deg);
+      &::before {
+        width: 9px;
+        background-color: var(--white);
+        left: calc(50% - 4.5px);
+        top: 100%;
+        height: 9px;
+        content: "";
+        position: absolute;
+      }
+      &::after {
+        width: 9px;
+        background-color: var(--white);
+        left: calc(50% - 4.5px);
+        top: -9px;
+        height: 9px;
+        content: "";
+        position: absolute;
+      }
+    }
   }
 
   .from-field {

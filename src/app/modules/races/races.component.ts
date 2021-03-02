@@ -18,7 +18,7 @@ import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
   providers: [NgOnDestroy]
 })
 export class RacesComponent implements OnInit {
-  private readonly visibleItemsCount = 3;
+  private readonly visibleItemsCount = 10;
   filterIsActive = false;
   allResults$: Observable<SearchResult>;
   searchResult: ISearchResult; // prepared search result
@@ -56,17 +56,17 @@ export class RacesComponent implements OnInit {
         return of(this.flightSearch);
       }),
       switchMap(() => this.searchService.flightSearchResults(this.flightSearch.search_id)),
-      filter(res => {
-        const filterRes = res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals);
-        if (res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals)) {
-          this.updateList$.next(null);
-          this.isLoading = true;
-        } else {
-          this.isLoading = false;
-          this.cdRef.detectChanges();
-        }
-        return filterRes;
-      }),
+      // filter(res => {
+      //   const filterRes = res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals);
+      //   if (res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals)) {
+      //     this.updateList$.next(null);
+      //     this.isLoading = true;
+      //   } else {
+      //     this.isLoading = false;
+      //     this.cdRef.detectChanges();
+      //   }
+      //   return filterRes;
+      // }),
       /*
         * searchResult передаем, чтоб новые данные фильтров(каждый запрос
         * flightSearchResults возвращает новые фильтры с результатами) добавлялись в старые
@@ -74,7 +74,7 @@ export class RacesComponent implements OnInit {
       map(res => new SearchResult(res, this.flightSearch, this.searchResult)),
       tap(res => {
         this.searchResult = res;
-        // this.isLoading = false;
+        this.isLoading = false;
         this.allFlights = [...this.allFlights, ...res.flights];
         this.filteredFlights = this.allFlights;
         // add items if less then 'visibleItemsCount'
@@ -82,7 +82,8 @@ export class RacesComponent implements OnInit {
         if (!currentVisibleFlights.length || currentVisibleFlights.length < this.visibleItemsCount) {
           this.visibleFlights$.next(this.addItems());
         }
-        // this.viewItem = this.allFlights[0];
+        // console.log(this.allFlights.map(flight => flight.price).sort((a, b) => a - b));
+        this.viewItem = this.allFlights[0];
       })
     );
   }

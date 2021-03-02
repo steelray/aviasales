@@ -1,0 +1,93 @@
+@import "components/mixins";
+:host {
+  display: block;
+  padding: 7px 15px;
+}
+
+ul {
+  margin: 0 -15px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  @include for-mobile {
+    margin: 0;
+  }
+  li {
+    margin: 0 10px 15px;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    width: calc(32% - 15px);
+    @include for-tablet {
+      width: calc(48% - 15px);
+    }
+    @include for-mobile {
+      width: 100%;
+    }
+    .icon {
+      display: inline-block;
+      margin-right: 10px;
+      width: 20px;
+      height: 20px;
+      background: {
+        repeat: no-repeat;
+        position: center;
+      }
+      &-food {
+        background-image: url(/assets/images/icons/food-e.png);
+      }
+      &-power {
+        background-image: url(/assets/images/icons/power-e.png);
+      }
+      &-nonalc {
+        background-image: url(/assets/images/icons/nonalc-e.png);
+      }
+      &-wifi {
+        background-image: url(/assets/images/icons/wifi-e.png);
+      }
+      &-alc {
+        background-image: url(/assets/images/icons/alc-e.png);
+      }
+    }
+    &.exists {
+      color: var(--default-font-color);
+      .icon {
+        &-food {
+          background-image: url(/assets/images/icons/food.png);
+        }
+        &-power {
+          background-image: url(/assets/images/icons/power.png);
+        }
+        &-nonalc {
+          background-image: url(/assets/images/icons/nonalc.png);
+        }
+        &-wifi {
+          background-image: url(/assets/images/icons/wifi.png);
+        }
+        &-alc {
+          background-image: url(/assets/images/icons/alc.png);
+        }
+      }
+    }
+    &.paid {
+      color: var(--default-font-color);
+      .icon {
+        &-food {
+          background-image: url(/assets/images/icons/food-w.png);
+        }
+        &-power {
+          background-image: url(/assets/images/icons/power-w.png);
+        }
+        &-nonalc {
+          background-image: url(/assets/images/icons/nonalc-w.png);
+        }
+        &-wifi {
+          background-image: url(/assets/images/icons/wifi-w.png);
+        }
+        &-alc {
+          background-image: url(/assets/images/icons/alc-w.png);
+        }
+      }
+    }
+  }
+}

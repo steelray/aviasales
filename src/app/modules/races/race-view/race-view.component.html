@@ -89,7 +89,7 @@
                   <div>{{race.departure | getCity:searchResult.airports}}</div>
                 </div>
                 <div>
-                  {{race.departure_timestamp * 1000 | customDate:'DD MMMM, ddd':(segment.arrival | getCityTimeZone:searchResult.airports) }}
+                  {{race.departure_timestamp * 1000 | customDate:'DD MMMM, ddd':(segment.departure | getCityTimeZone:searchResult.airports) }}
                 </div>
               </div>
               <div class="race-item__body-row">
@@ -121,6 +121,12 @@
                 *ngIf="flight.terms.flights_baggage[isBack ? 1 : 0][i] !== undefined"
                 [class.not-included]="(flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true) === 'x'">{{flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true}}</span>
             </div>
+          </div>
+          <div class="race-item__details">
+            <app-race-view-details
+              [race]="race"
+              [tripClass]="tripClass"
+              [flightInfos]="searchResult.flightInfo"></app-race-view-details>
           </div>
         </div>
       </ng-container>

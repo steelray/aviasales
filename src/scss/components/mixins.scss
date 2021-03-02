@@ -1,24 +1,14 @@
+$bp-mobile: 767px;
+$bp-tablet: 991px;
+
 @mixin for-mobile {
-  @media (min-width: $bp-mobile) {
+  @media (max-width: $bp-mobile) {
     @content;
   }
 }
 
 @mixin for-tablet {
-  @media (min-width: $bp-tablet) {
-    @content;
-  }
-}
-
-@mixin for-sm {
-  @media (min-width: $bp-sm) {
-    @content;
-  }
-}
-
-
-@mixin for-exl {
-  @media (max-width: $bp-exl) {
+  @media (max-width: $bp-tablet) {
     @content;
   }
 }
