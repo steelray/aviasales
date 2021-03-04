@@ -58,7 +58,7 @@ export class RacesComponent implements OnInit {
       switchMap(() => this.searchService.flightSearchResults(this.flightSearch.search_id)),
       filter(res => {
         const filterRes = res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals);
-        if (res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals)) {
+        if (filterRes) {
           this.updateList$.next(null);
           this.isLoading = true;
         } else {
@@ -113,6 +113,7 @@ export class RacesComponent implements OnInit {
   }
 
   onBackToList(): void {
+    console.log('back from view');
     this.viewItem = null;
     setTimeout(() => window.scroll(0, this.currentScrollPosition), 30);
   }

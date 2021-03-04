@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit {
       switchMap(value => {
         const searchParams = placesParams;
         placesParams.term = value;
-        return this.searchService.places2(searchParams);
+        return this.searchService.places(searchParams);
       }),
       tap(res => console.log(res)),
       map(res => this.prepareSelectOptions(res)),

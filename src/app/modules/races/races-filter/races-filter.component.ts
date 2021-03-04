@@ -36,43 +36,14 @@ export class RacesFilterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    @Self() private onDestroy$: NgOnDestroy
+    @Self() private onDestroy$: NgOnDestroy,
+    private cdRef: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
     this.prepareFiltersDepartureDateTime();
-
-
-    this.form = this.fb.group({
-      airline: [this.airlines.map(airline => airline.iata)],
-      airport: this.fb.group({
-        to: this.fb.group({
-          arrival: [this.filtersData.airports.arrival],
-          departure: [this.filtersData.airports.departure]
-        }),
-        back: this.fb.group({
-          arrival: [this.filtersData.airports.departure],
-          departure: [this.filtersData.airports.arrival],
-        })
-      }),
-      // baggage: [],
-      flights_duration: this.fb.group({
-        to: [[this.filtersData.flights_duration.to.min, this.filtersData.flights_duration.to.max]],
-        back: [[this.filtersData.flights_duration.back.min, this.filtersData.flights_duration.back.max]],
-      }),
-      price: [[this.filtersData.price.min, this.filtersData.price.max]],
-      travel_time: this.fb.group({
-        to: this.fb.group({
-          departure: [[this.filtersData.departure_datetime.to.min, this.filtersData.departure_datetime.to.max]],
-          arrival: [[this.filtersData.arrival_datetime.to.min, this.filtersData.arrival_datetime.to.max]]
-        }),
-        back: this.fb.group({
-          departure: [[this.filtersData.departure_datetime?.back?.min, this.filtersData.departure_datetime?.back?.max]],
-          arrival: [[this.filtersData.arrival_datetime?.back?.min, this.filtersData.arrival_datetime?.back?.max]]
-        })
-      })
-    });
-
+    this.buildForm();
+    this.form.setValue(this.formDefaultValues());
 
     this.form.valueChanges.pipe(
       debounceTime(300),
@@ -80,21 +51,6 @@ export class RacesFilterComponent implements OnInit {
     ).subscribe(res => {
       this.filterChanged.emit(res);
     });
-  }
-
-  private prepareFiltersDepartureDateTime(): void {
-    const toDepDate = this.searchSegments.to.depart_date;
-    this.filtersData.departure_datetime.to = {
-      min: this.minsToUnix(toDepDate, this.filtersData.departure_minutes.to.min),
-      max: this.minsToUnix(toDepDate, this.filtersData.departure_minutes.to.max),
-    };
-    if (this.searchSegments.back) {
-      const backDepDate = this.searchSegments.back.depart_date;
-      this.filtersData.departure_datetime.back = {
-        min: this.minsToUnix(backDepDate, this.filtersData.departure_minutes.back.min),
-        max: this.minsToUnix(backDepDate, this.filtersData.departure_minutes.back.max),
-      };
-    }
   }
 
   get filterItems(): ISelectOption[] {
@@ -136,6 +92,89 @@ export class RacesFilterComponent implements OnInit {
 
   backToMainFilters(): void {
     this.activeFilterType = null;
+  }
+
+  onReset(): void {
+    this.form.setValue(this.formDefaultValues());
+    this.activeFilterType = null;
+  }
+
+  private buildForm(): void {
+    this.form = this.fb.group({
+      airline: [],
+      airport: this.fb.group({
+        to: this.fb.group({
+          arrival: [],
+          departure: []
+        }),
+        back: this.fb.group({
+          arrival: [],
+          departure: [],
+        })
+      }),
+      // baggage: [],
+      flights_duration: this.fb.group({
+        to: [],
+        back: [],
+      }),
+      price: [],
+      travel_time: this.fb.group({
+        to: this.fb.group({
+          departure: [],
+          arrival: []
+        }),
+        back: this.fb.group({
+          departure: [],
+          arrival: []
+        })
+      })
+    });
+  }
+
+  private prepareFiltersDepartureDateTime(): void {
+    const toDepDate = this.searchSegments.to.depart_date;
+    this.filtersData.departure_datetime.to = {
+      min: this.minsToUnix(toDepDate, this.filtersData.departure_minutes.to.min),
+      max: this.minsToUnix(toDepDate, this.filtersData.departure_minutes.to.max),
+    };
+    if (this.searchSegments.back) {
+      const backDepDate = this.searchSegments.back.depart_date;
+      this.filtersData.departure_datetime.back = {
+        min: this.minsToUnix(backDepDate, this.filtersData.departure_minutes.back.min),
+        max: this.minsToUnix(backDepDate, this.filtersData.departure_minutes.back.max),
+      };
+    }
+  }
+
+  private formDefaultValues(): any {
+    return {
+      airline: this.airlines.map(airline => airline.iata),
+      airport: {
+        to: {
+          arrival: this.filtersData.airports.arrival,
+          departure: this.filtersData.airports.departure
+        },
+        back: {
+          arrival: this.filtersData.airports.departure,
+          departure: this.filtersData.airports.arrival,
+        }
+      },
+      flights_duration: {
+        to: [this.filtersData.flights_duration.to.min, this.filtersData.flights_duration.to.max],
+        back: [this.filtersData.flights_duration.back.min, this.filtersData.flights_duration.back.max],
+      },
+      price: [this.filtersData.price.min, this.filtersData.price.max],
+      travel_time: {
+        to: {
+          departure: [this.filtersData.departure_datetime.to.min, this.filtersData.departure_datetime.to.max],
+          arrival: [this.filtersData.arrival_datetime.to.min, this.filtersData.arrival_datetime.to.max]
+        },
+        back: {
+          departure: [this.filtersData.departure_datetime?.back?.min, this.filtersData.departure_datetime?.back?.max],
+          arrival: [this.filtersData.arrival_datetime?.back?.min, this.filtersData.arrival_datetime?.back?.max]
+        }
+      }
+    };
   }
 
   private minsToUnix(date: string, mins: number): number {

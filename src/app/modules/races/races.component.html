@@ -31,6 +31,7 @@
             </div>
         </header>
         <app-races-filter 
+            *ngIf="!isLoading"
             [filtersData]="searchResult.filters"
             [searchSegments]="searchIdResult.segments"
             [airports]="searchIdResult.airports"
@@ -89,9 +90,7 @@
             </ng-container>
           
         </ng-container>
-        <ng-template #noRacesFound>
-            По вашему запросу ничего не найдено. Попробуйте вернуться <a routerLink="/">на страницу поиска</a> и изменить параметры запроса.
-        </ng-template>
+        
     </div>
 
     <app-race-view 
@@ -105,7 +104,9 @@
 </ng-container>
 <ng-template #pageLoadSpinner>
     <div class="page-load-spinner">
-        <ng-container *ngTemplateOutlet="spinner"></ng-container>
+        <ng-container *ngIf="isLoading;else noRacesFound">
+            <ng-container *ngTemplateOutlet="spinner"></ng-container>
+        </ng-container>
     </div>
 </ng-template>
 
@@ -128,4 +129,9 @@
             <div>{{segment.transfers_total_duration / 60 | minutesToHoursMins}}</div>
         </ng-container>
     </div>
+</ng-template>
+<ng-template #noRacesFound>
+    <p class="nothing-found">
+        По вашему запросу ничего не найдено. Попробуйте вернуться <a routerLink="/">на страницу поиска</a> и изменить параметры запроса.
+    </p>
 </ng-template>
