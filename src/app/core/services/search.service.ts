@@ -1,7 +1,6 @@
-import { BaseOverlayDispatcher } from '@angular/cdk/overlay/dispatchers/base-overlay-dispatcher';
 import { Injectable } from '@angular/core';
 import { IPlacesParams, ISearchResult } from '@core/interfaces/search.interfaces';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
@@ -12,7 +11,7 @@ export class SearchSearvice extends ApiService {
   flightSearch$: Observable<any>;
   searchResult$ = new BehaviorSubject<ISearchResult>(null);
 
-  mock = true;
+  mock = false;
   flightSearch(params: any): Observable<any> {
     if (this.mock) {
       return this.http.get('/assets/flight-search.json').pipe(
@@ -48,6 +47,14 @@ export class SearchSearvice extends ApiService {
 
   places(params: IPlacesParams): Observable<any> {
     return this.post(`travelpayouts.places`, params);
+  }
+
+  places2(params: IPlacesParams): Observable<any> {
+    // tslint:disable-next-line:max-line-length
+    return from(
+      fetch(`http://autocomplete.travelpayouts.com/places2?term=${params.term}&locale=${params.locale}&types[]=city`)
+        .then(res => res.json())
+    );
   }
 
 

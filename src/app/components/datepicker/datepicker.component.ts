@@ -8,4 +8,5 @@ import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DatepickerComponent extends CustomFormFieldComponent {
+  @Input() minDate;
 }

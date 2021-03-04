@@ -13,6 +13,14 @@ body {
   height: 100%;
 }
 
+body {
+  @include for-mobile {
+    &.filter-is-opened {
+      overflow: hidden;
+    }
+  }
+}
+
 body,
 .mat-body,
 .mat-body-1,
@@ -69,6 +77,10 @@ mat-icon {
   color: var(--black);
   margin: 0 0 60px;
   line-height: 1;
+  @include for-mobile {
+    font-weight: 500 !important;
+    font-size: 20px !important;
+  }
 }
 
 .main-container {
@@ -84,6 +96,10 @@ mat-icon {
   align-items: center;
   overflow: hidden;
   position: relative;
+  @include for-mobile {
+    padding-top: 15px;
+    padding-bottom: 40px;
+  }
 
   > *:not(router-outlet) {
     width: 100%;

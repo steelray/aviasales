@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   apiEndpoint: 'https://uzcard.paycom.uz/api',
+  placesEndpoint: '/',
   airlineLogoEndpoint: ' http://pics.avs.io'
 };
 

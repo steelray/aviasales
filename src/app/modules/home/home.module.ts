@@ -10,6 +10,8 @@ import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { MatRadioModule } from '@angular/material/radio';
     ReactiveFormsModule,
     RxReactiveFormsModule,
     MatMenuModule,
-    MatRadioModule
+    MatRadioModule,
+    MatFormFieldModule,
+    MatDatepickerModule
   ]
 })
 export class HomeModule { }

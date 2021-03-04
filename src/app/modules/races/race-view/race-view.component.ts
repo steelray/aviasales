@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, Input, Output, EventEmitter, Inject } from '@angular/core';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
-import { IFlight, IRaceDetail, ISearchResult } from '@core/interfaces/search.interfaces';
+import { IFlight, IRace, IRaceDetail, ISearchResult } from '@core/interfaces/search.interfaces';
 
 @Component({
   selector: 'app-race-view',
@@ -30,8 +30,16 @@ export class RaceViewComponent implements OnInit {
     this.backToList.emit();
   }
 
-  viewDetails(event: Event): void {
+  viewDetails(event: Event, race: IRace): void {
     event.preventDefault();
+    const detailsEL: HTMLElement = this.document.getElementById(race.number);
+    if (detailsEL) {
+      if (detailsEL.style.display === 'block') {
+        detailsEL.style.display = 'none';
+      } else {
+        detailsEL.style.display = 'block';
+      }
+    }
   }
 
   onBuy(): void {

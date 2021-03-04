@@ -77,7 +77,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "aviasales:build"
+            "browserTarget": "aviasales:build",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {

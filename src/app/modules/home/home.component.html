@@ -9,9 +9,9 @@
             [control]="controls.departure">
             <mat-icon>location_on</mat-icon>
         </app-input-autocomplete>
-        <span>
+        <button mat-icon-button (click)="replaceDiractions()" type="text" [disabled]="!controls.departure.value || !controls.arrival.value">
             <mat-icon>swap_horiz</mat-icon>
-        </span>
+        </button>
         <app-input-autocomplete
             placeholder="Куда"
             [options]="toOptions$ | async"
@@ -23,18 +23,23 @@
 
     <div class="inputs-group fields-group">
         <div class="mob-title">Даты</div>
-        <app-datepicker
-            placeholder="Туда"
-            class="from-field"
-            [control]="controls.departure_date">
-        </app-datepicker>
+        <div class="dates-fields">
+            <app-datepicker
+                placeholder="Туда"
+                class="from-field"
+                [control]="controls.departure_date"
+                [minDate]="departureMinDate">
+            </app-datepicker>
+    
+            <app-datepicker
+                placeholder="Обратно"
+                class="from-field"
+                [control]="controls.arrival_date"
+                [minDate]="controls.departure_date.value">
+            </app-datepicker>
+        </div>
 
-        <app-datepicker
-            placeholder="Обратно"
-            class="from-field"
-            [control]="controls.arrival_date">
-        </app-datepicker>
-
+        <div class="mob-title">Пассажиры</div>
         <button type="button" class="passengers-class-btn"  [matMenuTriggerFor]="menu">
             <div>
                 {{passengersCount}} пассажир
@@ -46,7 +51,7 @@
     </div>
 
     <div class="text-center">
-        <button mat-raised-button color="primary" [disabled]="form.invalid">Искать билеты</button>
+        <button class="apply-btn" mat-raised-button color="primary" [disabled]="form.invalid">Искать билеты</button>
     </div>
 
 </form>

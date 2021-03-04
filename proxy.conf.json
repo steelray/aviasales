@@ -1,0 +1,10 @@
+{
+  "/places2": {
+    "target": "http://autocomplete.travelpayouts.com",
+    "secure": true,
+    "pathRewrite": {
+      "^/places2": "/places2"
+    },
+    "changeOrigin": true
+  }
+}

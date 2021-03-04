@@ -2,6 +2,9 @@
 :host {
   display: block;
   padding: 7px 15px;
+  @include for-mobile {
+    font-size: 12px;
+  }
 }
 
 ul {
@@ -23,6 +26,8 @@ ul {
     }
     @include for-mobile {
       width: 100%;
+      margin-left: 0;
+      margin-right: 0;
     }
     .icon {
       display: inline-block;

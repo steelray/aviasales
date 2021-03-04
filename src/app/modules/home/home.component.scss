@@ -1,16 +1,28 @@
 @import "components/mixins";
+:host {
+  padding-bottom: 75px;
+}
 .inputs-group {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   grid-column-gap: 15px;
+  @include for-mobile {
+    grid-template-columns: 1fr;
+  }
 }
 
-button {
+button.apply-btn {
   padding: 0 55px;
+  @include for-mobile {
+    width: 100%;
+  }
 }
 
 h1 {
   margin-bottom: 50px;
+  @include for-mobile {
+    margin-bottom: 25px;
+  }
 }
 
 hr {
@@ -37,6 +49,19 @@ hr {
   text-align: left;
   span {
     color: var(--na-font-color);
+  }
+  @include for-mobile {
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    margin-bottom: 35px;
+    div {
+      &::after {
+        content: ",";
+        margin-right: 7px;
+      }
+    }
   }
 }
 

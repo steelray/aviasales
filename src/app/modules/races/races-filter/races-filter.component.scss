@@ -1,3 +1,4 @@
+@import "components/mixins";
 :host {
   position: fixed;
   top: 15px;
@@ -12,6 +13,16 @@
   opacity: 0.2;
   transition: all 0.3s;
   z-index: 99;
+  @include for-mobile {
+    top: 55px;
+    bottom: 0;
+    height: auto;
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 0;
+    border-radius: 12px 12px 0 0;
+    transform: translate(0, 100%);
+  }
   &.active {
     transform: translate(0);
     opacity: 1;
@@ -19,6 +30,9 @@
   .title-1 {
     font-size: 24px;
     margin: 0 15px 30px;
+    @include for-mobile {
+      margin-bottom: 15px;
+    }
     span {
       &.not-active {
         color: var(--na-font-color);
@@ -36,11 +50,19 @@
     top: 20px;
     left: 5px;
     z-index: 2;
+    @include for-mobile {
+      right: 5px;
+      left: auto;
+      top: 16px;
+    }
   }
   &-inner {
-    height: 100%;
+    max-height: calc(100% - 70px);
     overflow: auto;
     z-index: 2;
+    @include for-mobile {
+      height: calc(100% - 160px);
+    }
     &__content {
       padding: 0 15px;
     }
@@ -50,15 +72,48 @@
     color: var(--main-color);
     margin-left: 1px;
     margin-top: 15px;
+    @include for-mobile {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+    }
   }
   &-list {
     &__item {
       padding: 22.5px 15px;
       font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      mat-icon {
+        display: none;
+        @include for-mobile {
+          display: inline-block;
+        }
+      }
       cursor: pointer;
       &:not(:last-child) {
         border-bottom: 1px solid var(--border-color);
       }
     }
+  }
+  &-actions {
+    @include for-mobile {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      padding: 10px 0 0;
+      background: var(--white);
+    }
+  }
+}
+
+.apply-btn {
+  display: none;
+  @include for-mobile {
+    display: block;
+    width: 100%;
+    text-transform: uppercase;
+    font-size: 14px;
   }
 }

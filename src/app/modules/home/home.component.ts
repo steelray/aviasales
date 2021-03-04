@@ -53,6 +53,8 @@ export class HomeComponent implements OnInit {
     }
   ];
   maxPassengersCount = 9;
+  departureMinDate = new Date();
+  arrivalMinDate = this.departureMinDate;
 
   constructor(
     private fb: FormBuilder,
@@ -66,20 +68,30 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.buildForm();
 
+    this.controls.departure_date.valueChanges.pipe(
+      filter(res => !!res),
+      takeUntil(this.onDestroy$)
+    ).subscribe(depDate => {
+      const arrivalDate = this.controls.arrival_date.value;
+      if (arrivalDate && depDate > arrivalDate) {
+        this.controls.arrival_date.setValue(depDate);
+      }
+    });
+
     this.fromOptions$ = this.controls.departure.valueChanges.pipe(
-      debounceTime(400),
+      debounceTime(250),
       filter(value => !!value && typeof value === 'string'),
       switchMap(value => {
         const searchParams = placesParams;
         placesParams.term = value;
-        return this.searchService.places(searchParams);
+        return this.searchService.places2(searchParams);
       }),
+      tap(res => console.log(res)),
       map(res => this.prepareSelectOptions(res)),
-      // tap(res => console.log(res))
     );
 
     this.toOptions$ = this.controls.arrival.valueChanges.pipe(
-      debounceTime(400),
+      debounceTime(250),
       filter(value => !!value && typeof value === 'string'),
       switchMap(value => {
         const searchParams = placesParams;
@@ -89,7 +101,6 @@ export class HomeComponent implements OnInit {
       map(res => this.prepareSelectOptions(res))
     );
 
-    console.log(this.controls);
   }
 
   get controls(): { [key: string]: AbstractControl } {
@@ -105,6 +116,14 @@ export class HomeComponent implements OnInit {
 
   get activeTripClass(): string {
     return this.tripClassOptions.find(tripClass => tripClass.value === this.controls.trip_class.value)?.title;
+  }
+
+  replaceDiractions(): void {
+    const { departure, arrival } = this.form.value;
+    if (departure && arrival) {
+      this.controls.departure.setValue(arrival);
+      this.controls.arrival.setValue(departure);
+    }
   }
 
   onSubmit(): void {
@@ -135,7 +154,7 @@ export class HomeComponent implements OnInit {
       departure: ['', RxwebValidators.required()],
       arrival: ['', RxwebValidators.required()],
       departure_date: ['', RxwebValidators.required()],
-      arrival_date: ['', RxwebValidators.required()],
+      arrival_date: [''],
       passengers: this.fb.group({
         adults: [1],
         children: [0],

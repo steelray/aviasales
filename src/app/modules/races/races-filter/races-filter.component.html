@@ -1,12 +1,13 @@
 <button mat-icon-button class="filter-close-btn" (click)="onClose()"><mat-icon>close</mat-icon></button>
+<div class="title-1">
+  <span [class.not-active]="activeFilterType" (click)="backToMainFilters()">Фильтр</span>
+  <span *ngIf="activeFilterType">{{activeFilterType.title}}</span>
+</div>
 <div class="filter-inner">
-  <div class="title-1">
-    <span [class.not-active]="activeFilterType" (click)="backToMainFilters()">Фильтр</span>
-    <span *ngIf="activeFilterType">{{activeFilterType.title}}</span>
-  </div>
   <div class="filter-list" *ngIf="!activeFilterType;else filterTypes">
     <div *ngFor="let item of filterItems" class="filter-list__item" (click)="onFilterItemCollapse(item)">
       {{item.title}}
+      <mat-icon>chevron_right</mat-icon>
     </div>
   </div>
   <ng-template #filterTypes>
@@ -46,6 +47,8 @@
       </ng-container>
     </div>
   </ng-template>
-
+</div>
+<div class="filter-actions">
   <button mat-button class="filter-reset-btn">Сбросить фильтр</button>
+  <button mat-raised-button color="primary" class="apply-btn" (click)="onClose()">применить</button>
 </div>

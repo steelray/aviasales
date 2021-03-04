@@ -1,4 +1,24 @@
 @import "mixins";
+
+input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+select:focus,
+textarea {
+  font-size: 16px;
+}
+
 mat-form-field,
 .mat-form-field-appearance-legacy {
   width: 100%;
@@ -123,6 +143,54 @@ app-datepicker {
   }
 }
 
+.fields-group {
+  margin-bottom: calc(24px - 1.5em);
+}
+
+.dates-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 15px;
+  @include for-mobile {
+    grid-template-columns: 1fr;
+  }
+  @include for-mobile {
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 25px;
+    app-datepicker {
+      mat-form-field,
+      .mat-form-field-appearance-legacy {
+        &:not(.mat-focused) {
+          .mat-form-field-infix {
+            border-color: transparent;
+          }
+        }
+      }
+      &:first-child {
+        mat-form-field,
+        .mat-form-field-appearance-legacy {
+          .mat-form-field-infix {
+            border-radius: 6px 6px 0 0;
+          }
+          &:not(.mat-focused) {
+            .mat-form-field-infix {
+              border-bottom: 1px solid var(--border-color);
+            }
+          }
+        }
+      }
+      &:last-child {
+        mat-form-field .mat-form-field-infix,
+        .mat-form-field-appearance-legacy .mat-form-field-infix {
+          border-radius: 0 0 6px 6px;
+        }
+      }
+    }
+  }
+}
+
 .from-to-fields {
   position: relative;
   display: flex;
@@ -133,6 +201,7 @@ app-datepicker {
     flex-direction: column;
     border: 1px solid var(--border-color);
     border-radius: 6px;
+    margin-bottom: 25px;
   }
 
   app-input-autocomplete {
@@ -169,7 +238,7 @@ app-datepicker {
     }
   }
 
-  > span {
+  > button {
     position: absolute;
     top: 8px;
     left: calc(50% - 17px);
@@ -181,6 +250,7 @@ app-datepicker {
     align-items: center;
     justify-content: center;
     background: var(--white);
+    padding: 0 !important;
     z-index: 1;
     @include for-mobile {
       top: calc(50% - 17px);
@@ -243,10 +313,6 @@ app-datepicker {
   }
 }
 
-.fields-group {
-  margin-bottom: calc(24px - 1.5em);
-}
-
 body {
   .mat-form-field-appearance-legacy .mat-form-field-prefix .mat-datepicker-toggle-default-icon,
   .mat-form-field-appearance-legacy .mat-form-field-suffix .mat-datepicker-toggle-default-icon {
@@ -303,6 +369,9 @@ body {
   .mat-option.mat-selected:not(.mat-option-multiple):not(.mat-option-disabled) {
     background: var(--main-color) !important;
     color: var(--white) !important;
+    span {
+      color: var(--white) !important;
+    }
   }
 
   .mat-autocomplete-panel .mat-option.mat-selected:not(.mat-active):not(:hover) {

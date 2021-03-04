@@ -1,8 +1,13 @@
-<button class="back-btn" mat-raised-button (click)="onBackToList()">Назад</button>
+<div class="back-btn-cont">
+  <button class="back-btn" mat-raised-button (click)="onBackToList()">
+    <span>Назад</span>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+</div>
 <div class="race-header">
   <div class="race-price">
     <div>{{flight.price | number | customNumber}} <span>сум</span></div>
-    <span>Туда и обратно</span>
+    <span>Туда <ng-container *ngIf="searchResult.segments.back">и обратно</ng-container></span>
   </div>
   <button class="buy-btn" mat-raised-button color="primary" (click)="onBuy()">Купить</button>
 </div>
@@ -46,10 +51,10 @@
             <span class="race-transfers__icon">
               <mat-icon>access_time</mat-icon>
             </span>
-            <div class="na-color">
+            <div class="na-color">Пересадка</div>
+            <div>
               {{ race.departure }}
             </div>
-            <div>Пересадка</div>
           </div>
         </ng-container>
         <div class="race-transfers__item" *ngIf="segment.races[segment.races.length - 1] as flightArrival">
@@ -83,7 +88,7 @@
               <div class="race-item__body-row">
                 <div class="race-item__body-iata">
                   <div>
-                    {{race.departure_timestamp * 1000 | customDate:'DD MMMM':(segment.departure | getCityTimeZone:searchResult.airports) }}
+                    {{race.departure_timestamp * 1000 | customDate:'HH:mm':(segment.departure | getCityTimeZone:searchResult.airports) }}
                   </div>
                   <div>{{race.departure}}</div>
                   <div>{{race.departure | getCity:searchResult.airports}}</div>
@@ -95,7 +100,7 @@
               <div class="race-item__body-row">
                 <div class="race-item__body-iata">
                   <div>
-                    {{race.arrival_timestamp * 1000 | customDate:'DD MMMM':(segment.arrival | getCityTimeZone:searchResult.airports) }}
+                    {{race.arrival_timestamp * 1000 | customDate:'HH:mm':(segment.arrival | getCityTimeZone:searchResult.airports) }}
                   </div>
                   <div>{{race.arrival}}</div>
                   <div>{{race.arrival | getCity:searchResult.airports}}</div>
@@ -108,7 +113,7 @@
             </div>
           </div>
           <div class="race-item__footer">
-            <a href="#" (click)="viewDetails($event)">
+            <a href="#" (click)="viewDetails($event, race)">
               Информация о рейсе
               <mat-icon>arrow_drop_down</mat-icon>
             </a>
@@ -122,7 +127,7 @@
                 [class.not-included]="(flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true) === 'x'">{{flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true}}</span>
             </div>
           </div>
-          <div class="race-item__details">
+          <div class="race-item__details" [id]="race.number">
             <app-race-view-details
               [race]="race"
               [tripClass]="tripClass"
