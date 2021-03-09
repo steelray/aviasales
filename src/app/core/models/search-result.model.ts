@@ -98,6 +98,29 @@ export class SearchResult implements ISearchResult {
     this.flights = proposals;
 
     this.filters.flights_duration = this.prepareFlightsDuration(this.flights); // set min max flight duration values for to&&back races;
+
+    this.filters.departure_datetime = this.prepareFilterDepartureDateTime(this.flights);
+    this.filters.arrival_datetime = this.prepareFilterArrivalDateTime(this.flights);
+  }
+
+  private prepareFilterDepartureDateTime(flights: IFlight[]): ISearchResultFilterArrivalDateTime {
+    const toDepTimestamps = flights.map(flight => flight.segment.to.departure_timestamp);
+    const toDepMax = Math.max.apply(Math, toDepTimestamps);
+    const toDepMin = Math.min.apply(Math, toDepTimestamps);
+
+    const backDepTimestamps = flights.map(flight => flight.segment.back.departure_timestamp);
+    const backDepMax = Math.max.apply(Math, backDepTimestamps);
+    const backDepMin = Math.min.apply(Math, backDepTimestamps);
+    return {
+      to: {
+        max: toDepMax,
+        min: toDepMin
+      },
+      back: {
+        max: backDepMax,
+        min: backDepMin
+      }
+    };
   }
 
   private getUniqueInfo(flightInfo: any): any {
@@ -130,7 +153,7 @@ export class SearchResult implements ISearchResult {
     const res: ISearchResultFilter = this.filters ? this.filters : this.setFiltersDefaultValues();
     res.airports.arrival = this.pushOnlyUniques(res.airports.arrival, newFilters.airports.arrival);
     res.airports.departure = this.pushOnlyUniques(res.airports.departure, newFilters.airports.departure);
-    res.arrival_datetime = this.prepareFilterArrivalDateTime(newFilters, res.arrival_datetime);
+    // res.arrival_datetime = this.prepareFilterArrivalDateTime(newFilters, res.arrival_datetime);
     res.arrival_time = this.prepareFilterArrivalTime(newFilters, res.arrival_time);
     res.departure_time = this.prepareFilterDepartureTime(newFilters, res.departure_time);
     res.departure_minutes = this.prepareFilterDepartureMinutes(newFilters, res.departure_minutes);
@@ -212,28 +235,27 @@ export class SearchResult implements ISearchResult {
   }
 
   private prepareFilterArrivalDateTime(
-    filters: any, currentDateTime: ISearchResultFilterArrivalDateTime
+    flights: IFlight[]
   ): ISearchResultFilterArrivalDateTime {
 
-    if (filters.arrival_datetime_0.max > currentDateTime.to.max) {
-      currentDateTime.to.max = filters.arrival_datetime_0.max;
-    }
+    const toArrivalTimestamps = flights.map(flight => flight.segment.to.arrival_timestamp);
+    const toArrivalMax = Math.max.apply(Math, toArrivalTimestamps);
+    const toArrivalMin = Math.min.apply(Math, toArrivalTimestamps);
 
-    if (!currentDateTime.to.min || filters.arrival_datetime_0.min < currentDateTime.to.min) {
-      currentDateTime.to.min = filters.arrival_datetime_0.min;
-    }
 
-    if (filters.arrival_datetime_1) {
-      if (filters.arrival_datetime_1.max > currentDateTime.back.max) {
-        currentDateTime.back.max = filters.arrival_datetime_1.max;
+    const backArrivalTimestamps = flights.map(flight => flight.segment.back.arrival_timestamp);
+    const backArrivalMax = Math.max.apply(Math, backArrivalTimestamps);
+    const backArrivalMin = Math.min.apply(Math, backArrivalTimestamps);
+    return {
+      to: {
+        max: toArrivalMax,
+        min: toArrivalMin
+      },
+      back: {
+        max: backArrivalMax,
+        min: backArrivalMin
       }
-
-      if (!currentDateTime.back.min || filters.arrival_datetime_1.min < currentDateTime.back.min) {
-        currentDateTime.back.min = filters.arrival_datetime_1.min;
-      }
-    }
-
-    return currentDateTime;
+    };
   }
 
   private prepareFilterArrivalTime(

@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, Self, ChangeDetectorRef, Inject } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 import { IFlight, IFlightSearchParams, ISearchResult, ISearchResultFilter } from '@core/interfaces/search.interfaces';
@@ -7,8 +8,8 @@ import { SearchResult } from '@core/models/search-result.model';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
 import { environment } from '@environments/environment';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { BehaviorSubject, interval, Observable, of, Subject, timer } from 'rxjs';
+import { filter, map, repeatWhen, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-races',
@@ -19,6 +20,12 @@ import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 })
 export class RacesComponent implements OnInit {
   private readonly visibleItemsCount = 10;
+  private readonly resultTimeout = (60 * 15); // 15 minutes in seconds
+
+  private readonly stopTimer$ = new Subject<void>();
+  private readonly startTimer$ = new Subject<void>();
+
+  resultTimeIsUp = false;
   filterIsActive = false;
   allResults$: Observable<SearchResult>;
   searchResult: ISearchResult; // prepared search result
@@ -35,21 +42,47 @@ export class RacesComponent implements OnInit {
 
   isLoading = true;
 
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private searchService: SearchSearvice,
     private cdRef: ChangeDetectorRef,
     @Inject(DOCUMENT) private document: Document,
-    @Self() private onDestroy$: NgOnDestroy
+    @Self() private onDestroy$: NgOnDestroy,
+    private snackbar: MatSnackBar
   ) { }
 
+  startTimer(): void {
+    this.startTimer$.next();
+  }
+  stopTimer(): void {
+    this.stopTimer$.next();
+  }
+
   ngOnInit(): void {
+
+    timer(0, 1000)
+      .pipe(
+        takeUntil(this.stopTimer$),
+        repeatWhen(() => this.startTimer$),
+        map(res => res + 1),
+        tap(res => this.resultTimeIsUp = res === this.resultTimeout),
+        takeUntil(this.onDestroy$)
+      ).subscribe(res => {
+        if (this.resultTimeIsUp) {
+          this.stopTimer();
+          this.cdRef.detectChanges();
+          this.showSnackbar();
+        }
+      });
+
     this.allResults$ = this.updateList$.pipe(
       switchMap(() => {
         if (!this.flightSearch) {
           // new search
           return this.searchService.flightSearch(this.prepareParams()).pipe(
-            tap(res => this.flightSearch = res)
+            tap(res => this.flightSearch = res),
+            tap(() => this.startTimer()),
           );
         }
         // search by stored search id
@@ -77,13 +110,12 @@ export class RacesComponent implements OnInit {
         // this.isLoading = false;
         this.allFlights = [...this.allFlights, ...res.flights];
         this.filteredFlights = this.allFlights;
+
         // add items if less then 'visibleItemsCount'
         const currentVisibleFlights = this.visibleFlights$.getValue();
         if (!currentVisibleFlights.length || currentVisibleFlights.length < this.visibleItemsCount) {
           this.visibleFlights$.next(this.addItems());
         }
-        // console.log(this.allFlights.map(flight => flight.price).sort((a, b) => a - b));
-        // this.viewItem = this.allFlights[0];
       })
     );
   }
@@ -113,7 +145,6 @@ export class RacesComponent implements OnInit {
   }
 
   onBackToList(): void {
-    console.log('back from view');
     this.viewItem = null;
     setTimeout(() => window.scroll(0, this.currentScrollPosition), 30);
   }
@@ -130,6 +161,32 @@ export class RacesComponent implements OnInit {
       takeUntil(this.onDestroy$)
     ).subscribe(res => {
       window.open(res.url, '_blank');
+    });
+  }
+
+  onResultUpdate(fromViewPage = false): void {
+    if (fromViewPage) {
+      this.onBackToList();
+    }
+    this.isLoading = true;
+
+    // reset all results
+    this.flightSearch = null;
+    this.searchResult = null;
+    this.allFlights = [];
+    this.filteredFlights = [];
+
+    // update result
+    this.updateList$.next(null);
+  }
+
+  private showSnackbar(): void {
+    this.snackbar.open('Цены могли измениться! Обновите поиск, чтобы увидеть актуальные цены.', 'обновить', {
+      panelClass: 'refresh-snackbar'
+    }).afterDismissed().pipe(
+      takeUntil(this.onDestroy$)
+    ).subscribe(() => {
+      this.onResultUpdate();
     });
   }
 
@@ -168,6 +225,48 @@ export class RacesComponent implements OnInit {
           flight.segment.back.total_duration >= filters.flights_duration.back[0]
           &&
           flight.segment.back.total_duration <= filters.flights_duration.back[1]
+        ):
+          res = false;
+          break;
+
+        case (
+          flight.segment.to.departure_timestamp < filters.travel_time.to.departure[0]
+        ):
+          res = false;
+          break;
+        case (
+          flight.segment.to.departure_timestamp > filters.travel_time.to.departure[1]
+        ):
+          res = false;
+          break;
+        case (
+          flight.segment.to.arrival_timestamp < filters.travel_time.to.arrival[0]
+        ):
+          res = false;
+          break;
+        case (
+          flight.segment.to.arrival_timestamp > filters.travel_time.to.arrival[1]
+        ):
+          res = false;
+          break;
+
+        case (
+          flight.segment.back.departure_timestamp < filters.travel_time.back.departure[0]
+        ):
+          res = false;
+          break;
+        case (
+          flight.segment.back.departure_timestamp > filters.travel_time.back.departure[1]
+        ):
+          res = false;
+          break;
+        case (
+          flight.segment.back.arrival_timestamp < filters.travel_time.back.arrival[0]
+        ):
+          res = false;
+          break;
+        case (
+          flight.segment.back.arrival_timestamp > filters.travel_time.back.arrival[1]
         ):
           res = false;
           break;

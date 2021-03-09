@@ -1,0 +1,11 @@
+:host {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  mat-spinner {
+    margin: 0 auto 15px;
+  }
+}

@@ -43,6 +43,8 @@ import { RaceFilterChecboxesGroupComponent } from './races-filter/race-filter-ch
 import { InArrayPipe } from '@core/pipes/in-array.pipe';
 import { GetBaggageHandbagInfoPipe } from '@core/pipes/get-baggage-kg.pipe';
 import { RaceViewDetailsComponent } from './race-view/race-view-details/race-view-details.component';
+import { RaceTicketComponent } from './race-ticket/race-ticket.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -67,7 +69,8 @@ import { RaceViewDetailsComponent } from './race-view/race-view-details/race-vie
     RaceFilterChecboxesGroupComponent,
     InArrayPipe,
     GetBaggageHandbagInfoPipe,
-    RaceViewDetailsComponent
+    RaceViewDetailsComponent,
+    RaceTicketComponent
   ],
   imports: [
     CommonModule,
@@ -91,7 +94,8 @@ import { RaceViewDetailsComponent } from './race-view/race-view-details/race-vie
     MatCheckboxModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSnackBarModule
   ]
 })
 export class RacesModule { }

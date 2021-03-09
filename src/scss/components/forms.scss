@@ -474,3 +474,13 @@ body {
 .filter-field {
   margin-bottom: 15px;
 }
+
+.mat-snack-bar-container.refresh-snackbar {
+  background: var(--red);
+  max-width: 80vw;
+  color: var(--white);
+  .mat-button {
+    background: var(--body-bg-color);
+    color: var(--red);
+  }
+}

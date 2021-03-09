@@ -41,7 +41,6 @@ export class RacesFilterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.prepareFiltersDepartureDateTime();
     this.buildForm();
     this.form.setValue(this.formDefaultValues());
 
@@ -129,21 +128,6 @@ export class RacesFilterComponent implements OnInit {
         })
       })
     });
-  }
-
-  private prepareFiltersDepartureDateTime(): void {
-    const toDepDate = this.searchSegments.to.depart_date;
-    this.filtersData.departure_datetime.to = {
-      min: this.minsToUnix(toDepDate, this.filtersData.departure_minutes.to.min),
-      max: this.minsToUnix(toDepDate, this.filtersData.departure_minutes.to.max),
-    };
-    if (this.searchSegments.back) {
-      const backDepDate = this.searchSegments.back.depart_date;
-      this.filtersData.departure_datetime.back = {
-        min: this.minsToUnix(backDepDate, this.filtersData.departure_minutes.back.min),
-        max: this.minsToUnix(backDepDate, this.filtersData.departure_minutes.back.max),
-      };
-    }
   }
 
   private formDefaultValues(): any {

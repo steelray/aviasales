@@ -1,16 +1,16 @@
 import { LabelType, Options } from '@angular-slider/ngx-slider';
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { minutesToTime } from '@core/utils/minutes-to-time.util';
-import { IAirport, IMinMaxValues, ISearchResultFilterArrivalDateTime, ISearchResultFilterTime, ISearchResultSegments } from '@core/interfaces/search.interfaces';
-import * as moment from 'moment';
+import { FormGroup } from '@angular/forms';
+import { IAirport, ISearchResultFilterArrivalDateTime, ISearchResultSegments } from '@core/interfaces/search.interfaces';
 import 'moment/min/locales';
+import { CustomDatePipe } from '@core/pipes/custom-date.pipe';
 
 @Component({
   selector: 'app-races-filter-travel-time',
   templateUrl: './races-filter-travel-time.component.html',
   styleUrls: ['./races-filter-travel-time.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CustomDatePipe]
 })
 export class RacesFilterTravelTimeComponent implements OnInit {
   @Input() form: FormGroup;
@@ -19,20 +19,7 @@ export class RacesFilterTravelTimeComponent implements OnInit {
   @Input() departureDatetime: ISearchResultFilterArrivalDateTime;
   @Input() airports: IAirport[];
 
-  DefaultOptions: Options = {
-    step: 600, // in seconds(10 minutes)
-    translate: (value: number, label: LabelType): string => {
-      switch (label) {
-        case LabelType.Low:
-          return `от ${this.timestampToDatetime(value)}`;
-        case LabelType.High:
-          return `до ${this.timestampToDatetime(value)}`;
-        default:
-          return '' + this.timestampToDatetime(value);
-      }
-    }
-  };
-
+  rangeStep = 600; // in seconds(10 minutes)
 
   arrivalToOptions: Options;
   arrivalBackOptions: Options;
@@ -41,36 +28,53 @@ export class RacesFilterTravelTimeComponent implements OnInit {
   departureBackOptions: Options;
 
   constructor(
-    private fb: FormBuilder
+    private customDatePipe: CustomDatePipe
   ) { }
 
   ngOnInit(): void {
+    const originAirport = {
+      to: this.airports.find(airport => this.searchSegments.to.original_origin === airport.city_code),
+      back: this.airports.find(airport => this.searchSegments.back.original_origin === airport.city_code)
+    };
+    const destinationAirport = {
+      to: this.airports.find(airport => this.searchSegments.to.original_destination === airport.city_code),
+      back: this.airports.find(airport => this.searchSegments.back.original_destination === airport.city_code)
+    };
+
     this.arrivalToOptions = {
-      ...this.DefaultOptions, ...{
-        floor: this.arrivalDatetime.to.min,
-        ceil: this.arrivalDatetime.to.max,
-      }
+      step: this.rangeStep,
+      translate: (value: number, label: LabelType): string => {
+        return this.translate(value, label, destinationAirport.to.time_zone);
+      },
+      floor: this.arrivalDatetime.to.min,
+      ceil: this.arrivalDatetime.to.max,
     };
 
     this.arrivalBackOptions = {
-      ...this.DefaultOptions, ...{
-        floor: this.arrivalDatetime.back.min,
-        ceil: this.arrivalDatetime.back.max,
-      }
+      step: this.rangeStep,
+      translate: (value: number, label: LabelType): string => {
+        return this.translate(value, label, destinationAirport.back.time_zone);
+      },
+      floor: this.arrivalDatetime.back.min,
+      ceil: this.arrivalDatetime.back.max,
     };
 
     this.departureToOptions = {
-      ...this.DefaultOptions, ...{
-        floor: this.departureDatetime.to.min,
-        ceil: this.departureDatetime.to.max,
-      }
+      step: this.rangeStep,
+      translate: (value: number, label: LabelType): string => {
+        return this.translate(value, label, originAirport.to.time_zone);
+      },
+      floor: this.departureDatetime.to.min,
+      ceil: this.departureDatetime.to.max,
     };
 
     this.departureBackOptions = {
-      ...this.DefaultOptions, ...{
-        floor: this.departureDatetime.back.min,
-        ceil: this.departureDatetime.back.max,
-      }
+      step: this.rangeStep,
+      translate: (value: number, label: LabelType): string => {
+        return this.translate(value, label, originAirport.back.time_zone);
+      },
+      floor: this.departureDatetime.back.min,
+      ceil: this.departureDatetime.back.max,
     };
 
   }
@@ -79,16 +83,19 @@ export class RacesFilterTravelTimeComponent implements OnInit {
     return this.form.controls;
   }
 
-  private timestampToDatetime(timestamp: number): string {
-    return moment(timestamp * 1000).locale('ru').format('HH:mm, DD MMM');
+  private translate(value: number, label: LabelType, timezone: string): string {
+    switch (label) {
+      case LabelType.Low:
+        return `от ${this.timestampToDatetime(value, timezone)}`;
+      case LabelType.High:
+        return `до ${this.timestampToDatetime(value, timezone)}`;
+      default:
+        return '' + this.timestampToDatetime(value, timezone);
+    }
   }
 
-  private timeToMinutes(time: string, splitter = ':'): number {
-    const timeArr = time.split(splitter);
-    if (timeArr.length < 2) {
-      return;
-    }
-    return (+timeArr[0] * 60) + (+timeArr[1]);
+  private timestampToDatetime(timestamp: number, timezone = 'Asia/Tashkent'): string {
+    return this.customDatePipe.transform(timestamp * 1000, 'HH:mm, DD MMM', timezone);
   }
 
 }

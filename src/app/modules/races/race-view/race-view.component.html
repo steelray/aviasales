@@ -9,7 +9,13 @@
     <div>{{flight.price | number | customNumber}} <span>сум</span></div>
     <span>Туда <ng-container *ngIf="searchResult.segments.back">и обратно</ng-container></span>
   </div>
-  <button class="buy-btn" mat-raised-button color="primary" (click)="onBuy()">Купить</button>
+  <a 
+    [disabled]="resultTimeIsUp"
+    class="buy-btn" 
+    mat-raised-button 
+    color="primary" 
+    target="_blank"
+    [href]="'buy-ticket/' + searchId +'/'+ flight.terms.url">Купить</a>
 </div>
 <ng-container [ngTemplateOutlet]="raceItem" [ngTemplateOutletContext]="{segment: flight.segment.to, isBack: false}"></ng-container>
 <ng-container *ngIf="flight.segment.back" [ngTemplateOutlet]="raceItem" [ngTemplateOutletContext]="{segment: flight.segment.back, isBack: true}"></ng-container>
