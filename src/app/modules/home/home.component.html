@@ -10,7 +10,7 @@
             [control]="controls.departure">
             <mat-icon>location_on</mat-icon>
         </app-input-autocomplete>
-        <button mat-icon-button (click)="replaceDiractions()" type="text" [disabled]="!controls.departure.value || !controls.arrival.value">
+        <button mat-icon-button (click)="replaceDiractions()" type="button" [disabled]="!controls.departure.value || !controls.arrival.value">
             <mat-icon>swap_horiz</mat-icon>
         </button>
         <app-input-autocomplete

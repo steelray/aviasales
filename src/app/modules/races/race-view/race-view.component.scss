@@ -41,12 +41,18 @@
 
 .race {
   margin-bottom: 50px;
+  @include for-mobile {
+    margin-bottom: 25px;
+  }
   &-header {
     line-height: 1;
     display: flex;
     justify-content: space-between;
     margin-bottom: 35px;
     align-items: flex-start;
+    @include for-mobile {
+      margin-bottom: 20px;
+    }
     span {
       color: var(--na-font-color);
       font-size: 12px;
@@ -72,7 +78,7 @@
     &__header {
       display: flex;
       justify-content: space-between;
-      padding-bottom: 10px;
+      padding-bottom: 5px;
       font-size: 16px;
 
       div {
@@ -87,6 +93,10 @@
     justify-content: space-between;
     margin-bottom: 30px;
     overflow: hidden;
+
+    @include for-mobile {
+      margin-bottom: 15px;
+    }
 
     &__item {
       position: relative;

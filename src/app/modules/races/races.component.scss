@@ -143,12 +143,8 @@ header {
       padding: 0 24px;
       @include for-mobile {
         font-size: 15px;
-        height: 30px;
-        line-height: 28px;
-        border-radius: 30px;
-        background: none;
-        border: 2px solid var(--main-color);
-        color: var(--main-color);
+        height: 34px;
+        line-height: 32px;
         font-weight: 500;
       }
     }

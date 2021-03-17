@@ -6,10 +6,10 @@ import { ISelectOption } from '@core/interfaces/select-option.interface';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { combineLatest, from, Observable, of } from 'rxjs';
-import { debounceTime, filter, finalize, map, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { placesParams } from '@core/const/places-params';
-import { IFlightSearchParams, IPlace } from '@core/interfaces/search.interfaces';
+import { IPlace } from '@core/interfaces/search.interfaces';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 
 @Component({
@@ -20,6 +20,7 @@ import { TRIP_CLASS } from '@core/enums/trip-class.enum';
   providers: [DatePipe, NgOnDestroy]
 })
 export class HomeComponent implements OnInit {
+  private readonly lsKey = '__pmAviasalesFilter';
   fromOptions$: Observable<ISelectOption[]>;
   toOptions$: Observable<ISelectOption[]>;
   passengersQuantityOptions: ISelectOption[] = [
@@ -39,18 +40,18 @@ export class HomeComponent implements OnInit {
       value: TRIP_CLASS.ECONOMY,
       title: 'Эконом'
     },
-    {
-      value: TRIP_CLASS.COMFORT,
-      title: 'Комфорт'
-    },
+    // {
+    //   value: TRIP_CLASS.COMFORT,
+    //   title: 'Комфорт'
+    // },
     {
       value: TRIP_CLASS.BUSINESS,
       title: 'Бизнес'
     },
-    {
-      value: TRIP_CLASS.FIRST,
-      title: 'Первый класс'
-    }
+    // {
+    //   value: TRIP_CLASS.FIRST,
+    //   title: 'Первый класс'
+    // }
   ];
   maxPassengersCount = 9;
   departureMinDate = new Date();
@@ -61,13 +62,12 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private searchService: SearchSearvice,
-    @Self() private onDestroy$: NgOnDestroy,
-    private cdRef: ChangeDetectorRef
+    @Self() private onDestroy$: NgOnDestroy
   ) { }
 
   ngOnInit(): void {
     this.buildForm();
-
+    this.setFormValueFromStorage();
     this.controls.departure_date.valueChanges.pipe(
       filter(res => !!res),
       takeUntil(this.onDestroy$)
@@ -85,7 +85,6 @@ export class HomeComponent implements OnInit {
         placesParams.term = value;
         return this.searchService.places2(searchParams);
       }),
-      tap(res => console.log(res)),
       map(res => this.prepareSelectOptions(res)),
     );
 
@@ -143,7 +142,7 @@ export class HomeComponent implements OnInit {
     queryParams.departure = formValue.departure.value;
     queryParams.arrival = formValue.arrival.value;
 
-
+    localStorage.setItem(this.lsKey, JSON.stringify(queryParams));
     this.router.navigate(['/races'], { queryParams });
   }
 
@@ -160,6 +159,52 @@ export class HomeComponent implements OnInit {
       }),
       trip_class: [TRIP_CLASS.ECONOMY]
     });
+  }
+
+  private setFormValueFromStorage(): void {
+    const storageData = JSON.parse(localStorage.getItem(this.lsKey));
+    const {
+      adults,
+      arrival,
+      arrival_date,
+      children,
+      departure,
+      departure_date,
+      infants,
+      trip_class
+    } = storageData;
+    combineLatest([
+      this.searchService.places2({ ...placesParams, term: departure }),
+      this.searchService.places2({ ...placesParams, term: arrival }),
+    ]).pipe(
+      map(res => ({
+        departure: res[0].find(place => place.code === departure),
+        arrival: res[1].find(place => place.code === arrival),
+      })),
+      takeUntil(this.onDestroy$)
+    ).subscribe(res => {
+      this.controls.departure.setValue({
+        title: res.departure.name,
+        value: res.departure.code
+      });
+
+      this.controls.arrival.setValue({
+        title: res.arrival.name,
+        value: res.arrival.code
+      });
+    });
+
+    this.controls.departure_date.setValue(new Date(departure_date));
+    if (arrival_date) {
+      this.controls.arrival_date.setValue(new Date(arrival_date));
+    }
+
+    this.controls.passengers.setValue({
+      adults,
+      children,
+      infants
+    });
+    this.controls.trip_class.setValue(trip_class);
   }
 
   private transformDate(date: any): string {
