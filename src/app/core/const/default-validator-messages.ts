@@ -33,7 +33,7 @@ export const defaultValidatorMessages = {
   password: 'Ошибка "password"',
   pattern: 'Ошибка "pattern"',
   range: 'Ошибка "range"',
-  required: 'Ошибка "required"',
+  required: 'Обязательное поле для заполнения',
   time: 'Ошибка "time"',
   upperCase: 'Ошибка "upperCase"',
   url: 'Ошибка "url"',

@@ -34,11 +34,11 @@ export class RacesFilterTravelTimeComponent implements OnInit {
   ngOnInit(): void {
     const originAirport = {
       to: this.airports.find(airport => this.searchSegments.to.original_origin === airport.city_code),
-      back: this.airports.find(airport => this.searchSegments.back.original_origin === airport.city_code)
+      back: this.airports.find(airport => this.searchSegments?.back?.original_origin === airport.city_code)
     };
     const destinationAirport = {
       to: this.airports.find(airport => this.searchSegments.to.original_destination === airport.city_code),
-      back: this.airports.find(airport => this.searchSegments.back.original_destination === airport.city_code)
+      back: this.airports.find(airport => this.searchSegments?.back?.original_destination === airport.city_code)
     };
 
     this.arrivalToOptions = {
@@ -53,10 +53,10 @@ export class RacesFilterTravelTimeComponent implements OnInit {
     this.arrivalBackOptions = {
       step: this.rangeStep,
       translate: (value: number, label: LabelType): string => {
-        return this.translate(value, label, destinationAirport.back.time_zone);
+        return this.translate(value, label, destinationAirport?.back?.time_zone);
       },
-      floor: this.arrivalDatetime.back.min,
-      ceil: this.arrivalDatetime.back.max,
+      floor: this.arrivalDatetime?.back?.min,
+      ceil: this.arrivalDatetime?.back?.max,
     };
 
     this.departureToOptions = {
@@ -71,10 +71,10 @@ export class RacesFilterTravelTimeComponent implements OnInit {
     this.departureBackOptions = {
       step: this.rangeStep,
       translate: (value: number, label: LabelType): string => {
-        return this.translate(value, label, originAirport.back.time_zone);
+        return this.translate(value, label, originAirport?.back?.time_zone);
       },
-      floor: this.departureDatetime.back.min,
-      ceil: this.departureDatetime.back.max,
+      floor: this.departureDatetime?.back?.min,
+      ceil: this.departureDatetime?.back?.max,
     };
 
   }

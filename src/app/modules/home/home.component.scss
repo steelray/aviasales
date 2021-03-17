@@ -1,6 +1,10 @@
 @import "components/mixins";
 :host {
   padding-bottom: 75px;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
 }
 .inputs-group {
   display: grid;

@@ -108,7 +108,7 @@ export class SearchResult implements ISearchResult {
     const toDepMax = Math.max.apply(Math, toDepTimestamps);
     const toDepMin = Math.min.apply(Math, toDepTimestamps);
 
-    const backDepTimestamps = flights.map(flight => flight.segment.back.departure_timestamp);
+    const backDepTimestamps = flights.map(flight => flight.segment?.back?.departure_timestamp);
     const backDepMax = Math.max.apply(Math, backDepTimestamps);
     const backDepMin = Math.min.apply(Math, backDepTimestamps);
     return {
@@ -243,7 +243,7 @@ export class SearchResult implements ISearchResult {
     const toArrivalMin = Math.min.apply(Math, toArrivalTimestamps);
 
 
-    const backArrivalTimestamps = flights.map(flight => flight.segment.back.arrival_timestamp);
+    const backArrivalTimestamps = flights.map(flight => flight.segment?.back?.arrival_timestamp);
     const backArrivalMax = Math.max.apply(Math, backArrivalTimestamps);
     const backArrivalMin = Math.min.apply(Math, backArrivalTimestamps);
     return {

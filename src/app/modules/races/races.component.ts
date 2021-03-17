@@ -41,6 +41,7 @@ export class RacesComponent implements OnInit {
   arrivalIATA: string;
 
   isLoading = true;
+  stopLoading = false;
 
 
   constructor(
@@ -89,17 +90,21 @@ export class RacesComponent implements OnInit {
         return of(this.flightSearch);
       }),
       switchMap(() => this.searchService.flightSearchResults(this.flightSearch.search_id)),
-      filter(res => {
-        const filterRes = res && res.length && res[0].proposals && !(res[1] && !res[1]?.proposals);
-        if (filterRes) {
+      tap(res => {
+        if (res && res.length && res.find(item => !item.proposals)) {
+          this.stopLoading = true;
+        }
+      }),
+      tap(() => {
+        if (!this.stopLoading) {
           this.updateList$.next(null);
           this.isLoading = true;
         } else {
           this.isLoading = false;
-          this.cdRef.detectChanges();
+          this.cdRef.markForCheck();
         }
-        return filterRes;
       }),
+      filter(res => res[0] && res[0].proposals), // stop loading if first element doesn't have any proposals
       /*
         * searchResult передаем, чтоб новые данные фильтров(каждый запрос
         * flightSearchResults возвращает новые фильтры с результатами) добавлялись в старые
@@ -195,6 +200,7 @@ export class RacesComponent implements OnInit {
     return allFlgihts.filter(flight => {
       let res = true;
 
+
       switch (true) {
         case !flight.carriers.filter(iata => filters.airline.find(airline => airline === iata)).length:
           res = false;
@@ -205,12 +211,7 @@ export class RacesComponent implements OnInit {
         case !filters.airport.to.departure.includes(flight.segment.to.departure):
           res = false;
           break;
-        case !filters.airport.back?.arrival?.includes(flight.segment?.back?.arrival):
-          res = false;
-          break;
-        case !filters.airport?.back?.departure.includes(flight.segment?.back?.departure):
-          res = false;
-          break;
+
         case !(flight.price >= filters.price[0] && flight.price <= filters.price[1]):
           res = false;
           break;
@@ -218,13 +219,6 @@ export class RacesComponent implements OnInit {
           flight.segment.to.total_duration >= filters.flights_duration.to[0]
           &&
           flight.segment.to.total_duration <= filters.flights_duration.to[1]
-        ):
-          res = false;
-          break;
-        case !(
-          flight.segment.back.total_duration >= filters.flights_duration.back[0]
-          &&
-          flight.segment.back.total_duration <= filters.flights_duration.back[1]
         ):
           res = false;
           break;
@@ -250,29 +244,45 @@ export class RacesComponent implements OnInit {
           res = false;
           break;
 
-        case (
-          flight.segment.back.departure_timestamp < filters.travel_time.back.departure[0]
-        ):
-          res = false;
-          break;
-        case (
-          flight.segment.back.departure_timestamp > filters.travel_time.back.departure[1]
-        ):
-          res = false;
-          break;
-        case (
-          flight.segment.back.arrival_timestamp < filters.travel_time.back.arrival[0]
-        ):
-          res = false;
-          break;
-        case (
-          flight.segment.back.arrival_timestamp > filters.travel_time.back.arrival[1]
-        ):
-          res = false;
-          break;
+
       }
-
-
+      if (this.searchResult.segments.back) {
+        switch (true) {
+          case !filters.airport.back?.arrival?.includes(flight.segment?.back?.arrival):
+            res = false;
+            break;
+          case !filters.airport?.back?.departure.includes(flight.segment?.back?.departure):
+            res = false;
+            break;
+          case !(
+            flight.segment.back.total_duration >= filters.flights_duration.back[0]
+            &&
+            flight.segment.back.total_duration <= filters.flights_duration.back[1]
+          ):
+            res = false;
+            break;
+          case (
+            flight.segment.back.departure_timestamp < filters.travel_time.back.departure[0]
+          ):
+            res = false;
+            break;
+          case (
+            flight.segment.back.departure_timestamp > filters.travel_time.back.departure[1]
+          ):
+            res = false;
+            break;
+          case (
+            flight.segment.back.arrival_timestamp < filters.travel_time.back.arrival[0]
+          ):
+            res = false;
+            break;
+          case (
+            flight.segment.back.arrival_timestamp > filters.travel_time.back.arrival[1]
+          ):
+            res = false;
+            break;
+        }
+      }
 
       return res;
     });

@@ -58,10 +58,6 @@ export class RacesFilterComponent implements OnInit {
         value: FILTER_TYPES.TRAVEL_TIME,
         title: 'Время вылета и прибытия'
       },
-      // {
-      //   value: FILTER_TYPES.BAGGAGE,
-      //   title: 'Багаж'
-      // },
       {
         value: FILTER_TYPES.TRAVEL_DURATION,
         title: 'Время в пути'
@@ -159,25 +155,6 @@ export class RacesFilterComponent implements OnInit {
         }
       }
     };
-  }
-
-  private minsToUnix(date: string, mins: number): number {
-    const toDepHoursMin = this.getHoursFromMins(mins);
-    const toDepMinutesMin = this.getMinutesFromMins(mins);
-    const m = moment();
-    m.set({
-      hour: toDepHoursMin,
-      minutes: toDepMinutesMin
-    });
-    return m.unix();
-  }
-
-  private getHoursFromMins(mins: number): number {
-    return Math.floor(mins / 60);
-  }
-
-  private getMinutesFromMins(mins: number): number {
-    return mins % 60;
   }
 
 }

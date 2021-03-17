@@ -4,10 +4,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class GetBaggageHandbagInfoPipe implements PipeTransform {
 
-  transform(value: any, countReturn = false): any {
+  transform(value: any): any {
     if (!value) {
       return 'x';
     }
+    // value = '2PC10';
     const splited = value.split('PC');
     const placeCount = splited[0];
     // if value like "1PCx36x30x27", not included
@@ -15,7 +16,7 @@ export class GetBaggageHandbagInfoPipe implements PipeTransform {
     if (!kg) {
       return 'x';
     }
-    const res = countReturn ? placeCount : kg;
+    const res = placeCount > 1 ? `x${placeCount}` : kg;
     return res;
   }
 

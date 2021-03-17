@@ -52,7 +52,7 @@ export class SearchSearvice extends ApiService {
   places2(params: IPlacesParams): Observable<any> {
     // tslint:disable-next-line:max-line-length
     return from(
-      fetch(`http://autocomplete.travelpayouts.com/places2?term=${params.term}&locale=${params.locale}&types[]=city`)
+      fetch(`//autocomplete.travelpayouts.com/places2?term=${params.term}&locale=${params.locale}&types[]=city`)
         .then(res => res.json())
     );
   }

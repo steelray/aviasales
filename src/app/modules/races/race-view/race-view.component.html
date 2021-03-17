@@ -127,10 +127,14 @@
               <span 
                 *ngIf="flight.terms.flights_handbags[isBack ? 1 : 0][i]" 
                 class="race-item__handbags-count"
-                [class.not-included]="(flight.terms.flights_handbags[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true) === 'x'">{{flight.terms.flights_handbags[isBack ? 1 : 0][i] | getBaggageHandbagInfo}}</span>
+                [class.not-included]="(flight.terms.flights_handbags[isBack ? 1 : 0][i] | getBaggageHandbagInfo) === 'x'">
+                  {{flight.terms.flights_handbags[isBack ? 1 : 0][i] | getBaggageHandbagInfo}}
+                </span>
               <span class="race-item__baggages-count" 
                 *ngIf="flight.terms.flights_baggage[isBack ? 1 : 0][i] !== undefined"
-                [class.not-included]="(flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true) === 'x'">{{flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo:true}}</span>
+                [class.not-included]="(flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo) === 'x'">
+                {{flight.terms.flights_baggage[isBack ? 1 : 0][i] | getBaggageHandbagInfo}}
+              </span>
             </div>
           </div>
           <div class="race-item__details" [id]="race.number">

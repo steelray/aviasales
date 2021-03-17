@@ -79,24 +79,22 @@ export class HomeComponent implements OnInit {
     });
 
     this.fromOptions$ = this.controls.departure.valueChanges.pipe(
-      debounceTime(250),
       filter(value => !!value && typeof value === 'string'),
       switchMap(value => {
         const searchParams = placesParams;
         placesParams.term = value;
-        return this.searchService.places(searchParams);
+        return this.searchService.places2(searchParams);
       }),
       tap(res => console.log(res)),
       map(res => this.prepareSelectOptions(res)),
     );
 
     this.toOptions$ = this.controls.arrival.valueChanges.pipe(
-      debounceTime(250),
       filter(value => !!value && typeof value === 'string'),
       switchMap(value => {
         const searchParams = placesParams;
         placesParams.term = value;
-        return this.searchService.places(searchParams);
+        return this.searchService.places2(searchParams);
       }),
       map(res => this.prepareSelectOptions(res))
     );
