@@ -1,4 +1,5 @@
 <ngx-slider 
+  [class.is-equal]="price.min === price.max" 
   [formControl]="control"
   [value]="price.min"
   [highValue]="price.max"

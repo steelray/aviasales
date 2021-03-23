@@ -27,6 +27,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { MaterialIconCustomizeModule } from '@core/material-icon-customize.module';
 import { InputAutocompleteComponent } from './input-autocomplete/input-autocomplete.component';
 import { CountInputComponent } from './count-input/count-input.component';
+import { getLangFromParams } from '@core/utils/get-lang.util';
 
 
 const COMPONENTS = [
@@ -66,7 +67,7 @@ const COMPONENTS = [
   providers: [
     {
       provide: MAT_DATE_LOCALE,
-      useValue: 'ru-RU',
+      useValue: getLangFromParams(),
       multi: true
     }
   ],

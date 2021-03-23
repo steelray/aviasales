@@ -428,6 +428,14 @@ body {
 body {
   ngx-slider.ngx-slider {
     height: 2px;
+    &.is-equal {
+      .ngx-slider-bubble {
+        &.ngx-slider-model-value,
+        &.ngx-slider-model-high {
+          display: none;
+        }
+      }
+    }
     .ngx-slider {
       &-bar-wrapper {
         height: 24px;

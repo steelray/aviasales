@@ -4,15 +4,17 @@
   {{searchSegments.to.original_destination | getCity:airports}} 
 </h3>
 <div class="filter-field">
-  <label>Вылет из {{searchSegments.to.original_origin | getCity:airports:'po'}}:</label>
-  <ngx-slider 
+  <label>{{"FLIGHT_FROM" | translate}} {{searchSegments.to.original_origin | getCity:airports:'po'}}:</label>
+  <ngx-slider
+    [class.is-equal]="departureDatetime.to.min === departureDatetime.to.max" 
     [formControl]="controls.to.controls.departure" 
     [value]="departureDatetime.to.min" 
     [highValue]="departureDatetime.to.max" 
     [options]="departureToOptions">
   </ngx-slider>
-  <label>Прибытие {{searchSegments.to.original_destination | getCity:airports:'vi'}}:</label>
+  <label>{{"ARRIVAL_TO" | translate}} {{searchSegments.to.original_destination | getCity:airports:'vi'}}:</label>
   <ngx-slider 
+    [class.is-equal]="arrivalDatetime.to.min === arrivalDatetime.to.max" 
     [formControl]="controls.to.controls.arrival"
     [value]="arrivalDatetime.to.min"
     [highValue]="arrivalDatetime.to.max"
@@ -26,15 +28,17 @@
     - 
     {{searchSegments.back.original_destination | getCity:airports}} 
   </h3>
-  <label>Вылет из {{searchSegments.back.original_origin | getCity:airports:'po'}}:</label>
+  <label>{{"FLIGHT_FROM" | translate}} {{searchSegments.back.original_origin | getCity:airports:'po'}}:</label>
   <ngx-slider 
+    [class.is-equal]="departureDatetime.back.min === departureDatetime.back.max" 
     [formControl]="controls.back.controls.departure" 
     [value]="departureDatetime.back.min" 
     [highValue]="departureDatetime.back.max" 
     [options]="departureBackOptions">
   </ngx-slider>
-  <label>Прибытие {{searchSegments.back.original_destination | getCity:airports:'vi'}}:</label>
+  <label>{{"ARRIVAL_TO" | translate}} {{searchSegments.back.original_destination | getCity:airports:'vi'}}:</label>
   <ngx-slider 
+    [class.is-equal]="arrivalDatetime.back.min === arrivalDatetime.back.max" 
     [formControl]="controls.back.controls.arrival"
     [value]="arrivalDatetime.back.min"
     [highValue]="arrivalDatetime.back.max"

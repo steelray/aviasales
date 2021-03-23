@@ -10,10 +10,10 @@
                             <mat-icon>swap_horiz</mat-icon>
                             {{searchResult.segments.to.original_destination | getCity:searchAllResults.airports}}
                         </h1>
-                        <div class="back-again">Туда <ng-container *ngIf="searchResult.segments.back">и обратно</ng-container></div>
+                        <div class="back-again">{{"TO" | translate}} <ng-container *ngIf="searchResult.segments.back">{{"AND_FROM" | translate}}</ng-container></div>
                     </div>
                     <div class="is-loading" *ngIf="isLoading;else filterBtn">
-                        Ищем все варианты
+                        {{"LOOKING_FOR_RESULT" | translate}}
                         <div class="spinner">
                             <ng-container [ngTemplateOutlet]="spinner" [ngTemplateOutletContext]="{diameter: 30}"></ng-container>
                         </div>
@@ -47,7 +47,7 @@
                             <div class="race-item__header">
                                 <div class="race-price">
                                     {{flight.price | number | customNumber}}
-                                    <span>сум</span>
+                                    <span>{{"SUM" | translate}}</span>
                                 </div>
                                 <div class="race-logos">
                                     <img *ngFor="let carrier of flight.carriers" [src]="carrier | getAirlineLogo" [matTooltip]="carrier | getAirlineName:searchResult.airlines" alt="logo-1">
@@ -76,12 +76,11 @@
                                     
                                     class="buy-btn" 
                                     mat-raised-button 
-                                    color="primary" 
-                                    target="_blank"
+                                    color="primary"
                                     [disabled]="resultTimeIsUp"
-                                    [href]="'buy-ticket/' + flightSearch.search_id +'/'+ flight.terms.url">Купить</a>
+                                    [href]="'buy-ticket/' + flightSearch.search_id +'/'+ flight.terms.url">{{"BUY" | translate}}</a>
                                 <a href="#" (click)="onView($event, flight)" class="more-btn">
-                                    Подробнее
+                                    {{"LEARN_MORE" | translate}}
                                     <mat-icon>keyboard_arrow_right</mat-icon>
                                 </a>
                             </mat-card-actions>
@@ -135,7 +134,7 @@
         <div>{{segment.departure_timestamp * 1000 | customDate:'HH:mm':(segment.departure | getCityTimeZone:searchResult.airports)}} - {{segment.arrival_timestamp * 1000 | customDate:'HH:mm':(segment.arrival | getCityTimeZone:searchResult.airports)}}</div>
     </div>
     <div class="race-item__col text-center">
-        <span>В пути</span>
+        <span>{{"IN_TRANSIT" | translate}}</span>
         <div>{{segment.total_duration | minutesToHoursMins}}</div>
     </div>
     <div  class="race-item__col">
@@ -147,6 +146,6 @@
 </ng-template>
 <ng-template #noRacesFound>
     <p class="nothing-found">
-        По вашему запросу ничего не найдено. Попробуйте вернуться <a routerLink="/">на страницу поиска</a> и изменить параметры запроса.
+        {{"NOTHING_FOUND_BY_QUERY" | translate}} <a routerLink="/">{{"TO_SEARCH_PAGE" | translate}}</a> {{"AND_CHANGE_QUERY_PARAMS" | translate}}.
     </p>
 </ng-template>

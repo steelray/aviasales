@@ -45,6 +45,7 @@ import { GetBaggageHandbagInfoPipe } from '@core/pipes/get-baggage-kg.pipe';
 import { RaceViewDetailsComponent } from './race-view/race-view-details/race-view-details.component';
 import { RaceTicketComponent } from './race-ticket/race-ticket.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    TranslateModule
+
   ]
 })
 export class RacesModule { }

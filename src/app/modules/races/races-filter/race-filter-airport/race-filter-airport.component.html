@@ -1,4 +1,4 @@
-<h4>Вылет из {{searchSegments.to.original_origin | getCity:allAirports:'po'}}</h4>
+<h4>{{"FLIGHT_FROM" | translate}} {{searchSegments.to.original_origin | getCity:allAirports:'po'}}</h4>
 <div class="filter-field" *ngFor="let airport of filterAirports.departure">
   <mat-checkbox 
     (change)="onChange($event, form.controls.to['controls'].departure)"
@@ -8,7 +8,7 @@
 
 <hr>
 
-<h4>Прибытие в {{searchSegments.to.original_destination | getCity:allAirports:'vi'}}</h4>
+<h4>{{"ARRIVAL_TO" | translate}} {{searchSegments.to.original_destination | getCity:allAirports:'vi'}}</h4>
 <div class="filter-field" *ngFor="let airport of filterAirports.arrival">
   <mat-checkbox 
     (change)="onChange($event, form.controls.to['controls'].arrival)"
@@ -17,7 +17,7 @@
 </div>
 <hr>
 <ng-container *ngIf="searchSegments?.back">
-  <h4>Вылет из {{searchSegments.back.original_origin | getCity:allAirports:'po'}}</h4>
+  <h4>{{"FLIGHT_FROM" | translate}} {{searchSegments.back.original_origin | getCity:allAirports:'po'}}</h4>
   <div class="filter-field" *ngFor="let airport of filterAirports.arrival">
     <mat-checkbox 
       (change)="onChange($event, form.controls.back['controls'].departure)"
@@ -26,7 +26,7 @@
   </div>
   <hr>
 
-  <h4>Прибытие в {{searchSegments.back.original_destination | getCity:allAirports:'vi'}}</h4>
+  <h4>{{"ARRIVAL_TO" | translate}} {{searchSegments.back.original_destination | getCity:allAirports:'vi'}}</h4>
   <div class="filter-field" *ngFor="let airport of filterAirports.departure">
     <mat-checkbox 
       (change)="onChange($event, form.controls.back['controls'].arrival)"

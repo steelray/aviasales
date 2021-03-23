@@ -25,7 +25,7 @@ export class InputAutocompleteComponent extends CustomFormFieldComponent {
 
   onBlur(value: string): void {
     // controller value must be selected from options
-    if (value && !this.optionIsSelected) {
+    if (this.control.value && typeof this.control.value === 'string') {
       this.control.setValue('');
     }
   }

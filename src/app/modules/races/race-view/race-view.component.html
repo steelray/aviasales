@@ -1,21 +1,20 @@
 <div class="back-btn-cont">
   <button class="back-btn" mat-raised-button (click)="onBackToList()">
-    <span>Назад</span>
+    <span>{{"BACK" | translate}}</span>
     <mat-icon>arrow_back</mat-icon>
   </button>
 </div>
 <div class="race-header">
   <div class="race-price">
-    <div>{{flight.price | number | customNumber}} <span>сум</span></div>
-    <span>Туда <ng-container *ngIf="searchResult.segments.back">и обратно</ng-container></span>
+    <div>{{flight.price | number | customNumber}} <span>{{"SUM" | translate}}</span></div>
+    <span>{{"TO" | translate}} <ng-container *ngIf="searchResult.segments.back">{{"AND_FROM" | translate}}</ng-container></span>
   </div>
   <a 
     [disabled]="resultTimeIsUp"
     class="buy-btn" 
     mat-raised-button 
-    color="primary" 
-    target="_blank"
-    [href]="'buy-ticket/' + searchId +'/'+ flight.terms.url">Купить</a>
+    color="primary"
+    [href]="'buy-ticket/' + searchId +'/'+ flight.terms.url">{{"BUY" | translate}}</a>
 </div>
 <ng-container [ngTemplateOutlet]="raceItem" [ngTemplateOutletContext]="{segment: flight.segment.to, isBack: false}"></ng-container>
 <ng-container *ngIf="flight.segment.back" [ngTemplateOutlet]="raceItem" [ngTemplateOutletContext]="{segment: flight.segment.back, isBack: true}"></ng-container>
@@ -57,7 +56,7 @@
             <span class="race-transfers__icon">
               <mat-icon>access_time</mat-icon>
             </span>
-            <div class="na-color">Пересадка</div>
+            <div class="na-color">{{"TRANSFER" | translate}}</div>
             <div>
               {{ race.departure }}
             </div>
@@ -77,7 +76,7 @@
       <ng-container *ngFor="let race of segment.races;let i = index">
         <div *ngIf="i !== 0" class="race-item__title">
           <mat-icon>access_time</mat-icon>
-          Пересадка в
+          {{"TRANSFER_IN" | translate}}
           {{race.departure | getCity:searchResult.airports:'pr'}}
         </div>
         <div
@@ -120,7 +119,7 @@
           </div>
           <div class="race-item__footer">
             <a href="#" (click)="viewDetails($event, race)">
-              Информация о рейсе
+              {{"RACE_INFO" | translate}}
               <mat-icon>arrow_drop_down</mat-icon>
             </a>
             <div>

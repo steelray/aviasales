@@ -4,7 +4,7 @@
       {{race.aircraft}}
     </ng-container>
     <br>
-    Средняя задержка: {{race.delay === undefined ? 'Неизвестно' : race.delay | minutesToHoursMins}}
+    {{"AVERAGE_DELAY"}}: {{race.delay === undefined ? ("UNKNOWN" | translate) : race.delay | minutesToHoursMins}}
   </p>
 
   <ul>
@@ -12,9 +12,9 @@
       [class.exists]="details.amenities.food.exists"
       [class.paid]="details.amenities.food.paid">
       <span class="icon icon-food"></span>
-        Горячая еда: 
+        {{"MEAL" | translate}}: 
         <ng-container *ngIf="details.amenities.food.exists;else notExists;">
-          {{details.amenities.food.paid ? 'Платно' : 'Бесплатно' }}
+          {{details.amenities.food.paid ? ('PAID' | translate) : ('FREE' | translate)  }}
         </ng-container>
     </li>
     <li 
@@ -22,9 +22,9 @@
       [class.paid]="details.amenities.power.paid">
       <span class="icon icon-power"></span>
       
-        USB и розетки: 
+        {{"USB" | translate}}: 
         <ng-container *ngIf="details.amenities.power.exists;else notExists;">
-          {{details.amenities.food.paid ? 'Платно' : 'Бесплатно' }}
+          {{details.amenities.food.paid ? ('PAID' | translate) : ('FREE' | translate)  }}
         </ng-container>
     </li>
     <li 
@@ -38,14 +38,14 @@
       "
       [class.paid]="details.amenities.beverage.nonalcoholic_paid">
       <span class="icon icon-nonalc"></span>
-        Б/а напитки: 
+        {{"NA_BEVERAGE" | translate}}: 
         <ng-container *ngIf="details.amenities.beverage.exists && 
           (
             details.amenities.beverage.type === beverageTypes.ALCOHOLIC_AND_NONALCOHOLIC
             ||
             details.amenities.beverage.type === beverageTypes.NONALCOHOLIC
           );else notExists;">
-        {{details.amenities.beverage.nonalcoholic_paid ? 'Платно' : 'Бесплатно' }}
+        {{details.amenities.beverage.nonalcoholic_paid ? ('PAID' | translate) : ('FREE' | translate) }}
       </ng-container>
     </li>
     <li 
@@ -55,7 +55,7 @@
       
       Wi-Fi: 
       <ng-container *ngIf="details.amenities.wifi.exists;else notExists;">\
-        {{details.amenities.wifi.paid ? 'Платно' : 'Бесплатно' }}
+        {{details.amenities.wifi.paid ? ('PAID' | translate) : ('FREE' | translate)  }}
       </ng-container>
     </li>
     <li 
@@ -70,20 +70,20 @@
       [class.paid]="details.amenities.beverage.alcoholic_paid">
       <span class="icon icon-alc"></span>
       
-      Алкоголь: 
+      {{"ALCOHOL" | translate}}: 
       <ng-container *ngIf="details.amenities.beverage.exists && 
         (
           details.amenities.beverage.type === beverageTypes.ALCOHOLIC_AND_NONALCOHOLIC
           ||
           details.amenities.beverage.type === beverageTypes.ALCOHOLIC
         );else notExists;">
-        {{details.amenities.beverage.alcoholic_paid ? 'Платно' : 'Бесплатно' }}
+        {{details.amenities.beverage.alcoholic_paid ? ('PAID' | translate) : ('FREE' | translate)  }}
       </ng-container>
     </li>
   </ul>
 
 </ng-container>
 <ng-template #noDetailsAvailable>
-  <p>Информация о рейсе отсутствует</p>
+  <p>{{"NO_DETAIL_INFO" | translate}}</p>
 </ng-template>
-<ng-template #notExists>Нет</ng-template>
+<ng-template #notExists>{{"NO" | translate}}</ng-template>

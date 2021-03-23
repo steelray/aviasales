@@ -1,10 +1,10 @@
 <div class="home">
-    <h1 class="title-1">Авиабилеты</h1>
+    <h1 class="title-1">{{'TICKETS' | translate}}</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="mob-title">Направление</div>
+    <div class="mob-title">{{'DIRECTION' | translate}}</div>
     <div class="from-to-fields fields-group">
         <app-input-autocomplete
-            placeholder="Откуда"
+            [placeholder]="'FLIGHT_FROM_INPUT' | translate"
             class="from-field"
             [options]="fromOptions$ | async"
             [control]="controls.departure">
@@ -14,7 +14,7 @@
             <mat-icon>swap_horiz</mat-icon>
         </button>
         <app-input-autocomplete
-            placeholder="Куда"
+            [placeholder]="'FLIGHT_TO_INPUT' | translate"
             [options]="toOptions$ | async"
             class="to-field"
             [control]="controls.arrival">
@@ -23,27 +23,29 @@
     </div>
 
     <div class="inputs-group fields-group">
-        <div class="mob-title">Даты</div>
+        <div class="mob-title">{{"DATES" | translate}}</div>
         <div class="dates-fields">
             <app-datepicker
-                placeholder="Туда"
+                [placeholder]="'TO' | translate"
                 class="from-field"
                 [control]="controls.departure_date"
-                [minDate]="departureMinDate">
+                [minDate]="departureMinDate"
+                [touchUi]="isMobile">
             </app-datepicker>
     
             <app-datepicker
-                placeholder="Обратно"
+                [placeholder]="'FROM' | translate"
                 class="from-field"
                 [control]="controls.arrival_date"
-                [minDate]="controls.departure_date.value">
+                [minDate]="controls.departure_date.value"
+                [touchUi]="isMobile">
             </app-datepicker>
         </div>
 
-        <div class="mob-title">Пассажиры</div>
+        <div class="mob-title">{{"PASSENGERS" | translate}}</div>
         <button type="button" class="passengers-class-btn"  [matMenuTriggerFor]="menu">
             <div>
-                {{passengersCount}} пассажир
+                {{passengersCount}} {{"PASSENGER" | translate}}
             </div>
             <span>
                 {{activeTripClass}}
@@ -52,7 +54,7 @@
     </div>
 
     <div class="text-center">
-        <button class="apply-btn" mat-raised-button color="primary" [disabled]="form.invalid">Искать билеты</button>
+        <button class="apply-btn" mat-raised-button color="primary" [disabled]="form.invalid">{{"SEARCH_TICKETS" | translate}}</button>
     </div>
 
 </form>
@@ -61,8 +63,8 @@
     <div class="passengers-class-menu">
         <div class="passengers-number">
             <div>
-                Взрослые
-                <span>Старше 12 лет</span>
+                {{"ADULTS" | translate}}
+                <span>{{"ADULTS_NOTE" | translate}}</span>
             </div>
             <app-count-input 
                 [control]="controls.passengers['controls'].adults"
@@ -71,8 +73,8 @@
         </div>
         <div class="passengers-number">
             <div>
-                Дети
-                <span>От 2 до 12 лет</span>
+                {{"CHILDREN" | translate}}
+                <span>{{"CHILDREN_NOTE" | translate}}</span>
             </div>
             <app-count-input 
                 [control]="controls.passengers['controls'].children"
@@ -80,8 +82,8 @@
         </div>
         <div class="passengers-number">
             <div>
-                Младенцы
-                <span>До 2 лет, без места</span>
+                {{"INFANTS" | translate}}
+                <span>{{"INFANTS_NOTE" | translate}}</span>
             </div>
             <app-count-input 
                 [control]="controls.passengers['controls'].infants"

@@ -9,4 +9,11 @@ import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field
 })
 export class DatepickerComponent extends CustomFormFieldComponent {
   @Input() minDate;
+  @Input() readonly = true;
+  @Input() touchUi = false;
+  @Input() clearable = true;
+
+  onClear(): void {
+    this.control.setValue('');
+  }
 }

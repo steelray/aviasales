@@ -1,1 +1,19 @@
-
+:host {
+  position: relative;
+  display: block;
+}
+.disable-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+}
+.clear-btn {
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px !important;
+  }
+}

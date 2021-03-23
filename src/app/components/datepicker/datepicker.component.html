@@ -4,15 +4,25 @@
         <span *ngIf="isRequired" class="required-mark">*</span>
     </mat-label>
     <input 
-        type="text" 
+        type="text"
+        [readonly]="readonly"
         [formControl]="control" 
         matInput 
         [placeholder]="placeholder"
         [matDatepicker]="picker"
         [min]="minDate"
-        (focus)="picker.open()">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+        (click)="picker.open()">
+    <div matSuffix>
+        <ng-container *ngIf="clearable && control.value;else toggleBtn">
+            <button class="clear-btn" mat-icon-button (click)="onClear()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </ng-container>
+        <ng-template #toggleBtn>
+            <mat-datepicker-toggle  [for]="picker"></mat-datepicker-toggle>
+        </ng-template>
+    </div>
+    <mat-datepicker [touchUi]="touchUi" #picker></mat-datepicker>
     <mat-error *ngFor="let error of errors">
         {{error.message}}
     </mat-error>

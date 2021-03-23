@@ -1,6 +1,6 @@
 <button mat-icon-button class="filter-close-btn" (click)="onClose()"><mat-icon>close</mat-icon></button>
 <div class="title-1">
-  <span [class.not-active]="activeFilterType" (click)="backToMainFilters()">Фильтр</span>
+  <span [class.not-active]="activeFilterType" (click)="backToMainFilters()">{{"FILTER" | translate}}</span>
   <span *ngIf="activeFilterType">{{activeFilterType.title}}</span>
 </div>
 <div class="filter-inner">
@@ -49,6 +49,6 @@
   </ng-template>
 </div>
 <div class="filter-actions">
-  <button mat-button class="filter-reset-btn" (click)="onReset()">Сбросить фильтр</button>
-  <button mat-raised-button color="primary" class="apply-btn" (click)="onClose()">применить</button>
+  <button mat-button class="filter-reset-btn" (click)="onReset()">{{"RESET_FILTER" | translate}}</button>
+  <button mat-raised-button color="primary" class="apply-btn" (click)="onClose()">{{"APPLY" | translate}}</button>
 </div>

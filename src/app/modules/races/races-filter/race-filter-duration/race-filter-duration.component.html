@@ -5,6 +5,7 @@
     {{searchSegments.to.original_destination | getCity:airports}} 
   </h3>
   <ngx-slider
+    [class.is-equal]="flightsDuration.to.min === flightsDuration.to.max" 
     [formControl]="form.get('to')"
     [value]="flightsDuration.to.min"
     [highValue]="flightsDuration.to.max"
@@ -19,6 +20,7 @@
     {{searchSegments.back.original_destination | getCity:airports}} 
   </h3>
   <ngx-slider
+    [class.is-equal]="flightsDuration.back.min === flightsDuration.back.max" 
     [formControl]="form.get('back')"
     [value]="flightsDuration.back.min"
     [highValue]="flightsDuration.back.max"

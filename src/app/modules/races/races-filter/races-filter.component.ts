@@ -4,7 +4,7 @@ import { IAirline, IAirport, ISearchResultFilter, ISearchResultSegments } from '
 import { ISelectOption } from '@core/interfaces/select-option.interface';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import * as moment from 'moment';
+import { TranslateService } from '@ngx-translate/core';
 
 enum FILTER_TYPES {
   BAGGAGE = 'baggage',
@@ -37,7 +37,8 @@ export class RacesFilterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     @Self() private onDestroy$: NgOnDestroy,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -56,23 +57,23 @@ export class RacesFilterComponent implements OnInit {
     return [
       {
         value: FILTER_TYPES.TRAVEL_TIME,
-        title: 'Время вылета и прибытия'
+        title: this.translateService.instant('FILTERS.DEPARTURE_ARRIVAL_TIME')
       },
       {
         value: FILTER_TYPES.TRAVEL_DURATION,
-        title: 'Время в пути'
+        title: this.translateService.instant('FILTERS.IN_TRANIST_DURATION')
       },
       {
         value: FILTER_TYPES.TICKET_PRICE,
-        title: 'Цена билета'
+        title: this.translateService.instant('FILTERS.TICKET_PRICE')
       },
       {
         value: FILTER_TYPES.AIRPORT,
-        title: 'Аэропорт'
+        title: this.translateService.instant('FILTERS.AIRPORT')
       },
       {
         value: FILTER_TYPES.AIRLINE,
-        title: 'Авиакомпания'
+        title: this.translateService.instant('FILTERS.AIRLINE')
       },
     ];
   }

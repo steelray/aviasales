@@ -7,6 +7,7 @@ import { IFlight, IFlightSearchParams, ISearchResult, ISearchResultFilter } from
 import { SearchResult } from '@core/models/search-result.model';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
+import { getLangFromParams } from '@core/utils/get-lang.util';
 import { environment } from '@environments/environment';
 import { BehaviorSubject, interval, Observable, of, Subject, timer } from 'rxjs';
 import { filter, map, repeatWhen, switchMap, take, takeUntil, tap } from 'rxjs/operators';
@@ -308,11 +309,12 @@ export class RacesComponent implements OnInit {
       infants,
       trip_class
     } = this.activatedRoute.snapshot.queryParams;
+    const locale = getLangFromParams() === 'uz' ? 'ru' : getLangFromParams();
     this.departureIATA = departure;
     this.arrivalIATA = arrival;
     const params: IFlightSearchParams = {
       currency: 'uzs',
-      locale: 'ru',
+      locale,
       know_english: true,
       trip_class: trip_class ? trip_class : TRIP_CLASS.ECONOMY,
       passengers: {

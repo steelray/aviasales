@@ -11,6 +11,8 @@ import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { placesParams } from '@core/const/places-params';
 import { IPlace } from '@core/interfaces/search.interfaces';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
+import * as moment from 'moment';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-home',
@@ -21,6 +23,7 @@ import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 })
 export class HomeComponent implements OnInit {
   private readonly lsKey = '__pmAviasalesFilter';
+  isMobile = false;
   fromOptions$: Observable<ISelectOption[]>;
   toOptions$: Observable<ISelectOption[]>;
   passengersQuantityOptions: ISelectOption[] = [
@@ -62,8 +65,12 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private datePipe: DatePipe,
     private searchService: SearchSearvice,
-    @Self() private onDestroy$: NgOnDestroy
-  ) { }
+    @Self() private onDestroy$: NgOnDestroy,
+    private deviceService: DeviceDetectorService
+
+  ) {
+    this.isMobile = this.deviceService.isMobile();
+  }
 
   ngOnInit(): void {
     this.buildForm();
@@ -163,6 +170,9 @@ export class HomeComponent implements OnInit {
 
   private setFormValueFromStorage(): void {
     const storageData = JSON.parse(localStorage.getItem(this.lsKey));
+    if (!storageData) {
+      return;
+    }
     const {
       adults,
       arrival,
@@ -194,7 +204,14 @@ export class HomeComponent implements OnInit {
       });
     });
 
-    this.controls.departure_date.setValue(new Date(departure_date));
+    let departureDate = departure_date;
+
+    const currentDate = moment().format('yyyy-MM-DD');
+    if (currentDate > departure_date) {
+      departureDate = currentDate;
+    }
+
+    this.controls.departure_date.setValue(new Date(departureDate));
     if (arrival_date) {
       this.controls.arrival_date.setValue(new Date(arrival_date));
     }

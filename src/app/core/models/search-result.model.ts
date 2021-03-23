@@ -15,7 +15,7 @@ import {
 } from '@core/interfaces/search.interfaces';
 declare var fx: any;
 export class SearchResult implements ISearchResult {
-  private readonly baseCurrency = 'rub';
+  private readonly baseCurrency = 'uzs';
   airlines: IAirline[] = [];
   airports: IAirport[] = [];
   currency: string = null;
@@ -101,6 +101,7 @@ export class SearchResult implements ISearchResult {
 
     this.filters.departure_datetime = this.prepareFilterDepartureDateTime(this.flights);
     this.filters.arrival_datetime = this.prepareFilterArrivalDateTime(this.flights);
+    this.filters.price = this.prepareFilterPrice(this.flights);
   }
 
   private prepareFilterDepartureDateTime(flights: IFlight[]): ISearchResultFilterArrivalDateTime {
@@ -143,13 +144,6 @@ export class SearchResult implements ISearchResult {
   private prepareFilters(result: any): ISearchResultFilter {
     const newFilters = result.filters_boundary;
     // tslint:disable-next-line:no-string-literal
-    const gateCurrency = Object.values(result.gates_info)[0]['currency_code']; // валюта у каждоого агенства может быть свой
-
-    const newFiltersPrice: IMinMaxValues = {
-      min: this.convertPriceToUzs(newFilters.price.min, gateCurrency),
-      max: this.convertPriceToUzs(newFilters.price.max, gateCurrency)
-    };
-
     const res: ISearchResultFilter = this.filters ? this.filters : this.setFiltersDefaultValues();
     res.airports.arrival = this.pushOnlyUniques(res.airports.arrival, newFilters.airports.arrival);
     res.airports.departure = this.pushOnlyUniques(res.airports.departure, newFilters.airports.departure);
@@ -157,7 +151,6 @@ export class SearchResult implements ISearchResult {
     res.arrival_time = this.prepareFilterArrivalTime(newFilters, res.arrival_time);
     res.departure_time = this.prepareFilterDepartureTime(newFilters, res.departure_time);
     res.departure_minutes = this.prepareFilterDepartureMinutes(newFilters, res.departure_minutes);
-    res.price = this.prepareFilterPrice(newFiltersPrice, res.price);
     return res;
   }
 
@@ -333,14 +326,11 @@ export class SearchResult implements ISearchResult {
     return currentTime;
   }
 
-  private prepareFilterPrice(price: IMinMaxValues, currentPrice: IMinMaxValues): IMinMaxValues {
-    if (currentPrice.max < price.max) {
-      currentPrice.max = price.max;
-    }
-    if (!currentPrice.min || price.min < currentPrice.min) {
-      currentPrice.min = price.min;
-    }
-    return currentPrice;
+  private prepareFilterPrice(flights: IFlight[]): IMinMaxValues {
+    return {
+      min: Math.min.apply(Math, flights.map(flight => flight.terms.price)),
+      max: Math.max.apply(Math, flights.map(flight => flight.terms.price)),
+    };
   }
 
   private prepareFlightsDuration(
@@ -399,7 +389,7 @@ export class SearchResult implements ISearchResult {
         segment: {
           to: this.prepareFlightRaces(segment[0])
         },
-        price: this.convertPriceToUzs(terms.unified_price, this.baseCurrency)
+        price: this.convertPriceToUzs(terms.price, terms.currency)
       };
       // если есть обратный рейс
       if (segment[1]) {
@@ -473,6 +463,6 @@ export class SearchResult implements ISearchResult {
   }
 
   private convertPriceToUzs(price: number, currency: string): number {
-    return Math.round(fx(price).from('uzs').to(currency));
+    return Math.round(fx(price).from(currency).to(this.baseCurrency));
   }
 }
