@@ -20,6 +20,8 @@ export class RaceViewDetailsComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    window.scroll(0, 0);
+
     const infoKey = `${this.tripClass}${this.race.name.replace(' ', '')}`;
     const info = this.flightInfos[infoKey];
 

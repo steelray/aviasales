@@ -60,7 +60,7 @@
 </form>
 
 <mat-menu #menu="matMenu">
-    <div class="passengers-class-menu">
+    <div class="passengers-class-menu" (click)="$event.stopPropagation()">
         <div class="passengers-number">
             <div>
                 {{"ADULTS" | translate}}
@@ -91,7 +91,7 @@
         </div>
     
         <hr>
-        <mat-radio-group [formControl]="controls.trip_class" (click)="$event.stopPropagation()">
+        <mat-radio-group [formControl]="controls.trip_class">
             <mat-radio-button class="trip-class-btn" *ngFor="let option of tripClassOptions" [value]="option.value">{{option.title}}</mat-radio-button>
         </mat-radio-group>
     </div>

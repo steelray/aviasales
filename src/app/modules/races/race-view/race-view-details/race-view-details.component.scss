@@ -55,7 +55,7 @@ ul {
       }
     }
     &.exists {
-      color: var(--default-font-color);
+      color: var(--font-color-1);
       .icon {
         &-food {
           background-image: url(/assets/images/icons/food.png);
@@ -75,7 +75,7 @@ ul {
       }
     }
     &.paid {
-      color: var(--default-font-color);
+      color: var(--font-color-1);
       .icon {
         &-food {
           background-image: url(/assets/images/icons/food-w.png);

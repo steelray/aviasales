@@ -1,7 +1,12 @@
-<button mat-icon-button class="filter-close-btn" (click)="onClose()"><mat-icon>close</mat-icon></button>
-<div class="title-1">
-  <span [class.not-active]="activeFilterType" (click)="backToMainFilters()">{{"FILTER" | translate}}</span>
+<div class="title-1 d-flex align-items-center">
+  <span [class.not-active]="activeFilterType" (click)="backToMainFilters()">
+    <button mat-icon-button>
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    {{"FILTER" | translate}}
+  </span>
   <span *ngIf="activeFilterType">{{activeFilterType.title}}</span>
+  <button mat-icon-button class="filter-close-btn" (click)="onClose()"><mat-icon>close</mat-icon></button>
 </div>
 <div class="filter-inner">
   <div class="filter-list" *ngIf="!activeFilterType;else filterTypes">

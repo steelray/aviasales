@@ -32,14 +32,34 @@
     margin: 0 15px 30px;
     @include for-mobile {
       margin-bottom: 15px;
+      justify-content: space-between;
     }
     span {
+      @include for-mobile {
+        text-align: center;
+      }
+      button {
+        display: none;
+      }
       &.not-active {
         color: var(--na-font-color);
         cursor: pointer;
+        @include for-mobile {
+          font-size: 0;
+          color: var(--white);
+          button {
+            margin-top: -10px;
+            display: inline-block;
+            font-size: 20px;
+            color: var(--font-color-1);
+          }
+        }
       }
       &:not(:first-child) {
         margin-left: 15px;
+        @include for-mobile {
+          margin-left: 0;
+        }
       }
     }
   }
@@ -51,9 +71,9 @@
     left: 5px;
     z-index: 2;
     @include for-mobile {
-      right: 5px;
+      position: relative;
+      top: auto;
       left: auto;
-      top: 16px;
     }
   }
   &-inner {
@@ -98,6 +118,7 @@
     }
   }
   &-actions {
+    align-items: center;
     @include for-mobile {
       background: var(--white);
       position: absolute;
