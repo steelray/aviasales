@@ -8,7 +8,8 @@ import { CustomFormFieldComponent } from '../custom-form-field/custom-form-field
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DatepickerComponent extends CustomFormFieldComponent {
-  @Input() minDate;
+  @Input() minDate: Date;
+  @Input() maxDate: Date;
   @Input() readonly = true;
   @Input() touchUi = false;
   @Input() clearable = true;

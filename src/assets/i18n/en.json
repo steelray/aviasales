@@ -51,5 +51,10 @@
     "TICKET_PRICE": "Цена билета",
     "AIRPORT": "Аэропорт",
     "AIRLINE": "Авиакомпания"
+  },
+  "ERRORS": {
+    "CITIES_MUST_BE_DIFFERENT": "Города должны быть разными",
+    "REQUIRED_FIELD": "Обязательное поле для заполнения",
+    "ONLY_ALPHA_NUMERIC": "Разрешены только цифры и буквы"
   }
 }

@@ -28,6 +28,7 @@ import { MaterialIconCustomizeModule } from '@core/material-icon-customize.modul
 import { InputAutocompleteComponent } from './input-autocomplete/input-autocomplete.component';
 import { CountInputComponent } from './count-input/count-input.component';
 import { getLangFromParams } from '@core/utils/get-lang.util';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 const COMPONENTS = [
@@ -62,7 +63,8 @@ const COMPONENTS = [
     MatNativeDateModule,
     MatIconModule,
     MaterialIconCustomizeModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    TranslateModule
   ],
   providers: [
     {

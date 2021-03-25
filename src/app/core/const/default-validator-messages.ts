@@ -1,7 +1,7 @@
 export const defaultValidatorMessages = {
   alpha: 'Разрешены только буквы',
   allOf: 'Ошибка "allOf"',
-  alphaNumeric: 'Разрешены только цифры и буквы',
+  alphaNumeric: 'ERRORS.ONLY_ALPHA_NUMERIC',
   choice: 'Ошибка "choice"',
   compare: 'Ошибка "compare"',
   contains: 'Ошибка "contains"',
@@ -33,7 +33,7 @@ export const defaultValidatorMessages = {
   password: 'Ошибка "password"',
   pattern: 'Ошибка "pattern"',
   range: 'Ошибка "range"',
-  required: 'Обязательное поле для заполнения',
+  required: 'ERRORS.REQUIRED_FIELD',
   time: 'Ошибка "time"',
   upperCase: 'Ошибка "upperCase"',
   url: 'Ошибка "url"',
@@ -102,6 +102,6 @@ export const defaultValidatorMessages = {
   startsWithAsync: 'Ошибка "startsWithAsync"',
   timeAsync: 'Ошибка "timeAsync"',
   urlAsync: 'Ошибка "urlAsync"',
-  ibanAsync: 'Ошибка "ibanAsync"',
+  ibanAsync: 'Ошибка "ibanAsync"'
 };
 

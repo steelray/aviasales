@@ -13,6 +13,7 @@ import { IPlace } from '@core/interfaces/search.interfaces';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 import * as moment from 'moment';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -58,7 +59,8 @@ export class HomeComponent implements OnInit {
   ];
   maxPassengersCount = 9;
   departureMinDate = new Date();
-  arrivalMinDate = this.departureMinDate;
+  departureMaxDate = new Date(this.departureMinDate.getFullYear() + 1, this.departureMinDate.getMonth(), this.departureMinDate.getDate());
+
 
   constructor(
     private fb: FormBuilder,
@@ -66,7 +68,9 @@ export class HomeComponent implements OnInit {
     private datePipe: DatePipe,
     private searchService: SearchSearvice,
     @Self() private onDestroy$: NgOnDestroy,
-    private deviceService: DeviceDetectorService
+    private deviceService: DeviceDetectorService,
+    private cdRef: ChangeDetectorRef,
+    private translateService: TranslateService
 
   ) {
     this.isMobile = this.deviceService.isMobile();
@@ -156,7 +160,7 @@ export class HomeComponent implements OnInit {
   private buildForm(): void {
     this.form = this.fb.group({
       departure: ['', RxwebValidators.required()],
-      arrival: ['', RxwebValidators.required()],
+      arrival: ['', [RxwebValidators.required(), this.compareCities]],
       departure_date: ['', RxwebValidators.required()],
       arrival_date: [''],
       passengers: this.fb.group({
@@ -197,11 +201,12 @@ export class HomeComponent implements OnInit {
         title: res.departure.name,
         value: res.departure.code
       });
-
-      this.controls.arrival.setValue({
-        title: res.arrival.name,
-        value: res.arrival.code
-      });
+      if (res.departure.code !== res.arrival.code) {
+        this.controls.arrival.setValue({
+          title: res.arrival.name,
+          value: res.arrival.code
+        });
+      }
     });
 
     let departureDate = departure_date;
@@ -235,6 +240,22 @@ export class HomeComponent implements OnInit {
       title: place.name,
       sub_title: place?.country_name
     }));
+
+  }
+
+  private compareCities(control: AbstractControl): any {
+    if (control.parent) {
+      const arrival = control.value;
+      const departure = control.parent.get('departure').value;
+      if (arrival.value && arrival.value === departure?.value) {
+        return {
+          citiesErrors: {
+            message: 'ERRORS.CITIES_MUST_BE_DIFFERENT'
+          }
+        };
+      }
+    }
+    return null;
 
   }
 }

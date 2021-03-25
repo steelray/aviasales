@@ -9,7 +9,7 @@
         [rows]="rows"
         [placeholder]="placeholder"></textarea>
     <mat-error *ngFor="let error of errors">
-        {{error.message}}
+        {{error.message | translate}}
     </mat-error>
     <ng-content></ng-content>
 </mat-form-field>

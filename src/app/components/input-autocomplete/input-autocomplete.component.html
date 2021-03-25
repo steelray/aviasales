@@ -17,7 +17,7 @@
     </mat-option>
   </mat-autocomplete>
   <mat-error *ngFor="let error of errors">
-    {{error.message}}
+    {{error.message | translate}}
   </mat-error>
   <ng-content></ng-content>
 </mat-form-field>

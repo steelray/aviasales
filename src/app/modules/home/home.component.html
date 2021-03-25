@@ -30,6 +30,7 @@
                 class="from-field"
                 [control]="controls.departure_date"
                 [minDate]="departureMinDate"
+                [maxDate]="departureMaxDate"
                 [touchUi]="isMobile">
             </app-datepicker>
     
@@ -38,6 +39,7 @@
                 class="from-field"
                 [control]="controls.arrival_date"
                 [minDate]="controls.departure_date.value"
+                [maxDate]="departureMaxDate"
                 [touchUi]="isMobile">
             </app-datepicker>
         </div>
