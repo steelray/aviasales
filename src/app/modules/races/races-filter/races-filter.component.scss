@@ -81,7 +81,7 @@
     overflow: auto;
     z-index: 2;
     @include for-mobile {
-      height: calc(100% - 160px);
+      height: calc(100% - 190px);
     }
     &__content {
       padding: 0 15px;

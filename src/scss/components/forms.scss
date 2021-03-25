@@ -513,3 +513,8 @@ body {
     height: 100%;
   }
 }
+body ngx-slider.ngx-slider .ngx-slider-bar-wrapper {
+  @include for-mobile {
+    pointer-events: none;
+  }
+}
