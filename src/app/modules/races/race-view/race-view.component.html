@@ -14,7 +14,7 @@
     class="buy-btn" 
     mat-raised-button 
     color="primary"
-    [href]="'buy-ticket/' + searchId +'/'+ flight.terms.url">{{"BUY" | translate}}</a>
+    (click)="onBuy()">{{"BUY" | translate}}</a>
 </div>
 <ng-container [ngTemplateOutlet]="raceItem" [ngTemplateOutletContext]="{segment: flight.segment.to, isBack: false}"></ng-container>
 <ng-container *ngIf="flight.segment.back" [ngTemplateOutlet]="raceItem" [ngTemplateOutletContext]="{segment: flight.segment.back, isBack: true}"></ng-container>

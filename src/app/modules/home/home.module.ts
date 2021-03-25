@@ -13,6 +13,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { TranslateModule } from '@ngx-translate/core';
     MatRadioModule,
     MatFormFieldModule,
     MatDatepickerModule,
-    TranslateModule
+    TranslateModule,
+    MatSnackBarModule
   ]
 })
 export class HomeModule { }

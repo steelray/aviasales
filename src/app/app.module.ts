@@ -8,11 +8,12 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
 import { ErrorMessageComponent } from '@components/error-message/error-message.component';
 import { HttpErrorInterceptor } from '@core/interceptors/http-error.interceptor';
 import localeRu from '@angular/common/locales/ru';
-import localeUz from '@angular/common/locales/uz';
+import localeUz from '@angular/common/locales/uz-Latn';
 import { registerLocaleData } from '@angular/common';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { getLangFromParams } from '@core/utils/get-lang.util';
+
 
 registerLocaleData(localeRu);
 registerLocaleData(localeUz);
@@ -50,7 +51,8 @@ export function HttpLoaderFactory(http: HttpClient): any {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true
-    }
+    },
+
   ],
   bootstrap: [AppComponent]
 })

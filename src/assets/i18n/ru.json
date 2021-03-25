@@ -32,7 +32,7 @@
   "TRANSFER_IN": "Пересадка в",
   "RACE_INFO": "Информация о рейсе",
   "FLIGHT_FROM": "Вылет из",
-  "ARRIVAL_TO": "Прибытие в",
+  "ARRIVAL_TO": "Прибытие",
   "ALL": "Все",
   "FILTER": "Фильтр",
   "RESET_FILTER": "Сбросить фильтр",
@@ -45,6 +45,10 @@
   "AND_CHANGE_QUERY_PARAMS": "и изменить параметры запроса",
   "FLIGHT_FROM_INPUT": "Откуда",
   "FLIGHT_TO_INPUT": "Куда",
+  "REFRESH": "обновить",
+  "CLOSE": "закрыть",
+  "HOUR": "ч.",
+  "MIN": "м.",
   "FILTERS": {
     "DEPARTURE_ARRIVAL_TIME": "Время вылета и прибытия",
     "IN_TRANIST_DURATION": "Время в пути",
@@ -55,6 +59,8 @@
   "ERRORS": {
     "CITIES_MUST_BE_DIFFERENT": "Города должны быть разными",
     "REQUIRED_FIELD": "Обязательное поле для заполнения",
-    "ONLY_ALPHA_NUMERIC": "Разрешены только цифры и буквы"
+    "ONLY_ALPHA_NUMERIC": "Разрешены только цифры и буквы",
+    "PRICES_CHANGED_WARNING": "Цены могли измениться! Обновите поиск, чтобы увидеть актуальные цены.",
+    "PLEASE_SELECT_OPTION_FROM_LIST": "Пожалуйста, выберите один из вариантов из выпадающего списка."
   }
 }

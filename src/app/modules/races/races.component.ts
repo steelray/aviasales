@@ -9,6 +9,7 @@ import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
 import { getLangFromParams } from '@core/utils/get-lang.util';
 import { environment } from '@environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, interval, Observable, of, Subject, timer } from 'rxjs';
 import { filter, map, repeatWhen, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 
@@ -43,6 +44,7 @@ export class RacesComponent implements OnInit {
 
   isLoading = true;
   stopLoading = false;
+  ticketUrlIsPreparing = false;
 
 
   constructor(
@@ -51,7 +53,8 @@ export class RacesComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     @Inject(DOCUMENT) private document: Document,
     @Self() private onDestroy$: NgOnDestroy,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private transalteService: TranslateService
   ) { }
 
   startTimer(): void {
@@ -162,11 +165,13 @@ export class RacesComponent implements OnInit {
     this.visibleFlights$.next(this.addItems()); // add filtered items to visible flights
   }
 
-  onBuy(url: number): void {
-    this.searchService.flightSearchClick(this.flightSearch.search_id, url).pipe(
+  onBuy(url: number | string): void {
+    this.ticketUrlIsPreparing = true;
+    this.searchService.flightSearchClick(this.flightSearch.search_id, +url).pipe(
       takeUntil(this.onDestroy$)
     ).subscribe(res => {
-      window.open(res.url, '_blank');
+      this.ticketUrlIsPreparing = false;
+      window.location.href = res.url;
     });
   }
 
@@ -187,7 +192,7 @@ export class RacesComponent implements OnInit {
   }
 
   private showSnackbar(): void {
-    this.snackbar.open('Цены могли измениться! Обновите поиск, чтобы увидеть актуальные цены.', 'обновить', {
+    this.snackbar.open(this.transalteService.instant('ERRORS.PRICES_CHANGED_WARNING'), this.transalteService.instant('REFRESH'), {
       panelClass: 'refresh-snackbar'
     }).afterDismissed().pipe(
       takeUntil(this.onDestroy$)
@@ -309,7 +314,7 @@ export class RacesComponent implements OnInit {
       infants,
       trip_class
     } = this.activatedRoute.snapshot.queryParams;
-    const locale = getLangFromParams() === 'uz' ? 'ru' : getLangFromParams();
+    const locale = ['uz', 'uz-latn'].includes(getLangFromParams()) ? 'ru' : getLangFromParams();
     this.departureIATA = departure;
     this.arrivalIATA = arrival;
     const params: IFlightSearchParams = {

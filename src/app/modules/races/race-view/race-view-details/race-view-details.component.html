@@ -4,7 +4,7 @@
       {{race.aircraft}}
     </ng-container>
     <br>
-    {{"AVERAGE_DELAY"}}: {{race.delay === undefined ? ("UNKNOWN" | translate) : race.delay | minutesToHoursMins}}
+    {{"AVERAGE_DELAY" | translate}}: {{race.delay === undefined ? ("UNKNOWN" | translate) : race.delay | minutesToHoursMins}}
   </p>
 
   <ul>

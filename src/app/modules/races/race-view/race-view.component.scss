@@ -1,20 +1,12 @@
 @import "components/mixins";
 :host {
   display: block;
-  margin-top: -120px;
   @include for-mobile {
-    display: block;
-    margin-top: -141px;
-    padding-top: 60px;
+    margin-top: -6px;
   }
 }
 .back-btn-cont {
   @include for-mobile {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 4px 15px 10px;
     background: var(--body-bg-color);
     z-index: 4;
   }

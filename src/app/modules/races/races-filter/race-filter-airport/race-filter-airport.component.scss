@@ -1,3 +1,5 @@
+@import "components/mixins";
+
 h4 {
   font-weight: 500;
   font-size: 16px;
@@ -6,4 +8,7 @@ h4 {
 hr {
   border-color: 1px solid var(--na-font-color);
   margin: 25px 0;
+  @include for-mobile {
+    margin: 12.5px 0;
+  }
 }

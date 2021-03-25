@@ -483,6 +483,9 @@ body {
 
 .filter-field {
   margin-bottom: 15px;
+  @include for-mobile {
+    margin-bottom: 10px;
+  }
 }
 
 .mat-snack-bar-container.refresh-snackbar {
@@ -492,6 +495,9 @@ body {
   .mat-button {
     background: var(--body-bg-color);
     color: var(--red);
+  }
+  .mat-simple-snackbar {
+    white-space: normal;
   }
 }
 

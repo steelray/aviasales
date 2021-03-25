@@ -9,6 +9,9 @@ export function getLangFromParams(): string {
   if (lang) {
     currentLang = lang;
   }
+  if (currentLang === 'uz') {
+    currentLang = 'uz-latn';
+  }
   localStorage.setItem('__lang', currentLang);
 
   return currentLang;

@@ -8,7 +8,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { InputComponent } from './input/input.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -21,7 +20,6 @@ import { SelectComponent } from './select/select.component';
 import { MatSelectModule } from '@angular/material/select';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { FileInputComponent } from './file-input/file-input.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MaterialIconCustomizeModule } from '@core/material-icon-customize.module';
@@ -30,7 +28,9 @@ import { CountInputComponent } from './count-input/count-input.component';
 import { getLangFromParams } from '@core/utils/get-lang.util';
 import { TranslateModule } from '@ngx-translate/core';
 
-
+import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatRippleModule } from '@angular/material/core';
+import { MomentDateModule, MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 const COMPONENTS = [
   InputComponent,
   CustomFormFieldComponent,
@@ -64,14 +64,15 @@ const COMPONENTS = [
     MatIconModule,
     MaterialIconCustomizeModule,
     MatAutocompleteModule,
-    TranslateModule
+    TranslateModule,
+    MatNativeDateModule,
+    MomentDateModule,
+    MatSnackBarModule
   ],
   providers: [
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: getLangFromParams(),
-      multi: true
-    }
+    { provide: MAT_DATE_LOCALE, useValue: getLangFromParams() },
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
   ],
   exports: COMPONENTS,
   entryComponents: [

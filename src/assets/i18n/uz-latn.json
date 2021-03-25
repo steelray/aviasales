@@ -31,8 +31,8 @@
   "TRANSFER": "O’tish",
   "TRANSFER_IN": "….ga o’tish",
   "RACE_INFO": "Reys haqida ma’lumot",
-  "FLIGHT_FROM": "…. uchish",
-  "ARRIVAL_TO": "….ga qo’nish",
+  "FLIGHT_FROM": "Uchish",
+  "ARRIVAL_TO": "Qo’nish",
   "ALL": "Barchasi",
   "FILTER": "Filtr",
   "RESET_FILTER": "Filtrni qayta yuklash",
@@ -45,16 +45,22 @@
   "AND_CHANGE_QUERY_PARAMS": "va so’rov parametrini o’zgartirish",
   "FLIGHT_FROM_INPUT": "Qayerdan",
   "FLIGHT_TO_INPUT": "Qayerga",
+  "REFRESH": "yangilash",
+  "CLOSE": "yopish",
+  "HOUR": "s.",
+  "MIN": "m.",
   "FILTERS": {
-    "DEPARTURE_ARRIVAL_TIME": "Время вылета и прибытия",
-    "IN_TRANIST_DURATION": "Время в пути",
-    "TICKET_PRICE": "Цена билета",
-    "AIRPORT": "Аэропорт",
-    "AIRLINE": "Авиакомпания"
+    "DEPARTURE_ARRIVAL_TIME": "Jo’nab ketish va qo’nish vaqti",
+    "IN_TRANIST_DURATION": "Yo’ldagi uchish vaqti",
+    "TICKET_PRICE": "Price of ticket",
+    "AIRPORT": "Aeroport",
+    "AIRLINE": "Aviakompaniya"
   },
   "ERRORS": {
     "CITIES_MUST_BE_DIFFERENT": "Города должны быть разными",
     "REQUIRED_FIELD": "Обязательное поле для заполнения",
-    "ONLY_ALPHA_NUMERIC": "Разрешены только цифры и буквы"
+    "ONLY_ALPHA_NUMERIC": "Разрешены только цифры и буквы",
+    "PRICES_CHANGED_WARNING": "Narxlar o'zgargan bo'lishi mumkin! Iltimos, yangilangan narxlarni ko'rish uchun qidiruvni yangilang.",
+    "PLEASE_SELECT_OPTION_FROM_LIST": "Iltimos, ro'yxatdagi variantlardan birini tanlang."
   }
 }

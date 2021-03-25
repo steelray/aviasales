@@ -105,6 +105,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      @include for-mobile {
+        padding: {
+          top: 15px;
+          bottom: 15px;
+        }
+      }
       mat-icon {
         display: none;
         @include for-mobile {

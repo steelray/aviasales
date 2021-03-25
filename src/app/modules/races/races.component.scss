@@ -1,19 +1,11 @@
 @import "components/mixins";
 :host {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
-  padding-top: 100px;
-  @include for-mobile {
-    padding-top: 130px;
-  }
+  flex: 1;
 }
 header {
-  position: fixed;
-  top: 0;
   width: 100%;
-  left: 15px;
-  width: 100%;
-  left: 0;
   z-index: 2;
   background: var(--body-bg-color);
   .header-inner {
@@ -25,14 +17,13 @@ header {
     width: 960px;
     max-width: 100%;
     margin: 0 auto;
-    padding: 30px 15px;
+    padding: 0 0 30px;
 
     @include for-mobile {
       flex-direction: column-reverse;
       justify-content: flex-start;
       align-items: flex-start;
       padding: {
-        top: 10px;
         bottom: 10px;
       }
     }
@@ -81,6 +72,7 @@ header {
   border-radius: 8px;
   padding: 20px 24px;
   margin-bottom: 12px;
+  overflow: hidden;
 
   @include for-mobile {
     padding: 12px;

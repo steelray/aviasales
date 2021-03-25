@@ -157,6 +157,7 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['/races'], { queryParams });
   }
 
+
   private buildForm(): void {
     this.form = this.fb.group({
       departure: ['', RxwebValidators.required()],
