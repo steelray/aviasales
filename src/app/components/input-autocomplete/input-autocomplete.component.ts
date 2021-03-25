@@ -33,14 +33,29 @@ export class InputAutocompleteComponent extends CustomFormFieldComponent {
 
 
   onBlur(value: string): void {
-    // controller value must be selected from options
-    if (this.control.value && typeof this.control.value === 'string') {
-      this.control.setValue('');
-      this.snackbar.open(this.translateService.instant('ERRORS.PLEASE_SELECT_OPTION_FROM_LIST'), this.translateService.instant('CLOSE'), {
-        panelClass: 'refresh-snackbar',
-        verticalPosition: 'top',
-        duration: 3000
-      });
-    }
+    setTimeout(() => {
+      let selectedFromList = true;
+      const controlValue = this.control.value;
+      if (
+        this.options && typeof controlValue === 'string'
+        && !this.options.find(option => option.value.toLocaleLowerCase() === controlValue.toLocaleLowerCase())
+        ||
+        !this.options && typeof controlValue === 'string'
+      ) {
+        selectedFromList = false;
+      }
+
+      // controller value must be selected from options
+      if (!selectedFromList) {
+        this.control.setValue('');
+
+        this.snackbar.open(this.translateService.instant('ERRORS.PLEASE_SELECT_OPTION_FROM_LIST'), this.translateService.instant('CLOSE'), {
+          panelClass: 'refresh-snackbar',
+          verticalPosition: 'top',
+          duration: 3000
+        });
+      }
+    }, 10);
+
   }
 }
