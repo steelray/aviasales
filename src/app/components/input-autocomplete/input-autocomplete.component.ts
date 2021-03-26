@@ -37,10 +37,15 @@ export class InputAutocompleteComponent extends CustomFormFieldComponent {
       let selectedFromList = true;
       const controlValue = this.control.value;
       if (
-        this.options && typeof controlValue === 'string'
-        && !this.options.find(option => option.value.toLocaleLowerCase() === controlValue.toLocaleLowerCase())
+        (
+          this.options && typeof controlValue === 'string'
+          &&
+          !this.options.find(option => option.value.toLocaleLowerCase() === controlValue.toLocaleLowerCase())
+        )
         ||
-        !this.options && typeof controlValue === 'string'
+        (
+          !this.options && typeof controlValue === 'string'
+        )
       ) {
         selectedFromList = false;
       }

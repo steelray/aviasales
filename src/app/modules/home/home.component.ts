@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
   tripClassOptions: ISelectOption[] = [
     {
       value: TRIP_CLASS.ECONOMY,
-      title: 'Эконом'
+      title: this.translateService.instant('ECONOMY')
     },
     // {
     //   value: TRIP_CLASS.COMFORT,
@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
     // },
     {
       value: TRIP_CLASS.BUSINESS,
-      title: 'Бизнес'
+      title: this.translateService.instant('BUSINESS')
     },
     // {
     //   value: TRIP_CLASS.FIRST,

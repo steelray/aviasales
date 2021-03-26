@@ -6,7 +6,7 @@
   "FROM": "Back",
   "PASSENGERS": "Passengers",
   "PASSENGER": "Passenger",
-  "SEARCH_TICKETS": "Searching tickets",
+  "SEARCH_TICKETS": "Search tickets",
   "ADULTS": "Adults",
   "ADULTS_NOTE": "Over 12 years old",
   "CHILDREN": "Bolalar",
@@ -27,7 +27,7 @@
   "BACK": "Back to",
   "SUM": "UZS",
   "AND_FROM": "And back from",
-  "BUY": "To buy",
+  "BUY": "Buy",
   "TRANSFER": "Transfer",
   "TRANSFER_IN": "transfer in",
   "RACE_INFO": "Information about the flight",
@@ -62,5 +62,9 @@
     "ONLY_ALPHA_NUMERIC": "Разрешены только цифры и буквы",
     "PRICES_CHANGED_WARNING": "Prices could change! Please refresh your search to see actual prices.",
     "PLEASE_SELECT_OPTION_FROM_LIST": "Please, select one of the options from the dropdown."
-  }
+  },
+  "FROM_DATE": "from",
+  "TO_DATE": "to",
+  "ECONOMY": "Economy",
+  "BUSINESS": "Business"
 }

@@ -4,6 +4,9 @@ import { FormGroup } from '@angular/forms';
 import { IAirport, ISearchResultFilterArrivalDateTime, ISearchResultSegments } from '@core/interfaces/search.interfaces';
 import 'moment/min/locales';
 import { CustomDatePipe } from '@core/pipes/custom-date.pipe';
+import { getLangFromParams } from '@core/utils/get-lang.util';
+import { TranslateService } from '@ngx-translate/core';
+import { APP_LANGS } from '@core/const/app-langs.const';
 
 @Component({
   selector: 'app-races-filter-travel-time',
@@ -18,7 +21,7 @@ export class RacesFilterTravelTimeComponent implements OnInit {
   @Input() arrivalDatetime: ISearchResultFilterArrivalDateTime;
   @Input() departureDatetime: ISearchResultFilterArrivalDateTime;
   @Input() airports: IAirport[];
-
+  currentLang = getLangFromParams();
   rangeStep = 600; // in seconds(10 minutes)
 
   arrivalToOptions: Options;
@@ -28,7 +31,8 @@ export class RacesFilterTravelTimeComponent implements OnInit {
   departureBackOptions: Options;
 
   constructor(
-    private customDatePipe: CustomDatePipe
+    private customDatePipe: CustomDatePipe,
+    private translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -86,9 +90,13 @@ export class RacesFilterTravelTimeComponent implements OnInit {
   private translate(value: number, label: LabelType, timezone: string): string {
     switch (label) {
       case LabelType.Low:
-        return `от ${this.timestampToDatetime(value, timezone)}`;
+        return this.currentLang !== APP_LANGS.uz
+          ? `${this.translateService.instant('FROM_DATE')} ${this.timestampToDatetime(value, timezone)}`
+          : `${this.timestampToDatetime(value, timezone)} ${this.translateService.instant('FROM_DATE')}`;
       case LabelType.High:
-        return `до ${this.timestampToDatetime(value, timezone)}`;
+        return this.currentLang !== APP_LANGS.uz
+          ? `${this.translateService.instant('TO_DATE')} ${this.timestampToDatetime(value, timezone)}`
+          : `${this.timestampToDatetime(value, timezone)} ${this.translateService.instant('TO_DATE')}`;
       default:
         return '' + this.timestampToDatetime(value, timezone);
     }

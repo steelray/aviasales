@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, Self, ChangeDetectorRef, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { APP_LANGS } from '@core/const/app-langs.const';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 import { IFlight, IFlightSearchParams, ISearchResult, ISearchResultFilter } from '@core/interfaces/search.interfaces';
 import { SearchResult } from '@core/models/search-result.model';
@@ -314,7 +315,7 @@ export class RacesComponent implements OnInit {
       infants,
       trip_class
     } = this.activatedRoute.snapshot.queryParams;
-    const locale = ['uz', 'uz-latn'].includes(getLangFromParams()) ? 'ru' : getLangFromParams();
+    const locale = [APP_LANGS.uz].includes(getLangFromParams()) ? APP_LANGS.ru : getLangFromParams();
     this.departureIATA = departure;
     this.arrivalIATA = arrival;
     const params: IFlightSearchParams = {

@@ -1,8 +1,11 @@
 import { LabelType, Options } from '@angular-slider/ngx-slider';
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { APP_LANGS } from '@core/const/app-langs.const';
 import { IAirport, IMinMaxValues, ISearchResultFilterArrivalDateTime, ISearchResultSegments } from '@core/interfaces/search.interfaces';
+import { getLangFromParams } from '@core/utils/get-lang.util';
 import { minutesToTime } from '@core/utils/minutes-to-time.util';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-race-filter-duration',
@@ -15,9 +18,11 @@ export class RaceFilterDurationComponent implements OnInit {
   @Input() form: FormGroup;
   @Input() airports: IAirport[];
   @Input() searchSegments: ISearchResultSegments;
+  currentLang = getLangFromParams();
 
-
-  constructor() { }
+  constructor(
+    private translateService: TranslateService
+  ) { }
   optionsTo: Options;
   optionsBack: Options;
   defaultOptions: Options = {
@@ -25,9 +30,13 @@ export class RaceFilterDurationComponent implements OnInit {
     translate: (value: number, label: LabelType): string => {
       switch (label) {
         case LabelType.Low:
-          return `от ${this.minutesToHourseMinutes(value)}`;
+          return this.currentLang !== APP_LANGS.uz
+            ? `${this.translateService.instant('FROM_DATE')} ${this.minutesToHourseMinutes(value)}`
+            : `${this.minutesToHourseMinutes(value)} ${this.translateService.instant('FROM_DATE')}`;
         case LabelType.High:
-          return `до ${this.minutesToHourseMinutes(value)}`;
+          return this.currentLang !== APP_LANGS.uz
+            ? `${this.translateService.instant('TO_DATE')} ${this.minutesToHourseMinutes(value)}`
+            : `${this.minutesToHourseMinutes(value)} ${this.translateService.instant('TO_DATE')} `;
         default:
           return '' + this.minutesToHourseMinutes(value);
       }
@@ -52,7 +61,7 @@ export class RaceFilterDurationComponent implements OnInit {
   private minutesToHourseMinutes(mins: number): string {
     const hours = Math.floor(mins / 60);
     const minutes = mins % 60;
-    return `${hours}ч ${minutes}м`;
+    return `${hours}${this.translateService.instant('HOUR')} ${minutes}${this.translateService.instant('MIN')}`;
   }
 
 }

@@ -52,15 +52,19 @@
   "FILTERS": {
     "DEPARTURE_ARRIVAL_TIME": "Jo’nab ketish va qo’nish vaqti",
     "IN_TRANIST_DURATION": "Yo’ldagi uchish vaqti",
-    "TICKET_PRICE": "Price of ticket",
+    "TICKET_PRICE": "Chipta narxi",
     "AIRPORT": "Aeroport",
     "AIRLINE": "Aviakompaniya"
   },
   "ERRORS": {
-    "CITIES_MUST_BE_DIFFERENT": "Города должны быть разными",
-    "REQUIRED_FIELD": "Обязательное поле для заполнения",
-    "ONLY_ALPHA_NUMERIC": "Разрешены только цифры и буквы",
+    "CITIES_MUST_BE_DIFFERENT": "Shaharlar boshqacha bo'lishi kerak",
+    "REQUIRED_FIELD": "To'ldirilishi shart",
+    "ONLY_ALPHA_NUMERIC": "Faqat raqamlar va harflarga ruxsat beriladi",
     "PRICES_CHANGED_WARNING": "Narxlar o'zgargan bo'lishi mumkin! Iltimos, yangilangan narxlarni ko'rish uchun qidiruvni yangilang.",
     "PLEASE_SELECT_OPTION_FROM_LIST": "Iltimos, ro'yxatdagi variantlardan birini tanlang."
-  }
+  },
+  "FROM_DATE": "dan",
+  "TO_DATE": "gacha",
+  "ECONOMY": "Ekonom",
+  "BUSINESS": "Biznes"
 }

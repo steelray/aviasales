@@ -1,3 +1,4 @@
+import { APP_LANGS } from '@core/const/app-langs.const';
 import { environment } from '@environments/environment';
 
 export function getLangFromParams(): string {
@@ -10,8 +11,13 @@ export function getLangFromParams(): string {
     currentLang = lang;
   }
   if (currentLang === 'uz') {
-    currentLang = 'uz-latn';
+    currentLang = APP_LANGS.uz;
   }
+
+  if (!Object.values(APP_LANGS).includes(currentLang)) {
+    currentLang = APP_LANGS.ru; // by default
+  }
+
   localStorage.setItem('__lang', currentLang);
 
   return currentLang;

@@ -28,9 +28,22 @@ import { CountInputComponent } from './count-input/count-input.component';
 import { getLangFromParams } from '@core/utils/get-lang.util';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatRippleModule } from '@angular/material/core';
+import { DateAdapter, MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatRippleModule, MatDateFormats } from '@angular/material/core';
 import { MomentDateModule, MomentDateAdapter, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+const CUSTOM_DATE_FORMATS: MatDateFormats = {
+  parse: {
+    dateInput: 'DD.MM.YYYY'
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  }
+}
+
 const COMPONENTS = [
   InputComponent,
   CustomFormFieldComponent,
@@ -72,7 +85,7 @@ const COMPONENTS = [
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: getLangFromParams() },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
   ],
   exports: COMPONENTS,
   entryComponents: [
