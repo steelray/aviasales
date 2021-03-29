@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, Self, ChangeDetectorRef, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { APP_LANGS } from '@core/const/app-langs.const';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 import { IFlight, IFlightSearchParams, ISearchResult, ISearchResultFilter } from '@core/interfaces/search.interfaces';
@@ -13,7 +13,7 @@ import { environment } from '@environments/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, interval, Observable, of, Subject, timer } from 'rxjs';
 import { filter, map, repeatWhen, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-
+import { Metrika } from 'ng-yandex-metrika';
 @Component({
   selector: 'app-races',
   templateUrl: './races.component.html',
@@ -55,7 +55,9 @@ export class RacesComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document,
     @Self() private onDestroy$: NgOnDestroy,
     private snackbar: MatSnackBar,
-    private transalteService: TranslateService
+    private transalteService: TranslateService,
+    private router: Router,
+    private metrika: Metrika
   ) { }
 
   startTimer(): void {
@@ -150,6 +152,7 @@ export class RacesComponent implements OnInit {
 
   onView(e: Event, flight: IFlight): void {
     e.preventDefault();
+    this.metrika.fireEvent('Avia_ticket_details_open').then(() => 'Avia_ticket_details_open');
     this.currentScrollPosition = this.document.documentElement.scrollTop;
     this.viewItem = flight;
   }
@@ -167,6 +170,8 @@ export class RacesComponent implements OnInit {
   }
 
   onBuy(url: number | string): void {
+    this.metrika.fireEvent('avia_ticket_purchase');
+
     this.ticketUrlIsPreparing = true;
     this.searchService.flightSearchClick(this.flightSearch.search_id, +url).pipe(
       takeUntil(this.onDestroy$)
@@ -190,6 +195,12 @@ export class RacesComponent implements OnInit {
 
     // update result
     this.updateList$.next(null);
+  }
+
+  goHome(event: Event): void {
+    event.preventDefault();
+    this.metrika.fireEvent('Avia_back_to_search');
+    this.router.navigate(['/']);
   }
 
   private showSnackbar(): void {

@@ -66,5 +66,7 @@
   "FROM_DATE": "dan",
   "TO_DATE": "gacha",
   "ECONOMY": "Ekonom",
-  "BUSINESS": "Biznes"
+  "BUSINESS": "Biznes",
+  "ADULTS_WARN": "Bitta go'dak uchun kamida bir nafar katta odam",
+  "INFANTS_WARN": "Bitta katta odam uchun ko'pi bilan bir nafar go'dak"
 }

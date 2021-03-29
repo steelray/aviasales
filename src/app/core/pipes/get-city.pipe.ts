@@ -10,13 +10,13 @@ export class GetCityPipe implements PipeTransform {
     if (!city) {
       city = airports.find(item => item.iata === iata);
     }
-    if (city) {
+    if (city && city.cases) {
       if (nameCase && city.cases[nameCase]) {
         return city.cases[nameCase];
       }
       return city.city;
     }
-    return iata;
+    return city?.city;
   }
 
 }

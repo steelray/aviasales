@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -32,7 +33,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatDatepickerModule,
     TranslateModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSnackBarModule,
+    MatTooltipModule,
+    TranslateModule
   ]
 })
 export class HomeModule { }

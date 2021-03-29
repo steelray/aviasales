@@ -9,7 +9,7 @@
       [placeholder]="placeholder"
       matInput
       [matAutocomplete]="auto"
-      (blur)="onBlur($event.target.value)">
+      #input>
   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"  [displayWith]="displayWithFn">
     <mat-option *ngFor="let option of options" [value]="option">
         {{option.title}}

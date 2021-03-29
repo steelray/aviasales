@@ -45,7 +45,7 @@
         </div>
 
         <div class="mob-title">{{"PASSENGERS" | translate}}</div>
-        <button type="button" class="passengers-class-btn"  [matMenuTriggerFor]="menu">
+        <button type="button" class="passengers-class-btn"  [matMenuTriggerFor]="menu" (click)="onPassengersMenuOpen()">
             <div>
                 {{passengersCount}} {{"PASSENGER" | translate}}
             </div>
@@ -70,8 +70,13 @@
             </div>
             <app-count-input 
                 [control]="controls.passengers['controls'].adults"
-                [minValue]="1"
-                [maxDisable]="passengersCount === maxPassengersCount"></app-count-input>
+                [minValue]="controls.passengers['controls'].infants.value ? controls.passengers['controls'].infants.value :1"
+                [maxDisable]="
+                    passengersCount === maxPassengersCount"
+                [matTooltip]="controls.passengers['controls'].infants.value === controls.passengers['controls'].adults.value 
+                ? ('ADULTS_WARN' | translate)
+                : null"
+                #adultsTooltip="matTooltip" (click)="adultsTooltip.toggle()"></app-count-input>
         </div>
         <div class="passengers-number">
             <div>
@@ -89,7 +94,15 @@
             </div>
             <app-count-input 
                 [control]="controls.passengers['controls'].infants"
-                [maxDisable]="passengersCount === maxPassengersCount"></app-count-input>
+                [maxDisable]="
+                    passengersCount === maxPassengersCount 
+                    || 
+                    controls.passengers['controls'].infants.value >= controls.passengers['controls'].adults.value
+                "
+                [matTooltip]="controls.passengers['controls'].infants.value === controls.passengers['controls'].adults.value 
+                    ? ('INFANTS_WARN' | translate)
+                    : null"
+                #infantsTooltip="matTooltip" (click)="infantsTooltip.toggle()"></app-count-input>
         </div>
     
         <hr>

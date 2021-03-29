@@ -155,6 +155,6 @@
 </ng-template>
 <ng-template #noRacesFound>
     <p class="nothing-found">
-        {{"NOTHING_FOUND_BY_QUERY" | translate}} <a routerLink="/">{{"TO_SEARCH_PAGE" | translate}}</a> {{"AND_CHANGE_QUERY_PARAMS" | translate}}.
+        {{"NOTHING_FOUND_BY_QUERY" | translate}} <a href="#" (click)="goHome($event)">{{"TO_SEARCH_PAGE" | translate}}</a> {{"AND_CHANGE_QUERY_PARAMS" | translate}}.
     </p>
 </ng-template>

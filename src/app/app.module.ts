@@ -13,6 +13,7 @@ import { registerLocaleData } from '@angular/common';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { getLangFromParams } from '@core/utils/get-lang.util';
+import { MetrikaModule } from 'ng-yandex-metrika';
 
 
 registerLocaleData(localeRu);
@@ -40,7 +41,13 @@ export function HttpLoaderFactory(http: HttpClient): any {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    MetrikaModule.forRoot(
+      {
+        id: 35896610,
+        webvisor: true
+      }
+    ),
   ],
   providers: [
     {

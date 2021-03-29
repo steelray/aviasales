@@ -14,7 +14,8 @@ import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 import * as moment from 'moment';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { TranslateService } from '@ngx-translate/core';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Metrika } from 'ng-yandex-metrika';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -70,13 +71,16 @@ export class HomeComponent implements OnInit {
     @Self() private onDestroy$: NgOnDestroy,
     private deviceService: DeviceDetectorService,
     private cdRef: ChangeDetectorRef,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private snackbar: MatSnackBar,
+    private metrika: Metrika
 
   ) {
     this.isMobile = this.deviceService.isMobile();
   }
 
   ngOnInit(): void {
+
     this.buildForm();
     this.setFormValueFromStorage();
     this.controls.departure_date.valueChanges.pipe(
@@ -85,6 +89,7 @@ export class HomeComponent implements OnInit {
     ).subscribe(depDate => {
       const arrivalDate = this.controls.arrival_date.value;
       if (arrivalDate && depDate > arrivalDate) {
+
         this.controls.arrival_date.setValue(depDate);
       }
     });
@@ -108,6 +113,8 @@ export class HomeComponent implements OnInit {
       }),
       map(res => this.prepareSelectOptions(res))
     );
+
+    this.ymEventsInit();
 
   }
 
@@ -154,9 +161,15 @@ export class HomeComponent implements OnInit {
     queryParams.arrival = formValue.arrival.value;
 
     localStorage.setItem(this.lsKey, JSON.stringify(queryParams));
+
+    this.metrika.fireEvent('Avia_search_started');
+
     this.router.navigate(['/races'], { queryParams });
   }
 
+  onPassengersMenuOpen(): void {
+    this.metrika.fireEvent('Avia_passengers_open');
+  }
 
   private buildForm(): void {
     this.form = this.fb.group({
@@ -201,12 +214,12 @@ export class HomeComponent implements OnInit {
       this.controls.departure.setValue({
         title: res.departure.name,
         value: res.departure.code
-      });
+      }, { emitEvent: false });
       if (res.departure.code !== res.arrival.code) {
         this.controls.arrival.setValue({
           title: res.arrival.name,
           value: res.arrival.code
-        });
+        }, { emitEvent: false });
       }
     });
 
@@ -217,17 +230,17 @@ export class HomeComponent implements OnInit {
       departureDate = currentDate;
     }
 
-    this.controls.departure_date.setValue(new Date(departureDate));
+    this.controls.departure_date.setValue(new Date(departureDate), { emitEvent: false });
     if (arrival_date) {
-      this.controls.arrival_date.setValue(new Date(arrival_date));
+      this.controls.arrival_date.setValue(new Date(arrival_date), { emitEvent: false });
     }
 
     this.controls.passengers.setValue({
       adults,
       children,
       infants
-    });
-    this.controls.trip_class.setValue(trip_class);
+    }, { emitEvent: false });
+    this.controls.trip_class.setValue(trip_class, { emitEvent: false });
   }
 
   private transformDate(date: any): string {
@@ -258,5 +271,42 @@ export class HomeComponent implements OnInit {
     }
     return null;
 
+  }
+
+  private ymEventsInit(): void {
+    this.metrika.fireEvent('Avia_open');
+    combineLatest([
+      this.controls.departure.valueChanges.pipe(
+        filter(res => !!res),
+        filter(res => typeof res !== 'string'),
+        tap(() => this.metrika.fireEvent('Avia_from_filled'))
+      ),
+      this.controls.arrival.valueChanges.pipe(
+        filter(res => !!res),
+        filter(res => typeof res !== 'string'),
+        tap(() => this.metrika.fireEvent('Avia_to_filled'))
+      ),
+      this.controls.departure_date.valueChanges.pipe(
+        filter(res => !!res),
+        tap(() => this.metrika.fireEvent('Avia_date_to_filled'))
+      ),
+      this.controls.arrival_date.valueChanges.pipe(
+        filter(res => !!res),
+        tap(() => this.metrika.fireEvent('Avia_date_back_filled'))
+      ),
+      this.controls.trip_class.valueChanges.pipe(
+        filter(res => !!res),
+        tap((res) => {
+          if (res === TRIP_CLASS.ECONOMY) {
+            this.metrika.fireEvent('Avia_passengers_economy_selected');
+          }
+          if (res === TRIP_CLASS.BUSINESS) {
+            this.metrika.fireEvent('Avia_passengers_business_selected');
+          }
+        })
+      ),
+    ]).pipe(
+      takeUntil(this.onDestroy$)
+    ).subscribe();
   }
 }

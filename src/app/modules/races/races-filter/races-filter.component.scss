@@ -85,6 +85,9 @@
     }
     &__content {
       padding: 0 15px;
+      @include for-mobile {
+        padding: 0 25px;
+      }
     }
   }
   &-reset-btn {
