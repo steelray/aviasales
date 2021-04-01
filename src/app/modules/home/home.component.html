@@ -50,7 +50,7 @@
                 {{passengersCount}} {{"PASSENGER" | translate}}
             </div>
             <span>
-                {{activeTripClass}}
+                {{activeTripClass | translate}}
             </span>
         </button>
     </div>
@@ -104,11 +104,21 @@
                     : null"
                 #infantsTooltip="matTooltip" (click)="infantsTooltip.toggle()"></app-count-input>
         </div>
-    
         <hr>
         <mat-radio-group [formControl]="controls.trip_class">
-            <mat-radio-button class="trip-class-btn" *ngFor="let option of tripClassOptions" [value]="option.value">{{option.title}}</mat-radio-button>
+            <mat-radio-button class="trip-class-btn" *ngFor="let option of tripClassOptions" [value]="option.value">{{option.title | translate}}</mat-radio-button>
         </mat-radio-group>
     </div>
 </mat-menu>
+<!-- FOR webview testing -->
+<!-- <a href="http://payme.uz/" target="_blank">target blank</a>
+<br>
+<button (click)="onBuy()">target blank async</button>
+<a *ngIf="buyLink" [href]="buyLink" #buyLinkTmpl target="_blank"></a>
+<br>
+<a href="#" (click)="windowOpen($event, 'http://payme.uz/')">window open</a>
+<br>
+<a href="#" (click)="windowOpenAsync($event, 'http://payme.uz/')">window open async</a> -->
+
+
 </div>

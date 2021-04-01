@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, OnInit, ChangeDetectionStrategy, Self, ChangeDetectorRef, Inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Self, ChangeDetectorRef, Inject, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { APP_LANGS } from '@core/const/app-langs.const';
@@ -47,6 +47,8 @@ export class RacesComponent implements OnInit {
   stopLoading = false;
   ticketUrlIsPreparing = false;
 
+  @ViewChild('buyLinkTmpl', { static: false }) buyLinkTmpl: ElementRef;
+  buyLink: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -170,14 +172,19 @@ export class RacesComponent implements OnInit {
   }
 
   onBuy(url: number | string): void {
+    this.buyLink = null;
     this.metrika.fireEvent('avia_ticket_purchase');
-
-    this.ticketUrlIsPreparing = true;
+    // const windowOpen = window.open();
+    // this.ticketUrlIsPreparing = true;
     this.searchService.flightSearchClick(this.flightSearch.search_id, +url).pipe(
       takeUntil(this.onDestroy$)
     ).subscribe(res => {
-      this.ticketUrlIsPreparing = false;
-      window.location.href = res.url;
+      this.buyLink = res.url;
+      this.cdRef.detectChanges();
+      setTimeout(() => {
+        this.buyLinkTmpl.nativeElement.click();
+      });
+      // windowOpen.location = res.url;
     });
   }
 

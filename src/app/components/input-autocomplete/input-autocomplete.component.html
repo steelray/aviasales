@@ -8,9 +8,10 @@
       [formControl]="control"
       [placeholder]="placeholder"
       matInput
+      matAutocompletePosition="below"
       [matAutocomplete]="auto"
       #input>
-  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"  [displayWith]="displayWithFn">
+  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"   [displayWith]="displayWithFn">
     <mat-option *ngFor="let option of options" [value]="option">
         {{option.title}}
         <span class="sub-title" *ngIf="option?.sub_title">, {{option.sub_title}}</span>

@@ -46,6 +46,7 @@ import { RaceViewDetailsComponent } from './race-view/race-view-details/race-vie
 import { RaceTicketComponent } from './race-ticket/race-ticket.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
+import { RaceBuyTestComponent } from './race-buy-test/race-buy-test.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { TranslateModule } from '@ngx-translate/core';
     InArrayPipe,
     GetBaggageHandbagInfoPipe,
     RaceViewDetailsComponent,
-    RaceTicketComponent
+    RaceTicketComponent,
+    RaceBuyTestComponent
   ],
   imports: [
     CommonModule,

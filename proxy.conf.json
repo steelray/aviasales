@@ -1,4 +1,13 @@
 {
+  "/api/*": {
+    "target": "https://payme.uz/api/",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": "true",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  },
   "/places2": {
     "target": "http://autocomplete.travelpayouts.com",
     "secure": true,

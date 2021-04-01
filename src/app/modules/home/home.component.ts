@@ -1,21 +1,21 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ChangeDetectionStrategy, Self, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Self, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ISelectOption } from '@core/interfaces/select-option.interface';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import { debounceTime, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { placesParams } from '@core/const/places-params';
 import { IPlace } from '@core/interfaces/search.interfaces';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 import * as moment from 'moment';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { TranslateService } from '@ngx-translate/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Metrika } from 'ng-yandex-metrika';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
   tripClassOptions: ISelectOption[] = [
     {
       value: TRIP_CLASS.ECONOMY,
-      title: this.translateService.instant('ECONOMY')
+      title: 'ECONOMY'
     },
     // {
     //   value: TRIP_CLASS.COMFORT,
@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
     // },
     {
       value: TRIP_CLASS.BUSINESS,
-      title: this.translateService.instant('BUSINESS')
+      title: 'BUSINESS'
     },
     // {
     //   value: TRIP_CLASS.FIRST,
@@ -70,10 +70,10 @@ export class HomeComponent implements OnInit {
     private searchService: SearchSearvice,
     @Self() private onDestroy$: NgOnDestroy,
     private deviceService: DeviceDetectorService,
-    private cdRef: ChangeDetectorRef,
     private translateService: TranslateService,
-    private snackbar: MatSnackBar,
-    private metrika: Metrika
+    private metrika: Metrika,
+    private http: HttpClient,
+    private cdRef: ChangeDetectorRef
 
   ) {
     this.isMobile = this.deviceService.isMobile();
@@ -170,6 +170,8 @@ export class HomeComponent implements OnInit {
   onPassengersMenuOpen(): void {
     this.metrika.fireEvent('Avia_passengers_open');
   }
+
+
 
   private buildForm(): void {
     this.form = this.fb.group({
@@ -309,4 +311,19 @@ export class HomeComponent implements OnInit {
       takeUntil(this.onDestroy$)
     ).subscribe();
   }
+
+
+
+  private getUserCurrentLocation(): void {
+    // if (window.navigator.geolocation) {
+    //   window.navigator.geolocation
+    //     .getCurrentPosition(this.successFunction, console.error);
+    // }
+  }
+
+  // private successFunction(position) {
+  //   var lat = position.coords.latitude;
+  //   var lng = position.coords.longitude;
+  //   codeLatLng(lat, lng)
+  // }
 }

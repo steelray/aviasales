@@ -158,3 +158,4 @@
         {{"NOTHING_FOUND_BY_QUERY" | translate}} <a href="#" (click)="goHome($event)">{{"TO_SEARCH_PAGE" | translate}}</a> {{"AND_CHANGE_QUERY_PARAMS" | translate}}.
     </p>
 </ng-template>
+<a *ngIf="buyLink" [href]="buyLink" #buyLinkTmpl target="_blank"></a>
