@@ -15,10 +15,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { WebviewTestComponent } from './webview-test/webview-test.component';
 
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, WebviewTestComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

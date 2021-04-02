@@ -20,10 +20,10 @@
                             </div>
                         </div>
                         <ng-template #filterBtn>
-                            <div class="header-actions" [class.justify-content-end]="!isWebView">
-                                <button *ngIf="isWebView" mat-icon-button routerLink="/" class="back-btn">
+                            <div class="header-actions justify-content-end">
+                                <!-- <button *ngIf="isWebView" mat-icon-button routerLink="/" class="back-btn">
                                     <mat-icon>arrow_back</mat-icon>
-                                </button>
+                                </button> -->
                                 <button  class="filter-btn" mat-icon-button (click)="onFilterToggle()">
                                     <mat-icon>filter_alt</mat-icon>
                                 </button>
