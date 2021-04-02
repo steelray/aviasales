@@ -14,6 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, interval, Observable, of, Subject, timer } from 'rxjs';
 import { filter, map, repeatWhen, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { Metrika } from 'ng-yandex-metrika';
+import * as iswebview from 'is-webview';
 @Component({
   selector: 'app-races',
   templateUrl: './races.component.html',
@@ -46,6 +47,7 @@ export class RacesComponent implements OnInit {
   isLoading = true;
   stopLoading = false;
   ticketUrlIsPreparing = false;
+  isWebView = iswebview(navigator.userAgent);
 
   @ViewChild('buyLinkTmpl', { static: false }) buyLinkTmpl: ElementRef;
   buyLink: string;
@@ -70,6 +72,8 @@ export class RacesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.isWebView);
+
 
     timer(0, 1000)
       .pipe(

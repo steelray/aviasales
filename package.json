@@ -26,6 +26,7 @@
     "@ngx-translate/core": "^13.0.0",
     "@ngx-translate/http-loader": "^6.0.0",
     "@rxweb/reactive-form-validators": "^2.1.2",
+    "is-webview": "^1.0.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "ng-yandex-metrika": "^4.0.0",

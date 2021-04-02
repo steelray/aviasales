@@ -35,6 +35,11 @@ header {
       display: flex;
       justify-content: space-between;
     }
+    &.justify-content-end {
+      @include for-mobile {
+        justify-content: flex-end;
+      }
+    }
     .back-btn {
       display: none;
       @include for-mobile {

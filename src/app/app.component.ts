@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Self } from '@angular/core';
+import { Component, OnInit, Self } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { UrlService } from '@core/services/url.service';
