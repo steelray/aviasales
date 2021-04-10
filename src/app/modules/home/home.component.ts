@@ -160,7 +160,7 @@ export class HomeComponent implements OnInit {
     queryParams.departure = formValue.departure.value;
     queryParams.arrival = formValue.arrival.value;
 
-    localStorage.setItem(this.lsKey, JSON.stringify(queryParams));
+    sessionStorage.setItem(this.lsKey, JSON.stringify(queryParams));
 
     this.metrika.fireEvent('Avia_search_started');
 
@@ -189,7 +189,7 @@ export class HomeComponent implements OnInit {
   }
 
   private setFormValueFromStorage(): void {
-    const storageData = JSON.parse(localStorage.getItem(this.lsKey));
+    const storageData = JSON.parse(sessionStorage.getItem(this.lsKey));
     if (!storageData) {
       return;
     }

@@ -1,7 +1,9 @@
-import { Component, OnInit, Self } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Self } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { UrlService } from '@core/services/url.service';
+import { TranslateService } from '@ngx-translate/core';
 import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -16,8 +18,11 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     @Self() private onDestroy$: NgOnDestroy,
-    private urlService: UrlService
-  ) { }
+    private urlService: UrlService,
+    private titleService: Title,
+    private translateService: TranslateService
+  ) {
+  }
 
   ngOnInit(): void {
     this.router.events.pipe(
@@ -28,6 +33,7 @@ export class AppComponent implements OnInit {
       this.currentUrl = event.url;
       this.urlService.setPreviousUrl(this.prevUrl);
     });
+    this.translateService.get('TITLE').subscribe(res => this.titleService.setTitle(res));
   }
 
 }

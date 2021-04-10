@@ -278,4 +278,15 @@ header {
 .nothing-found {
   text-align: center;
   padding: 0 15px;
+  font-size: 18px;
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  a {
+    color: var(--main-color);
+    margin: 15px 0;
+    font-size: 21px;
+    text-decoration: none;
+  }
 }

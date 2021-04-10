@@ -19,7 +19,7 @@ export class WebviewTestComponent {
   onBuy(): void {
     this.buyLink = null;
     this.request().subscribe(res => {
-      this.buyLink = 'https://www.uzairways.com/uz';
+      this.buyLink = '//www.uzairways.com/uz';
       this.cdRef.detectChanges();
       setTimeout(() => {
         this.buyLinkTmpl.nativeElement.click();
@@ -29,13 +29,14 @@ export class WebviewTestComponent {
 
   onBuyWindowOpen(): void {
     const windowOpen: any = window.open();
+    windowOpen.test_test = 'forTesting';
     this.request().subscribe(res => {
-      windowOpen.location = 'https://www.uzairways.com/uz';
+      windowOpen.location = '//www.uzairways.com/uz';
     });
   }
 
   private request(): Observable<any> {
-    return this.http.get('https://jsonplaceholder.typicode.com/todos/1');
+    return this.http.get('//jsonplaceholder.typicode.com/todos/1');
   }
 
 }

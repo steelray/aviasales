@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'https://uzcard.paycom.uz/api',
-  // apiEndpoint: '//payme.uz/api',
-  testApiEndpoint: 'https://aviasalestest.free.beeceptor.com',
+  // apiEndpoint: '//uzcard.paycom.uz/api',
+  apiEndpoint: '//services.payme.uz/api',
+  testApiEndpoint: '//aviasalestest.free.beeceptor.com',
   placesEndpoint: '/',
   airlineLogoEndpoint: ' //pics.avs.io',
   defaultLang: 'ru'
