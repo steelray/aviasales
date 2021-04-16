@@ -27,7 +27,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         } else {
 
           // server-side error
-          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+          if (error.status === 0) {
+            errorMessage = 'Произошла непредвиденная ошибка.'
+          } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+          }
 
         }
 

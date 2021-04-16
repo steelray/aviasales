@@ -98,6 +98,7 @@ export interface IGatesInfo {
   label: string;
   payment_methods: string[];
   productivity: number;
+  airline_iatas: string[];
 }
 
 export interface ISearchResultFilter {

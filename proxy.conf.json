@@ -1,6 +1,6 @@
 {
   "/api/*": {
-    "target": "https://payme.uz/api/",
+    "target": "https://services.payme.uz/api/",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": "true",

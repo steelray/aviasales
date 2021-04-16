@@ -1,21 +1,21 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ChangeDetectionStrategy, Self, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Self, ChangeDetectorRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ISelectOption } from '@core/interfaces/select-option.interface';
 import { NgOnDestroy } from '@core/services/destroy.service';
 import { SearchSearvice } from '@core/services/search.service';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { combineLatest, Observable, of } from 'rxjs';
-import { debounceTime, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { placesParams } from '@core/const/places-params';
 import { IPlace } from '@core/interfaces/search.interfaces';
 import { TRIP_CLASS } from '@core/enums/trip-class.enum';
 import * as moment from 'moment';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { TranslateService } from '@ngx-translate/core';
-import { Metrika } from 'ng-yandex-metrika';
 import { HttpClient } from '@angular/common/http';
+import { NgxMetrikaService } from '@kolkov/ngx-metrika';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit {
     @Self() private onDestroy$: NgOnDestroy,
     private deviceService: DeviceDetectorService,
     private translateService: TranslateService,
-    private metrika: Metrika,
+    private ym: NgxMetrikaService,
     private http: HttpClient,
     private cdRef: ChangeDetectorRef
 
@@ -162,13 +162,13 @@ export class HomeComponent implements OnInit {
 
     sessionStorage.setItem(this.lsKey, JSON.stringify(queryParams));
 
-    this.metrika.fireEvent('Avia_search_started');
+    this.ym.reachGoal.next({ target: 'Avia_search_started' });
 
     this.router.navigate(['/races'], { queryParams });
   }
 
   onPassengersMenuOpen(): void {
-    this.metrika.fireEvent('Avia_passengers_open');
+    this.ym.reachGoal.next({ target: 'Avia_passengers_open' });
   }
 
 
@@ -276,34 +276,34 @@ export class HomeComponent implements OnInit {
   }
 
   private ymEventsInit(): void {
-    this.metrika.fireEvent('Avia_open');
+    this.ym.reachGoal.next({ target: 'Avia_open' });
     combineLatest([
       this.controls.departure.valueChanges.pipe(
         filter(res => !!res),
         filter(res => typeof res !== 'string'),
-        tap(() => this.metrika.fireEvent('Avia_from_filled'))
+        tap(() => this.ym.reachGoal.next({ target: 'Avia_from_filled' }))
       ),
       this.controls.arrival.valueChanges.pipe(
         filter(res => !!res),
         filter(res => typeof res !== 'string'),
-        tap(() => this.metrika.fireEvent('Avia_to_filled'))
+        tap(() => this.ym.reachGoal.next({ target: 'Avia_to_filled' }))
       ),
       this.controls.departure_date.valueChanges.pipe(
         filter(res => !!res),
-        tap(() => this.metrika.fireEvent('Avia_date_to_filled'))
+        tap(() => this.ym.reachGoal.next({ target: 'Avia_date_to_filled' }))
       ),
       this.controls.arrival_date.valueChanges.pipe(
         filter(res => !!res),
-        tap(() => this.metrika.fireEvent('Avia_date_back_filled'))
+        tap(() => this.ym.reachGoal.next({ target: 'Avia_date_back_filled' }))
       ),
       this.controls.trip_class.valueChanges.pipe(
         filter(res => !!res),
         tap((res) => {
           if (res === TRIP_CLASS.ECONOMY) {
-            this.metrika.fireEvent('Avia_passengers_economy_selected');
+            this.ym.reachGoal.next({ target: 'Avia_passengers_economy_selected' });
           }
           if (res === TRIP_CLASS.BUSINESS) {
-            this.metrika.fireEvent('Avia_passengers_business_selected');
+            this.ym.reachGoal.next({ target: 'Avia_passengers_business_selected' });
           }
         })
       ),
@@ -313,17 +313,4 @@ export class HomeComponent implements OnInit {
   }
 
 
-
-  private getUserCurrentLocation(): void {
-    // if (window.navigator.geolocation) {
-    //   window.navigator.geolocation
-    //     .getCurrentPosition(this.successFunction, console.error);
-    // }
-  }
-
-  // private successFunction(position) {
-  //   var lat = position.coords.latitude;
-  //   var lng = position.coords.longitude;
-  //   codeLatLng(lat, lng)
-  // }
 }
